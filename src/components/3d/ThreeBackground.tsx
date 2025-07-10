@@ -1,28 +1,26 @@
 import { useRef, useMemo } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { OrbitControls, Float, Sphere } from '@react-three/drei';
+import { OrbitControls } from '@react-three/drei';
 import * as THREE from 'three';
 
 interface ThreeBackgroundProps {
   isDark: boolean;
 }
 
-// Enhanced 3D Platform with Holographic Elements
-function HolographicPlatform({ isDark }: { isDark: boolean }) {
+// Simple Floating Platform
+function FloatingPlatform({ isDark }: { isDark: boolean }) {
   const meshRef = useRef<THREE.Group>(null);
   
   const colors = useMemo(() => ({
     light: {
-      primary: '#8b5cf6',   // Purple
-      secondary: '#06b6d4', // Cyan
-      accent: '#d946ef',    // Magenta
-      glow: '#c084fc'       // Light Purple
+      primary: '#8b5cf6',
+      secondary: '#06b6d4',
+      accent: '#d946ef'
     },
     dark: {
-      primary: '#00f6ff',   // Cyan
-      secondary: '#41deff',  // Light Cyan
-      accent: '#ffd700',    // Gold
-      glow: '#00bfff'       // Deep Sky Blue
+      primary: '#00f6ff',
+      secondary: '#41deff',
+      accent: '#ffd700'
     }
   }), []);
 
@@ -31,88 +29,89 @@ function HolographicPlatform({ isDark }: { isDark: boolean }) {
   useFrame((state) => {
     if (meshRef.current) {
       meshRef.current.rotation.y = state.clock.elapsedTime * 0.05;
-      meshRef.current.position.y = Math.sin(state.clock.elapsedTime * 0.5) * 0.2;
+      meshRef.current.position.y = Math.sin(state.clock.elapsedTime * 0.5) * 0.3;
     }
   });
 
   return (
     <group ref={meshRef}>
-      {/* Central Glowing Platform */}
-      <Float speed={1} rotationIntensity={0.3} floatIntensity={0.5}>
-        <mesh position={[0, -3, 0]}>
-          <cylinderGeometry args={[12, 12, 0.8, 64]} />
+      {/* Central Platform */}
+      <mesh position={[0, -2, 0]}>
+        <cylinderGeometry args={[8, 8, 0.5, 32]} />
+        <meshPhongMaterial 
+          color={currentColors.primary} 
+          transparent 
+          opacity={0.4}
+          emissive={currentColors.primary}
+          emissiveIntensity={0.1}
+        />
+      </mesh>
+
+      {/* Floating Rings */}
+      {[...Array(4)].map((_, i) => (
+        <mesh 
+          key={i}
+          position={[
+            Math.cos(i * Math.PI / 2) * 12,
+            Math.sin(i * 0.5) * 3 + 2,
+            Math.sin(i * Math.PI / 2) * 12
+          ]}
+          rotation={[Math.PI / 2, 0, i * Math.PI / 4]}
+        >
+          <ringGeometry args={[2 + i * 0.3, 2.5 + i * 0.3, 24]} />
           <meshPhongMaterial 
-            color={currentColors.primary} 
+            color={currentColors.secondary} 
             transparent 
-            opacity={0.4}
-            emissive={currentColors.primary}
-            emissiveIntensity={0.2}
+            opacity={0.5}
+            emissive={currentColors.secondary}
+            emissiveIntensity={0.05}
+            side={THREE.DoubleSide}
           />
         </mesh>
-      </Float>
-
-      {/* Holographic Rings */}
-      {[...Array(6)].map((_, i) => (
-        <Float key={i} speed={0.8 + i * 0.1} rotationIntensity={0.2} floatIntensity={0.3}>
-          <mesh 
-            position={[
-              Math.cos(i * Math.PI / 3) * (15 + i * 2),
-              Math.sin(i * 0.3) * 4 + 2,
-              Math.sin(i * Math.PI / 3) * (15 + i * 2)
-            ]}
-            rotation={[Math.PI / 2 + i * 0.1, i * 0.2, i]}
-          >
-            <ringGeometry args={[3 + i * 0.5, 4 + i * 0.5, 32]} />
-            <meshPhongMaterial 
-              color={i % 2 === 0 ? currentColors.secondary : currentColors.accent} 
-              transparent 
-              opacity={0.5}
-              emissive={i % 2 === 0 ? currentColors.secondary : currentColors.accent}
-              emissiveIntensity={0.1}
-              side={THREE.DoubleSide}
-            />
-          </mesh>
-        </Float>
       ))}
 
-      {/* Floating Data Panels */}
-      {[...Array(8)].map((_, i) => (
-        <Float key={`panel-${i}`} speed={0.4 + i * 0.05} rotationIntensity={0.1} floatIntensity={0.2}>
-          <mesh 
-            position={[
-              Math.cos(i * Math.PI / 4) * 20,
-              Math.sin(i * 0.5) * 6 + 5,
-              Math.sin(i * Math.PI / 4) * 20
-            ]}
-            rotation={[0, -i * Math.PI / 4, 0]}
-          >
-            <planeGeometry args={[4, 2.5]} />
-            <meshPhongMaterial 
-              color={currentColors.glow} 
-              transparent 
-              opacity={0.3}
-              emissive={currentColors.glow}
-              emissiveIntensity={0.15}
-              side={THREE.DoubleSide}
-            />
-          </mesh>
-        </Float>
+      {/* Geometric Shapes */}
+      {[...Array(6)].map((_, i) => (
+        <mesh 
+          key={`shape-${i}`}
+          position={[
+            (Math.random() - 0.5) * 30,
+            Math.random() * 10 - 5,
+            (Math.random() - 0.5) * 30
+          ]}
+          rotation={[Math.random() * Math.PI, Math.random() * Math.PI, 0]}
+        >
+          {i % 3 === 0 ? (
+            <boxGeometry args={[1, 1, 1]} />
+          ) : i % 3 === 1 ? (
+            <sphereGeometry args={[0.5, 16, 16]} />
+          ) : (
+            <octahedronGeometry args={[0.7]} />
+          )}
+          <meshPhongMaterial 
+            color={i % 2 === 0 ? currentColors.primary : currentColors.accent}
+            transparent 
+            opacity={0.6}
+            emissive={i % 2 === 0 ? currentColors.primary : currentColors.accent}
+            emissiveIntensity={0.1}
+          />
+        </mesh>
       ))}
     </group>
   );
 }
 
-// Enhanced Particle System with Dynamic Colors
-function EnhancedParticles({ isDark }: { isDark: boolean }) {
+// Simple Particle System
+function SimpleParticles({ isDark }: { isDark: boolean }) {
   const meshRef = useRef<THREE.Points>(null);
   
-  const particlesCount = 800;
+  const particlesCount = 400;
   const positions = useMemo(() => {
     const positions = new Float32Array(particlesCount * 3);
     for (let i = 0; i < particlesCount; i++) {
-      positions[i * 3] = (Math.random() - 0.5) * 120;
-      positions[i * 3 + 1] = Math.random() * 60 - 30;
-      positions[i * 3 + 2] = (Math.random() - 0.5) * 120;
+      positions[i * 3] = (Math.random() - 0.5) * 80;
+      positions[i * 3 + 1] = Math.random() * 40 - 20;
+      positions[i * 3 + 2] = (Math.random() - 0.5) * 80;
     }
     return positions;
   }, []);
@@ -120,7 +119,6 @@ function EnhancedParticles({ isDark }: { isDark: boolean }) {
   useFrame((state) => {
     if (meshRef.current) {
       meshRef.current.rotation.y = state.clock.elapsedTime * 0.01;
-      meshRef.current.rotation.x = Math.sin(state.clock.elapsedTime * 0.02) * 0.1;
     }
   });
 
@@ -135,146 +133,13 @@ function EnhancedParticles({ isDark }: { isDark: boolean }) {
         />
       </bufferGeometry>
       <pointsMaterial
-        size={0.15}
+        size={0.1}
         color={isDark ? '#00f6ff' : '#8b5cf6'}
         transparent
-        opacity={0.8}
+        opacity={0.7}
         blending={THREE.AdditiveBlending}
       />
     </points>
-  );
-}
-
-// Cyberpunk HUD Elements (Dark Theme)
-function CyberpunkHUD() {
-  return (
-    <group>
-      {/* Main HUD Ring */}
-      <Float speed={0.5} rotationIntensity={0.1} floatIntensity={0.3}>
-        <mesh position={[0, 8, 0]} rotation={[Math.PI / 2, 0, 0]}>
-          <ringGeometry args={[25, 27, 64]} />
-          <meshPhongMaterial 
-            color="#00f6ff" 
-            transparent 
-            opacity={0.4}
-            emissive="#00f6ff"
-            emissiveIntensity={0.2}
-            side={THREE.DoubleSide}
-          />
-        </mesh>
-      </Float>
-
-      {/* Floating HUD Panels */}
-      {[...Array(6)].map((_, i) => (
-        <Float key={`hud-${i}`} speed={0.3 + i * 0.1} rotationIntensity={0.05} floatIntensity={0.15}>
-          <mesh 
-            position={[
-              Math.cos(i * Math.PI / 3) * 18,
-              8 + Math.sin(i) * 3,
-              Math.sin(i * Math.PI / 3) * 18
-            ]}
-            rotation={[0, -i * Math.PI / 3, 0]}
-          >
-            <planeGeometry args={[3.5, 2]} />
-            <meshPhongMaterial 
-              color="#41deff" 
-              transparent 
-              opacity={0.25}
-              emissive="#41deff"
-              emissiveIntensity={0.1}
-              side={THREE.DoubleSide}
-            />
-          </mesh>
-        </Float>
-      ))}
-
-      {/* Energy Cores */}
-      {[...Array(4)].map((_, i) => (
-        <Float key={`core-${i}`} speed={1 + i * 0.2} rotationIntensity={0.3} floatIntensity={0.4}>
-          <Sphere 
-            position={[
-              Math.cos(i * Math.PI / 2) * 30,
-              4 + Math.sin(i * 2) * 2,
-              Math.sin(i * Math.PI / 2) * 30
-            ]}
-            args={[0.8, 16, 16]}
-          >
-            <meshPhongMaterial 
-              color="#ffd700" 
-              transparent 
-              opacity={0.6}
-              emissive="#ffd700"
-              emissiveIntensity={0.3}
-            />
-          </Sphere>
-        </Float>
-      ))}
-    </group>
-  );
-}
-
-// Holographic Elements (Light Theme)
-function HolographicElements() {
-  return (
-    <group>
-      {/* Holographic Dome */}
-      <Float speed={0.4} rotationIntensity={0.2} floatIntensity={0.2}>
-        <mesh position={[0, 10, 0]}>
-          <sphereGeometry args={[20, 32, 16, 0, Math.PI * 2, 0, Math.PI / 2]} />
-          <meshPhongMaterial 
-            color="#d946ef" 
-            transparent 
-            opacity={0.2}
-            emissive="#d946ef"
-            emissiveIntensity={0.1}
-            side={THREE.DoubleSide}
-            wireframe={true}
-          />
-        </mesh>
-      </Float>
-
-      {/* Floating Crystals */}
-      {[...Array(8)].map((_, i) => (
-        <Float key={`crystal-${i}`} speed={0.6 + i * 0.1} rotationIntensity={0.4} floatIntensity={0.5}>
-          <mesh 
-            position={[
-              Math.cos(i * Math.PI / 4) * 16,
-              Math.sin(i * 0.8) * 6 + 8,
-              Math.sin(i * Math.PI / 4) * 16
-            ]}
-            rotation={[Math.random() * Math.PI, Math.random() * Math.PI, 0]}
-          >
-            <octahedronGeometry args={[1.2]} />
-            <meshPhongMaterial 
-              color={i % 2 === 0 ? '#8b5cf6' : '#06b6d4'} 
-              transparent 
-              opacity={0.7}
-              emissive={i % 2 === 0 ? '#8b5cf6' : '#06b6d4'}
-              emissiveIntensity={0.2}
-            />
-          </mesh>
-        </Float>
-      ))}
-
-      {/* Holographic Grid Lines */}
-      {[...Array(5)].map((_, i) => (
-        <Float key={`grid-${i}`} speed={0.2} rotationIntensity={0.05} floatIntensity={0.1}>
-          <mesh 
-            position={[0, i * 3 - 6, -25]}
-            rotation={[Math.PI / 2, 0, 0]}
-          >
-            <planeGeometry args={[50, 0.1]} />
-            <meshPhongMaterial 
-              color="#c084fc" 
-              transparent 
-              opacity={0.4}
-              emissive="#c084fc"
-              emissiveIntensity={0.1}
-            />
-          </mesh>
-        </Float>
-      ))}
-    </group>
   );
 }
 
@@ -282,67 +147,39 @@ export const ThreeBackground = ({ isDark }: ThreeBackgroundProps) => {
   return (
     <div className="fixed inset-0 -z-10">
       <Canvas
-        camera={{ position: [0, 8, 35], fov: 65 }}
+        camera={{ position: [0, 8, 30], fov: 60 }}
         gl={{ alpha: true, antialias: true }}
       >
+        {/* Lighting */}
         <ambientLight intensity={isDark ? 0.3 : 0.5} />
         <directionalLight 
-          position={[20, 20, 10]} 
-          intensity={isDark ? 0.8 : 1.2}
+          position={[15, 15, 8]} 
+          intensity={isDark ? 0.7 : 1}
           color={isDark ? '#00f6ff' : '#8b5cf6'}
         />
         <pointLight 
-          position={[-15, 10, -10]} 
-          intensity={isDark ? 0.6 : 0.8}
+          position={[-10, 10, -8]} 
+          intensity={isDark ? 0.5 : 0.7}
           color={isDark ? '#41deff' : '#d946ef'}
         />
         <pointLight 
-          position={[15, -5, 15]} 
-          intensity={isDark ? 0.4 : 0.6}
+          position={[10, -8, 10]} 
+          intensity={isDark ? 0.4 : 0.5}
           color={isDark ? '#ffd700' : '#06b6d4'}
         />
 
-        {/* Enhanced 3D Elements */}
-        <HolographicPlatform isDark={isDark} />
-        <EnhancedParticles isDark={isDark} />
-        
-        {/* Theme-specific Elements */}
-        {isDark ? <CyberpunkHUD /> : <HolographicElements />}
+        {/* 3D Elements */}
+        <FloatingPlatform isDark={isDark} />
+        <SimpleParticles isDark={isDark} />
 
-        {/* Additional Floating Elements for More Presence */}
-        <Float speed={0.5} rotationIntensity={0.1} floatIntensity={0.3}>
-          <mesh position={[25, 5, -20]} rotation={[0, Math.PI / 4, 0]}>
-            <boxGeometry args={[2, 2, 2]} />
-            <meshPhongMaterial 
-              color={isDark ? '#00f6ff' : '#8b5cf6'} 
-              transparent 
-              opacity={0.4}
-              emissive={isDark ? '#00f6ff' : '#8b5cf6'}
-              emissiveIntensity={0.2}
-            />
-          </mesh>
-        </Float>
-
-        <Float speed={0.3} rotationIntensity={0.2} floatIntensity={0.4}>
-          <mesh position={[-25, -5, -15]}>
-            <octahedronGeometry args={[1.5]} />
-            <meshPhongMaterial 
-              color={isDark ? '#41deff' : '#d946ef'} 
-              transparent 
-              opacity={0.5}
-              emissive={isDark ? '#41deff' : '#d946ef'}
-              emissiveIntensity={0.15}
-            />
-          </mesh>
-        </Float>
-
+        {/* Controls */}
         <OrbitControls 
           enableZoom={false}
           enablePan={false}
           autoRotate
-          autoRotateSpeed={0.4}
-          maxPolarAngle={Math.PI / 1.8}
-          minPolarAngle={Math.PI / 4}
+          autoRotateSpeed={0.3}
+          maxPolarAngle={Math.PI / 2}
+          minPolarAngle={Math.PI / 6}
         />
       </Canvas>
     </div>
