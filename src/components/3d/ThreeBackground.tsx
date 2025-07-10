@@ -128,7 +128,7 @@ function GlowingCircle({ isDark }: { isDark: boolean }) {
   );
 }
 
-// Tech Lines Network
+// Tech Lines Network - Fixed to use proper geometry
 function TechLines({ isDark }: { isDark: boolean }) {
   const groupRef = useRef<THREE.Group>(null);
   
@@ -164,8 +164,11 @@ function TechLines({ isDark }: { isDark: boolean }) {
       const colors = [0x0066AA, 0x0088CC, 0x00AAFF];
       const randomColor = colors[Math.floor(Math.random() * colors.length)];
       
+      // Create proper line geometry using TubeGeometry
+      const curve = new THREE.CatmullRomCurve3(points);
+      
       lineData.push({
-        points,
+        curve,
         color: randomColor,
         opacity: 0.25 + Math.random() * 0.25
       });
@@ -182,21 +185,14 @@ function TechLines({ isDark }: { isDark: boolean }) {
   return (
     <group ref={groupRef}>
       {lines.map((lineData, i) => (
-        <line key={i}>
-          <bufferGeometry>
-            <bufferAttribute
-              attach="attributes-position"
-              count={lineData.points.length}
-              array={new Float32Array(lineData.points.flatMap(p => [p.x, p.y, p.z]))}
-              itemSize={3}
-            />
-          </bufferGeometry>
-          <lineBasicMaterial
+        <mesh key={i}>
+          <tubeGeometry args={[lineData.curve, 64, 0.02, 8, false]} />
+          <meshBasicMaterial
             color={isDark ? lineData.color : '#8b5cf6'}
             transparent
             opacity={lineData.opacity}
           />
-        </line>
+        </mesh>
       ))}
     </group>
   );
@@ -253,18 +249,28 @@ function SecondaryCircle({ isDark }: { isDark: boolean }) {
   );
 }
 
-// ACM Logo Component
+// ACM Logo Component with better error handling
 function ACMLogo({ isDark }: { isDark: boolean }) {
   const groupRef = useRef<THREE.Group>(null);
   const [logoTexture, setLogoTexture] = useState<THREE.Texture | null>(null);
+  const [textureError, setTextureError] = useState(false);
 
   useEffect(() => {
     const loader = new THREE.TextureLoader();
-    loader.load('/acm logo.jpeg', (texture) => {
-      setLogoTexture(texture);
-    }, undefined, (error) => {
-      console.log('Logo texture could not be loaded:', error);
-    });
+    
+    // Try to load the logo, with fallback handling
+    loader.load(
+      'acm-logo.jpeg', // Updated path
+      (texture) => {
+        setLogoTexture(texture);
+        setTextureError(false);
+      }, 
+      undefined, 
+      (error) => {
+        console.log('Logo texture could not be loaded, using fallback');
+        setTextureError(true);
+      }
+    );
   }, []);
 
   const accentDots = useMemo(() => {
