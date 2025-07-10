@@ -90,12 +90,12 @@ export const Navigation = () => {
             className="relative"
           >
             {/* Enhanced Liquid Glass Container */}
-            <div className="liquid-glass rounded-3xl p-8 relative overflow-hidden">
-              {/* Liquid Crystal Background Effect */}
-              <div className="absolute inset-0 opacity-30">
-                <div className="absolute top-0 left-0 w-32 h-32 bg-gradient-to-br from-primary/20 to-transparent rounded-full blur-2xl"></div>
-                <div className="absolute bottom-0 right-0 w-40 h-40 bg-gradient-to-tl from-accent/20 to-transparent rounded-full blur-3xl"></div>
-                <div className="absolute top-1/2 left-1/2 w-24 h-24 bg-gradient-to-r from-primary-glow/15 to-accent/15 rounded-full blur-xl -translate-x-1/2 -translate-y-1/2"></div>
+            <div className="ultra-liquid-glass rounded-3xl p-10 relative overflow-hidden">
+              {/* Ultra Crystal Background Effects */}
+              <div className="absolute inset-0 opacity-20">
+                <div className="absolute top-0 left-0 w-40 h-40 gradient-glass-cyan rounded-full blur-3xl"></div>
+                <div className="absolute bottom-0 right-0 w-48 h-48 gradient-glass-blue rounded-full blur-3xl"></div>
+                <div className="absolute top-1/2 left-1/2 w-32 h-32 gradient-glass-purple rounded-full blur-2xl -translate-x-1/2 -translate-y-1/2"></div>
               </div>
 
               {/* Animated Scan Lines */}
@@ -132,25 +132,28 @@ export const Navigation = () => {
                       gridRow: block.position.row
                     }}
                   >
-                    {/* Liquid Crystal Card Background */}
-                    <div className="absolute inset-0 liquid-glass rounded-2xl">
-                      <div className={`absolute inset-0 bg-gradient-to-br ${block.color} opacity-80 rounded-2xl`}></div>
+                    {/* Premium Crystal Card Background */}
+                    <div className="absolute inset-0 crystal-glass rounded-2xl">
+                      <div className={`absolute inset-0 bg-gradient-to-br ${block.color} opacity-90 rounded-2xl`}></div>
                       
-                      {/* Crystal Facets Effect */}
-                      <div className="absolute inset-0 opacity-40">
-                        <div className="absolute top-0 left-0 w-full h-1/2 bg-gradient-to-br from-white/30 to-transparent rounded-t-2xl"></div>
-                        <div className="absolute bottom-0 right-0 w-1/2 h-1/2 bg-gradient-to-tl from-white/20 to-transparent rounded-br-2xl"></div>
+                      {/* Ultra Crystal Facets Effect */}
+                      <div className="absolute inset-0 opacity-50">
+                        <div className="absolute top-0 left-0 w-full h-1/3 bg-gradient-to-br from-white/40 to-transparent rounded-t-2xl"></div>
+                        <div className="absolute bottom-0 right-0 w-1/2 h-1/2 bg-gradient-to-tl from-white/25 to-transparent rounded-br-2xl"></div>
+                        <div className="absolute top-1/3 left-1/3 w-1/3 h-1/3 bg-gradient-to-br from-white/20 to-transparent rounded-full"></div>
                       </div>
                       
-                      {/* Animated Liquid Flow */}
+                      {/* Premium Liquid Flow Animation */}
                       <div className="absolute inset-0 overflow-hidden rounded-2xl">
-                        <div className="absolute -top-1/2 -left-1/2 w-full h-full bg-gradient-to-br from-white/10 to-transparent rounded-full animate-[liquid-flow_6s_ease-in-out_infinite]"></div>
+                        <div className="absolute -top-1/2 -left-1/2 w-full h-full bg-gradient-to-br from-white/15 to-transparent rounded-full animate-[crystal-rotate_8s_linear_infinite]"></div>
+                        <div className="absolute -bottom-1/2 -right-1/2 w-full h-full bg-gradient-to-tl from-white/10 to-transparent rounded-full animate-[crystal-rotate_12s_linear_infinite_reverse]"></div>
                       </div>
                       
-                      {/* HUD Elements */}
-                      <div className="absolute top-2 right-2 w-8 h-8 border border-white/40 rounded-full backdrop-blur-sm"></div>
-                      <div className="absolute bottom-2 left-2 w-6 h-6 border border-white/30 rounded backdrop-blur-sm"></div>
-                      <div className="absolute top-2 left-2 w-1 h-6 bg-white/30 rounded-full"></div>
+                      {/* Enhanced HUD Elements */}
+                      <div className="absolute top-2 right-2 w-8 h-8 border-2 border-white/50 rounded-full backdrop-blur-md bg-white/10"></div>
+                      <div className="absolute bottom-2 left-2 w-6 h-6 border border-white/40 rounded backdrop-blur-sm bg-white/5"></div>
+                      <div className="absolute top-2 left-2 w-1 h-8 bg-white/40 rounded-full shadow-lg"></div>
+                      <div className="absolute bottom-2 right-2 w-4 h-1 bg-white/30 rounded-full"></div>
                     </div>
                     
                     {/* Content */}

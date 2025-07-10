@@ -90,30 +90,31 @@ export const RegistrationForm = () => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6 }}
     >
-      {/* Enhanced Liquid Crystal Container */}
-      <div className="liquid-glass rounded-3xl p-8 relative overflow-hidden">
-        {/* Liquid Crystal Background Effects */}
-        <div className="absolute inset-0 opacity-20">
-          <div className="absolute top-0 left-0 w-40 h-40 bg-gradient-to-br from-primary/30 to-transparent rounded-full blur-3xl"></div>
-          <div className="absolute bottom-0 right-0 w-48 h-48 bg-gradient-to-tl from-accent/25 to-transparent rounded-full blur-3xl"></div>
-          <div className="absolute top-1/2 left-1/2 w-32 h-32 bg-gradient-to-r from-primary-glow/20 to-accent/20 rounded-full blur-2xl -translate-x-1/2 -translate-y-1/2"></div>
+      {/* Enhanced Premium Crystal Container */}
+      <div className="premium-glass-card rounded-3xl p-10 relative overflow-hidden">
+        {/* Ultra Crystal Background Effects */}
+        <div className="absolute inset-0 opacity-15">
+          <div className="absolute top-0 left-0 w-48 h-48 gradient-glass-blue rounded-full blur-3xl"></div>
+          <div className="absolute bottom-0 right-0 w-56 h-56 gradient-glass-purple rounded-full blur-3xl"></div>
+          <div className="absolute top-1/3 left-1/2 w-40 h-40 gradient-glass-pink rounded-full blur-2xl -translate-x-1/2"></div>
         </div>
 
-        {/* Animated Scan Lines */}
+        {/* Premium Scan Lines */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden rounded-3xl">
-          <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary/60 to-transparent animate-[scan-line_4s_linear_infinite]"></div>
-          <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-accent/50 to-transparent animate-[scan-line_5s_linear_infinite_reverse]"></div>
+          <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-white/80 to-transparent animate-[scan-line_5s_linear_infinite]"></div>
+          <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-white/60 to-transparent animate-[scan-line_6s_linear_infinite_reverse]"></div>
+          <div className="absolute top-1/2 left-0 w-full h-px bg-gradient-to-r from-transparent via-white/40 to-transparent animate-[scan-line_7s_linear_infinite] -translate-y-1/2"></div>
         </div>
 
-        <div className="text-center mb-8 relative z-10">
-          {/* ACM VVITU Logo Placeholder */}
+        <div className="text-center mb-10 relative z-10">
+          {/* Enhanced ACM VVITU Logo */}
           <motion.div
-            className="mx-auto w-16 h-16 mb-4 liquid-glass rounded-2xl flex items-center justify-center"
-            initial={{ scale: 0, rotate: -180 }}
-            animate={{ scale: 1, rotate: 0 }}
-            transition={{ duration: 0.8, type: "spring" }}
+            className="mx-auto w-20 h-20 mb-6 crystal-glass rounded-3xl flex items-center justify-center"
+            initial={{ scale: 0, rotate: -180, opacity: 0 }}
+            animate={{ scale: 1, rotate: 0, opacity: 1 }}
+            transition={{ duration: 1.2, type: "spring", bounce: 0.4 }}
           >
-            <span className="text-2xl font-bold text-holographic font-orbitron">ACM</span>
+            <span className="text-3xl font-bold text-holographic font-orbitron">ACM</span>
           </motion.div>
           
           <h2 className="text-3xl font-bold text-holographic mb-2 font-orbitron">
