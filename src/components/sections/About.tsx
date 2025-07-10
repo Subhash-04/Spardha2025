@@ -7,7 +7,7 @@ export const About = () => {
     <section id="about" className="py-20 relative">
       <div className="container mx-auto px-6">
         <motion.div
-          className="dashboard-glass p-8 md:p-12 relative overflow-hidden rounded-3xl"
+          className="fluid-glass dark:dark p-8 md:p-12 relative overflow-hidden rounded-3xl shiny-cuts"
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
@@ -69,7 +69,7 @@ export const About = () => {
                     ].map((item, index) => (
                       <motion.div
                         key={item.label}
-                        className="crystal-glass p-4 text-center rounded-2xl hover:scale-105 transition-all duration-300"
+                        className="diamond-crystal dark:dark p-4 text-center rounded-2xl hover:scale-105 transition-all duration-300"
                         initial={{ opacity: 0, scale: 0.8 }}
                         whileInView={{ opacity: 1, scale: 1 }}
                         transition={{ duration: 0.4, delay: 0.6 + index * 0.1 }}
@@ -89,7 +89,7 @@ export const About = () => {
                 {/* Visual Element */}
                 <div className="relative">
                   <motion.div
-                    className="dashboard-glass p-8 text-center rounded-3xl"
+                    className="fluid-glass dark:dark p-8 text-center rounded-3xl shiny-cuts"
                     initial={{ opacity: 0, rotate: -5 }}
                     whileInView={{ opacity: 1, rotate: 0 }}
                     transition={{ duration: 0.8, delay: 0.6 }}
@@ -129,7 +129,7 @@ export const About = () => {
             >
               <Button
                 variant="outline"
-                className="crystal-glass group hover:scale-105 transition-all duration-300"
+                className="diamond-crystal dark:dark group hover:scale-105 transition-all duration-300"
                 // TODO: Add AI regeneration functionality
               >
                 <Sparkles className="w-4 h-4 mr-2 group-hover:animate-spin" />

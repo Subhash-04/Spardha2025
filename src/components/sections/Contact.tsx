@@ -53,7 +53,7 @@ export const Contact = () => {
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
           >
-            <div className="dashboard-glass p-8 rounded-3xl">
+            <div className="fluid-glass dark:dark p-8 rounded-3xl shiny-cuts">
               <h3 className="text-2xl font-semibold mb-6 text-gradient">
                 Contact Information
               </h3>
@@ -68,7 +68,7 @@ export const Contact = () => {
                     transition={{ duration: 0.6, delay: index * 0.1 }}
                     viewport={{ once: true }}
                   >
-                    <div className="crystal-glass p-3 group-hover:bg-primary/10 transition-all duration-300 rounded-xl">
+                    <div className="diamond-crystal dark:dark p-3 group-hover:bg-primary/10 transition-all duration-300 rounded-xl">
                       <info.icon className="w-6 h-6 text-primary" />
                     </div>
                     <div className="flex-1">
@@ -104,7 +104,7 @@ export const Contact = () => {
                   {['Instagram', 'LinkedIn', 'Twitter'].map((platform, index) => (
                     <motion.button
                       key={platform}
-                      className="crystal-glass px-4 py-2 text-sm hover:scale-105 transition-all duration-300"
+                      className="diamond-crystal dark:dark px-4 py-2 text-sm hover:scale-105 transition-all duration-300"
                       whileHover={{ scale: 1.05, y: -2 }}
                       whileTap={{ scale: 0.95 }}
                       initial={{ opacity: 0, x: -20 }}
@@ -122,7 +122,7 @@ export const Contact = () => {
 
           {/* Map */}
           <motion.div
-            className="dashboard-glass overflow-hidden rounded-3xl"
+            className="fluid-glass dark:dark overflow-hidden rounded-3xl shiny-cuts"
             initial={{ opacity: 0, x: 50 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8 }}
@@ -142,7 +142,7 @@ export const Contact = () => {
               
               {/* Map Overlay */}
               <motion.div
-                className="absolute top-4 left-4 crystal-glass p-3 rounded-xl"
+                className="absolute top-4 left-4 diamond-crystal dark:dark p-3 rounded-xl"
                 initial={{ opacity: 0, scale: 0.8 }}
                 whileInView={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.6, delay: 0.3 }}
@@ -165,7 +165,7 @@ export const Contact = () => {
           transition={{ duration: 0.8, delay: 0.4 }}
           viewport={{ once: true }}
         >
-          <div className="dashboard-glass p-6 max-w-2xl mx-auto rounded-3xl">
+          <div className="fluid-glass dark:dark p-6 max-w-2xl mx-auto rounded-3xl shiny-cuts">
             <h4 className="text-lg font-semibold text-gradient mb-2">
               Need Help with Registration?
             </h4>

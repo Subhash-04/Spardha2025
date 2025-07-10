@@ -64,7 +64,7 @@ export const Hero = () => {
           <Button
             onClick={scrollToRegister}
             size="lg"
-            className="dashboard-glass text-lg px-8 py-3 hover:scale-105 transition-all duration-300 border-primary/30 hover:border-primary/50"
+            className="fluid-glass dark:dark text-lg px-8 py-3 hover:scale-105 transition-all duration-300 border-primary/30 hover:border-primary/50 shiny-cuts"
           >
             Register Now
           </Button>
@@ -73,7 +73,7 @@ export const Hero = () => {
             onClick={scrollToAbout}
             variant="outline"
             size="lg"
-            className="crystal-glass text-lg px-8 py-3 hover:scale-105 transition-all duration-300"
+            className="diamond-crystal dark:dark text-lg px-8 py-3 hover:scale-105 transition-all duration-300"
           >
             Learn More
           </Button>
