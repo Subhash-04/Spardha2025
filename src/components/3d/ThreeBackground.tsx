@@ -283,40 +283,22 @@ export const ThreeBackground = ({ isDark }: ThreeBackgroundProps) => {
     <div className="fixed inset-0 -z-10">
       <Canvas
         camera={{ position: [0, 8, 35], fov: 65 }}
-        gl={{ 
-          alpha: true, 
-          antialias: true
-        }}
+        gl={{ alpha: true, antialias: true }}
       >
-        {/* Lighting */}
-        <ambientLight intensity={isDark ? 0.2 : 0.4} />
-        <directionalLight 
-          position={[20, 20, 10]} 
-          intensity={isDark ? 0.6 : 1}
-          color={isDark ? '#00f6ff' : '#8b5cf6'}
-        />
-        <pointLight 
-          position={[-15, 10, -10]} 
-          intensity={isDark ? 0.4 : 0.6}
-          color={isDark ? '#41deff' : '#d946ef'}
-        />
-
-        {/* Core 3D Elements */}
-        <HolographicPlatform isDark={isDark} />
-        <EnhancedParticles isDark={isDark} />
+        <ambientLight intensity={0.4} />
+        <directionalLight position={[10, 10, 5]} intensity={0.8} />
         
-        {/* Theme-specific Elements */}
-        {isDark ? <CyberpunkHUD /> : <HolographicElements />}
-
-        {/* Controls */}
-        <OrbitControls 
-          enableZoom={false}
-          enablePan={false}
-          autoRotate
-          autoRotateSpeed={0.3}
-          maxPolarAngle={Math.PI / 1.8}
-          minPolarAngle={Math.PI / 4}
-        />
+        {/* Simple working geometry */}
+        <mesh position={[0, 0, 0]}>
+          <sphereGeometry args={[2, 32, 32]} />
+          <meshPhongMaterial 
+            color={isDark ? '#00f6ff' : '#8b5cf6'} 
+            transparent 
+            opacity={0.3}
+          />
+        </mesh>
+        
+        <OrbitControls enableZoom={false} autoRotate />
       </Canvas>
     </div>
   );
