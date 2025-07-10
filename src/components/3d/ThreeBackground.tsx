@@ -131,33 +131,30 @@ function GlowingCircles({ isDark }: { isDark: boolean }) {
   );
 }
 
-// Tech Lines Network - Fixed for React Three Fiber
+// Tech Lines Network
 function TechLines({ isDark }: { isDark: boolean }) {
   const groupRef = useRef<THREE.Group>(null);
   
   const lines = useMemo(() => {
     const lineData = [];
-    const nodeCount = 15; // Reduced for better performance
+    const nodeCount = 20;
     
     for (let i = 0; i < nodeCount; i++) {
-      const connections = Math.floor(Math.random() * 2) + 1;
+      const connections = Math.floor(Math.random() * 3) + 1;
       for (let j = 0; j < connections; j++) {
         const start = new THREE.Vector3(
-          (Math.random() - 0.5) * 80,
-          (Math.random() - 0.5) * 40,
-          (Math.random() - 0.5) * 80
+          (Math.random() - 0.5) * 100,
+          (Math.random() - 0.5) * 60,
+          (Math.random() - 0.5) * 100
         );
         
         const end = new THREE.Vector3(
-          start.x + (Math.random() - 0.5) * 25,
-          start.y + (Math.random() - 0.5) * 15,
-          start.z + (Math.random() - 0.5) * 25
+          start.x + (Math.random() - 0.5) * 30,
+          start.y + (Math.random() - 0.5) * 20,
+          start.z + (Math.random() - 0.5) * 30
         );
         
-        lineData.push({ 
-          points: [start, end], 
-          opacity: Math.random() * 0.4 + 0.2 
-        });
+        lineData.push({ start, end, opacity: Math.random() * 0.5 + 0.2 });
       }
     }
     return lineData;
@@ -165,27 +162,31 @@ function TechLines({ isDark }: { isDark: boolean }) {
 
   useFrame((state) => {
     if (groupRef.current) {
-      groupRef.current.rotation.y = state.clock.elapsedTime * 0.03;
+      groupRef.current.rotation.y = state.clock.elapsedTime * 0.05;
     }
   });
 
   return (
     <group ref={groupRef}>
       {lines.map((line, i) => (
-        <mesh key={i}>
-          <tubeGeometry args={[
-            new THREE.CatmullRomCurve3(line.points),
-            64,
-            0.02,
-            8,
-            false
-          ]} />
-          <meshBasicMaterial
+        <line key={i}>
+          <bufferGeometry>
+            <bufferAttribute
+              attach="attributes-position"
+              count={2}
+              array={new Float32Array([
+                line.start.x, line.start.y, line.start.z,
+                line.end.x, line.end.y, line.end.z
+              ])}
+              itemSize={3}
+            />
+          </bufferGeometry>
+          <lineBasicMaterial
             color={isDark ? '#00d4ff' : '#8b5cf6'}
             transparent
             opacity={line.opacity}
           />
-        </mesh>
+        </line>
       ))}
     </group>
   );
@@ -273,6 +274,31 @@ function FloatingGeometry({ isDark }: { isDark: boolean }) {
   );
 }
 
+// Interactive Mouse Handler
+function MouseInteraction({ isDark }: { isDark: boolean }) {
+  const { camera } = useThree();
+  const [mouse, setMouse] = useState({ x: 0, y: 0 });
+  
+  useEffect(() => {
+    const handleMouseMove = (event: MouseEvent) => {
+      setMouse({
+        x: (event.clientX / window.innerWidth) * 2 - 1,
+        y: -(event.clientY / window.innerHeight) * 2 + 1
+      });
+    };
+    
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, []);
+
+  useFrame(() => {
+    camera.position.x += (mouse.x * 5 - camera.position.x) * 0.02;
+    camera.position.y += (mouse.y * 3 - camera.position.y) * 0.02;
+    camera.lookAt(0, 0, 0);
+  });
+
+  return null;
+}
 
 export const ThreeBackground = ({ isDark }: ThreeBackgroundProps) => {
   return (
@@ -325,6 +351,7 @@ export const ThreeBackground = ({ isDark }: ThreeBackgroundProps) => {
         <TechLines isDark={isDark} />
         <CrystalGrid isDark={isDark} />
         <FloatingGeometry isDark={isDark} />
+        <MouseInteraction isDark={isDark} />
 
         {/* Fog for Depth */}
         <fog 
