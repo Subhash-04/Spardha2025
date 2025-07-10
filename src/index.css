@@ -1,128 +1,147 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Spardha 2025 Design System - Modern Glassmorphism & Neumorphism
-All colors MUST be HSL for proper theme switching.
+/* Spardha 2025 - Futuristic Design System
+Inspired by iOS 26 Liquid Glass & Cyberpunk Aesthetics
 */
 
 @layer base {
   :root {
-    /* Light Theme - Purple/Violet Spectrum */
-    --background: 224 25% 95%;
-    --foreground: 222 20% 15%;
+    /* Light Theme - Holographic Platform */
+    --background: 240 15% 97%;
+    --foreground: 240 10% 4%;
 
-    --card: 224 25% 95%;
-    --card-foreground: 222 20% 15%;
-    --card-glass: 224 25% 95% / 0.8;
+    --card: 240 10% 95%;
+    --card-foreground: 240 10% 4%;
+    --card-glass: 240 10% 95% / 0.85;
 
-    --popover: 224 25% 95%;
-    --popover-foreground: 222 20% 15%;
+    --popover: 240 10% 95%;
+    --popover-foreground: 240 10% 4%;
 
-    --primary: 262 52% 47%;
+    --primary: 262 100% 65%;
     --primary-foreground: 0 0% 100%;
-    --primary-glow: 262 83% 58%;
+    --primary-glow: 278 100% 75%;
 
-    --secondary: 224 25% 88%;
-    --secondary-foreground: 222 20% 15%;
+    --secondary: 240 5% 90%;
+    --secondary-foreground: 240 10% 4%;
 
-    --muted: 224 25% 88%;
-    --muted-foreground: 222 15% 45%;
+    --muted: 240 5% 92%;
+    --muted-foreground: 240 4% 46%;
 
-    --accent: 262 52% 47%;
-    --accent-foreground: 0 0% 100%;
+    --accent: 194 100% 55%;
+    --accent-foreground: 240 10% 4%;
 
     --destructive: 0 84% 60%;
-    --destructive-foreground: 0 0% 100%;
+    --destructive-foreground: 0 0% 98%;
 
-    --border: 224 25% 82%;
-    --input: 224 25% 90%;
-    --ring: 262 52% 47%;
+    --border: 240 6% 88%;
+    --input: 240 6% 90%;
+    --ring: 262 100% 65%;
 
     --radius: 1rem;
 
-    /* Glassmorphism Effects */
-    --glass-bg: 224 25% 95% / 0.8;
-    --glass-border: 224 25% 82% / 0.3;
-    --glass-shadow: 224 25% 75% / 0.2;
+    /* Holographic Glass Effects */
+    --glass-bg: 240 10% 95% / 0.15;
+    --glass-border: 262 100% 65% / 0.25;
+    --glass-shadow: 262 100% 65% / 0.3;
+    --glass-glow: 278 100% 75% / 0.4;
 
-    /* Neumorphism Shadows */
-    --neu-light: 224 25% 98%;
-    --neu-dark: 224 25% 85%;
+    /* Liquid Glass iOS 26 */
+    --liquid-glass: 240 10% 95% / 0.08;
+    --liquid-border: 262 100% 65% / 0.2;
+    --liquid-glow: 278 100% 75% / 0.6;
 
-    /* Theme Gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(262 83% 58%), hsl(262 52% 47%));
-    --gradient-glass: linear-gradient(135deg, hsl(224 25% 95% / 0.9), hsl(224 25% 90% / 0.7));
+    /* Neumorphism - Light */
+    --neu-light: 240 15% 98%;
+    --neu-dark: 240 10% 88%;
+    --neu-shadow-light: 240 15% 100% / 0.8;
+    --neu-shadow-dark: 240 10% 85% / 0.6;
 
-    --sidebar-background: 224 25% 95%;
-    --sidebar-foreground: 222 20% 15%;
-    --sidebar-primary: 262 52% 47%;
+    /* Holographic Colors */
+    --holo-primary: 262 100% 65%;
+    --holo-secondary: 194 100% 55%;
+    --holo-accent: 278 100% 75%;
+    --holo-tertiary: 300 100% 70%;
+
+    --sidebar-background: 240 15% 97%;
+    --sidebar-foreground: 240 10% 4%;
+    --sidebar-primary: 262 100% 65%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 224 25% 88%;
-    --sidebar-accent-foreground: 222 20% 15%;
-    --sidebar-border: 224 25% 82%;
-    --sidebar-ring: 262 52% 47%;
+    --sidebar-accent: 240 5% 90%;
+    --sidebar-accent-foreground: 240 10% 4%;
+    --sidebar-border: 240 6% 88%;
+    --sidebar-ring: 262 100% 65%;
   }
 
   .dark {
-    /* Dark Theme - Cyan/Blue Holographic */
-    --background: 222 47% 6%;
-    --foreground: 195 100% 95%;
+    /* Dark Theme - Cyberpunk HUD */
+    --background: 223 47% 6%;
+    --foreground: 194 100% 95%;
 
-    --card: 222 47% 8%;
-    --card-foreground: 195 100% 95%;
-    --card-glass: 222 47% 8% / 0.8;
+    --card: 223 47% 8%;
+    --card-foreground: 194 100% 95%;
+    --card-glass: 223 47% 8% / 0.85;
 
-    --popover: 222 47% 8%;
-    --popover-foreground: 195 100% 95%;
+    --popover: 223 47% 8%;
+    --popover-foreground: 194 100% 95%;
 
-    --primary: 195 100% 50%;
-    --primary-foreground: 222 47% 6%;
-    --primary-glow: 195 100% 75%;
+    --primary: 194 100% 55%;
+    --primary-foreground: 223 47% 6%;
+    --primary-glow: 187 100% 65%;
 
-    --secondary: 222 47% 12%;
-    --secondary-foreground: 195 100% 95%;
+    --secondary: 223 47% 12%;
+    --secondary-foreground: 194 100% 95%;
 
-    --muted: 222 47% 12%;
-    --muted-foreground: 195 50% 70%;
+    --muted: 223 47% 10%;
+    --muted-foreground: 194 50% 65%;
 
-    --accent: 195 100% 50%;
-    --accent-foreground: 222 47% 6%;
+    --accent: 41 100% 65%;
+    --accent-foreground: 223 47% 6%;
 
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 0 0% 100%;
+    --destructive: 0 62% 55%;
+    --destructive-foreground: 0 85% 97%;
 
-    --border: 222 47% 15%;
-    --input: 222 47% 12%;
-    --ring: 195 100% 50%;
+    --border: 223 47% 15%;
+    --input: 223 47% 12%;
+    --ring: 194 100% 55%;
 
-    /* Glassmorphism Effects - Dark */
-    --glass-bg: 222 47% 8% / 0.8;
-    --glass-border: 195 100% 50% / 0.2;
-    --glass-shadow: 195 100% 50% / 0.1;
+    /* Cyberpunk Glass Effects */
+    --glass-bg: 223 47% 8% / 0.12;
+    --glass-border: 194 100% 55% / 0.3;
+    --glass-shadow: 194 100% 55% / 0.4;
+    --glass-glow: 187 100% 65% / 0.5;
 
-    /* Neumorphism Shadows - Dark */
-    --neu-light: 222 47% 12%;
-    --neu-dark: 222 47% 3%;
+    /* Liquid Glass - Dark */
+    --liquid-glass: 223 47% 8% / 0.08;
+    --liquid-border: 194 100% 55% / 0.25;
+    --liquid-glow: 187 100% 65% / 0.8;
 
-    /* Theme Gradients - Dark */
-    --gradient-primary: linear-gradient(135deg, hsl(195 100% 75%), hsl(195 100% 50%));
-    --gradient-glass: linear-gradient(135deg, hsl(222 47% 8% / 0.9), hsl(222 47% 6% / 0.7));
+    /* Neumorphism - Dark */
+    --neu-light: 223 47% 12%;
+    --neu-dark: 223 47% 3%;
+    --neu-shadow-light: 223 47% 15% / 0.7;
+    --neu-shadow-dark: 223 47% 1% / 0.8;
 
-    --sidebar-background: 222 47% 6%;
-    --sidebar-foreground: 195 100% 95%;
-    --sidebar-primary: 195 100% 50%;
-    --sidebar-primary-foreground: 222 47% 6%;
-    --sidebar-accent: 222 47% 12%;
-    --sidebar-accent-foreground: 195 100% 95%;
-    --sidebar-border: 222 47% 15%;
-    --sidebar-ring: 195 100% 50%;
+    /* Cyberpunk Colors */
+    --cyber-primary: 194 100% 55%;
+    --cyber-secondary: 187 100% 65%;
+    --cyber-accent: 41 100% 65%;
+    --cyber-tertiary: 160 100% 60%;
+
+    --sidebar-background: 223 47% 6%;
+    --sidebar-foreground: 194 100% 95%;
+    --sidebar-primary: 194 100% 55%;
+    --sidebar-primary-foreground: 223 47% 6%;
+    --sidebar-accent: 223 47% 12%;
+    --sidebar-accent-foreground: 194 100% 95%;
+    --sidebar-border: 223 47% 15%;
+    --sidebar-ring: 194 100% 55%;
   }
-}
 
-@layer base {
   * {
     @apply border-border;
   }
@@ -130,92 +149,385 @@ All colors MUST be HSL for proper theme switching.
   body {
     @apply bg-background text-foreground font-inter antialiased;
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    overflow-x: hidden;
   }
 
   html {
     scroll-behavior: smooth;
   }
+
+  /* Scrollbar Styling */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    @apply bg-background;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: hsl(var(--primary) / 0.5);
+    @apply rounded-full;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--primary) / 0.8);
+  }
 }
 
 @layer components {
-  /* Glassmorphism Components */
+  /* === LIQUID GLASS COMPONENTS (iOS 26 Style) === */
+  .liquid-glass {
+    background: hsl(var(--liquid-glass));
+    backdrop-filter: blur(40px) saturate(1.5);
+    -webkit-backdrop-filter: blur(40px) saturate(1.5);
+    border: 1px solid hsl(var(--liquid-border));
+    box-shadow: 
+      0 16px 64px hsl(var(--glass-shadow)),
+      inset 0 2px 0 hsl(var(--liquid-border)),
+      0 0 32px hsl(var(--liquid-glow));
+    position: relative;
+    overflow: hidden;
+  }
+
+  .liquid-glass::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      hsl(var(--primary)),
+      transparent
+    );
+    animation: liquid-scan 3s linear infinite;
+  }
+
+  .liquid-card {
+    @apply liquid-glass rounded-3xl p-8;
+    transform-style: preserve-3d;
+    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .liquid-card:hover {
+    transform: translateY(-8px) rotateX(2deg) rotateY(2deg);
+    box-shadow: 
+      0 24px 80px hsl(var(--glass-shadow)),
+      inset 0 2px 0 hsl(var(--liquid-border)),
+      0 0 48px hsl(var(--liquid-glow));
+  }
+
+  .liquid-button {
+    @apply liquid-glass rounded-2xl px-8 py-4 font-medium;
+    @apply transition-all duration-300 ease-out;
+    @apply relative overflow-hidden;
+    cursor: pointer;
+  }
+
+  .liquid-button::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: radial-gradient(circle, hsl(var(--primary) / 0.3) 0%, transparent 70%);
+    transform: translate(-50%, -50%);
+    transition: all 0.6s ease;
+  }
+
+  .liquid-button:hover::after {
+    width: 200%;
+    height: 200%;
+  }
+
+  .liquid-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 
+      0 20px 60px hsl(var(--glass-shadow)),
+      0 0 40px hsl(var(--liquid-glow));
+  }
+
+  /* === ADVANCED GLASSMORPHISM === */
   .glass-card {
-    @apply backdrop-blur-xl bg-card/80 border border-border/30;
-    box-shadow: 0 8px 32px hsl(var(--glass-shadow));
+    background: hsl(var(--glass-bg));
+    backdrop-filter: blur(30px) saturate(1.8);
+    -webkit-backdrop-filter: blur(30px) saturate(1.8);
+    border: 1px solid hsl(var(--glass-border));
+    box-shadow: 
+      0 12px 48px hsl(var(--glass-shadow)),
+      inset 0 1px 0 hsl(var(--glass-border));
+    @apply rounded-2xl;
   }
 
-  .glass-button {
-    @apply backdrop-blur-lg bg-primary/90 hover:bg-primary text-primary-foreground;
-    @apply border border-primary/30 shadow-lg hover:shadow-xl;
-    @apply transition-all duration-300 ease-in-out;
-    @apply active:scale-95;
+  .glass-intense {
+    background: hsl(var(--glass-bg));
+    backdrop-filter: blur(50px) saturate(2);
+    -webkit-backdrop-filter: blur(50px) saturate(2);
+    border: 1px solid hsl(var(--glass-border));
+    box-shadow: 
+      0 20px 64px hsl(var(--glass-shadow)),
+      inset 0 2px 0 hsl(var(--glass-border)),
+      0 0 40px hsl(var(--glass-glow));
+    @apply rounded-3xl;
   }
 
-  /* Neumorphism Components */
+  /* === NEUMORPHISM COMPONENTS === */
   .neu-card {
     background: hsl(var(--background));
     box-shadow: 
-      8px 8px 16px hsl(var(--neu-dark)),
-      -8px -8px 16px hsl(var(--neu-light));
-    @apply rounded-2xl transition-all duration-300;
+      16px 16px 32px hsl(var(--neu-shadow-dark)),
+      -16px -16px 32px hsl(var(--neu-shadow-light));
+    @apply rounded-3xl transition-all duration-500;
+    transform-style: preserve-3d;
   }
 
   .neu-card:hover {
     box-shadow: 
-      12px 12px 24px hsl(var(--neu-dark)),
-      -12px -12px 24px hsl(var(--neu-light));
-    @apply -translate-y-1;
+      24px 24px 48px hsl(var(--neu-shadow-dark)),
+      -24px -24px 48px hsl(var(--neu-shadow-light));
+    transform: translateY(-4px) rotateX(1deg);
   }
 
   .neu-button {
     background: hsl(var(--background));
     box-shadow: 
-      6px 6px 12px hsl(var(--neu-dark)),
-      -6px -6px 12px hsl(var(--neu-light));
-    @apply rounded-xl transition-all duration-200;
+      8px 8px 16px hsl(var(--neu-shadow-dark)),
+      -8px -8px 16px hsl(var(--neu-shadow-light));
+    @apply rounded-2xl transition-all duration-300;
+    @apply active:scale-95;
   }
 
   .neu-button:active {
     box-shadow: 
-      inset 4px 4px 8px hsl(var(--neu-dark)),
-      inset -4px -4px 8px hsl(var(--neu-light));
+      inset 6px 6px 12px hsl(var(--neu-shadow-dark)),
+      inset -6px -6px 12px hsl(var(--neu-shadow-light));
   }
 
   .neu-input {
     background: hsl(var(--background));
     box-shadow: 
-      inset 4px 4px 8px hsl(var(--neu-dark)),
-      inset -4px -4px 8px hsl(var(--neu-light));
-    @apply rounded-xl border-0 transition-all duration-200;
+      inset 6px 6px 12px hsl(var(--neu-shadow-dark)),
+      inset -6px -6px 12px hsl(var(--neu-shadow-light));
+    @apply rounded-2xl border-0 px-6 py-4;
+    @apply transition-all duration-300;
   }
 
   .neu-input:focus {
     box-shadow: 
-      inset 6px 6px 12px hsl(var(--neu-dark)),
-      inset -6px -6px 12px hsl(var(--neu-light)),
-      0 0 0 2px hsl(var(--ring));
+      inset 8px 8px 16px hsl(var(--neu-shadow-dark)),
+      inset -8px -8px 16px hsl(var(--neu-shadow-light)),
+      0 0 0 3px hsl(var(--ring) / 0.3);
   }
 
-  /* Text Gradients */
-  .text-gradient {
-    background: var(--gradient-primary);
-    -webkit-background-clip: text;
+  /* === 3D CARD EFFECTS === */
+  .card-3d {
+    transform-style: preserve-3d;
+    transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    perspective: 1000px;
+  }
+
+  .card-3d:hover {
+    transform: rotateX(10deg) rotateY(15deg) translateZ(30px);
+  }
+
+  .card-float {
+    animation: float-3d 8s ease-in-out infinite;
+  }
+
+  /* === HOLOGRAPHIC EFFECTS === */
+  .holo-text {
+    background: linear-gradient(
+      45deg,
+      hsl(var(--holo-primary)) 0%,
+      hsl(var(--holo-secondary)) 25%,
+      hsl(var(--holo-accent)) 50%,
+      hsl(var(--holo-tertiary)) 75%,
+      hsl(var(--holo-primary)) 100%
+    );
+    background-size: 400% 400%;
     background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: holographic-flow 4s ease-in-out infinite;
+  }
+
+  .cyber-glow {
+    box-shadow: 
+      0 0 20px hsl(var(--primary)),
+      0 0 40px hsl(var(--primary)),
+      0 0 60px hsl(var(--primary)),
+      inset 0 0 20px hsl(var(--primary) / 0.1);
+    animation: cyber-pulse 3s ease-in-out infinite;
+  }
+
+  /* === HUD ELEMENTS === */
+  .hud-panel {
+    background: hsl(var(--glass-bg));
+    border: 1px solid hsl(var(--glass-border));
+    backdrop-filter: blur(20px);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hud-panel::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      hsl(var(--primary)),
+      transparent
+    );
+    animation: hud-scan 2s linear infinite;
+  }
+
+  .hud-panel::after {
+    content: '';
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 8px;
+    height: 8px;
+    background: hsl(var(--primary));
+    border-radius: 50%;
+    animation: hud-blink 1.5s ease-in-out infinite;
+  }
+
+  /* === TEXT EFFECTS === */
+  .text-gradient {
+    background: linear-gradient(
+      135deg,
+      hsl(var(--primary)) 0%,
+      hsl(var(--primary-glow)) 100%
+    );
+    background-clip: text;
+    -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
   }
 
-  /* Glow Effects */
-  .glow {
-    filter: drop-shadow(0 0 8px hsl(var(--primary-glow)));
+  .text-holographic {
+    @apply holo-text font-orbitron font-bold;
   }
 
-  .glow-hover:hover {
-    filter: drop-shadow(0 0 16px hsl(var(--primary-glow)));
-    @apply transition-all duration-300;
+  /* === ANIMATIONS === */
+  .loading-dots {
+    animation: loading-pulse 1.5s ease-in-out infinite;
   }
 
-  /* Loading Spinner */
-  .spinner {
-    @apply animate-spin rounded-full border-2 border-muted border-t-primary;
+  .spinner-3d {
+    animation: spin-3d 2s linear infinite;
+  }
+}
+
+@layer utilities {
+  /* === FONT FAMILIES === */
+  .font-orbitron {
+    font-family: 'Orbitron', monospace;
+  }
+
+  .font-inter {
+    font-family: 'Inter', sans-serif;
+  }
+
+  /* === ANIMATIONS === */
+  @keyframes liquid-scan {
+    0% { left: -100%; }
+    100% { left: 100%; }
+  }
+
+  @keyframes float-3d {
+    0%, 100% { 
+      transform: translateY(0px) rotateX(0deg) rotateY(0deg); 
+    }
+    25% { 
+      transform: translateY(-20px) rotateX(2deg) rotateY(5deg); 
+    }
+    50% { 
+      transform: translateY(0px) rotateX(0deg) rotateY(10deg); 
+    }
+    75% { 
+      transform: translateY(-10px) rotateX(-2deg) rotateY(5deg); 
+    }
+  }
+
+  @keyframes holographic-flow {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+  }
+
+  @keyframes cyber-pulse {
+    0%, 100% {
+      box-shadow: 
+        0 0 20px hsl(var(--primary)),
+        0 0 40px hsl(var(--primary)),
+        0 0 60px hsl(var(--primary));
+    }
+    50% {
+      box-shadow: 
+        0 0 30px hsl(var(--primary)),
+        0 0 60px hsl(var(--primary)),
+        0 0 90px hsl(var(--primary));
+    }
+  }
+
+  @keyframes hud-scan {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+  }
+
+  @keyframes hud-blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  @keyframes loading-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+  }
+
+  @keyframes spin-3d {
+    0% { transform: rotateY(0deg) rotateX(0deg); }
+    25% { transform: rotateY(90deg) rotateX(30deg); }
+    50% { transform: rotateY(180deg) rotateX(0deg); }
+    75% { transform: rotateY(270deg) rotateX(-30deg); }
+    100% { transform: rotateY(360deg) rotateX(0deg); }
+  }
+
+  /* === RESPONSIVE 3D EFFECTS === */
+  @media (max-width: 768px) {
+    .card-3d:hover {
+      transform: rotateX(5deg) rotateY(8deg) translateZ(15px);
+    }
+    
+    .liquid-card:hover {
+      transform: translateY(-4px) rotateX(1deg) rotateY(1deg);
+    }
+  }
+
+  /* === ACCESSIBILITY === */
+  @media (prefers-reduced-motion: reduce) {
+    .card-3d,
+    .liquid-card,
+    .card-float,
+    .holo-text,
+    .cyber-glow,
+    .loading-dots,
+    .spinner-3d {
+      animation: none !important;
+      transition: none !important;
+    }
+    
+    .card-3d:hover,
+    .liquid-card:hover {
+      transform: none;
+    }
   }
 }
