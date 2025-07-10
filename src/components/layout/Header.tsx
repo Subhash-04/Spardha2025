@@ -17,6 +17,7 @@ export const Header = ({ isDark, onThemeToggle }: HeaderProps) => {
     { href: '#home', label: 'Home' },
     { href: '#about', label: 'About' },
     { href: '#events', label: 'Events' },
+    { href: '#navigation', label: 'Campus' },
     { href: '#register', label: 'Register' },
     { href: '#contact', label: 'Contact' },
   ];

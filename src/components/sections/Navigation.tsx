@@ -87,84 +87,122 @@ export const Navigation = () => {
             initial={{ opacity: 0, x: -50 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8 }}
-            className="liquid-glass rounded-3xl p-8"
+            className="relative"
           >
-            <h3 className="text-2xl font-bold text-gradient mb-6 font-orbitron">
-              Campus Layout
-            </h3>
-            
-            {/* Grid Container */}
-            <div className="grid grid-cols-3 gap-4 mb-8">
-              {campusBlocks.map((block, index) => (
-                <motion.div
-                  key={block.id}
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
-                  whileHover={{ 
-                    scale: 1.05,
-                    rotateY: 5,
-                    rotateX: 5
-                  }}
-                  className={`
-                    liquid-card h-32 flex flex-col items-center justify-center
-                    bg-gradient-to-br ${block.color} text-white
-                    cursor-pointer card-3d relative overflow-hidden
-                    ${block.id === 'NEW' ? 'col-span-1' : ''}
-                  `}
-                  style={{
-                    gridColumn: block.position.col,
-                    gridRow: block.position.row
-                  }}
-                >
-                  {/* Background Pattern */}
+            {/* Enhanced Liquid Glass Container */}
+            <div className="liquid-glass rounded-3xl p-8 relative overflow-hidden">
+              {/* Liquid Crystal Background Effect */}
+              <div className="absolute inset-0 opacity-30">
+                <div className="absolute top-0 left-0 w-32 h-32 bg-gradient-to-br from-primary/20 to-transparent rounded-full blur-2xl"></div>
+                <div className="absolute bottom-0 right-0 w-40 h-40 bg-gradient-to-tl from-accent/20 to-transparent rounded-full blur-3xl"></div>
+                <div className="absolute top-1/2 left-1/2 w-24 h-24 bg-gradient-to-r from-primary-glow/15 to-accent/15 rounded-full blur-xl -translate-x-1/2 -translate-y-1/2"></div>
+              </div>
+
+              {/* Animated Scan Lines */}
+              <div className="absolute inset-0 pointer-events-none">
+                <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent animate-[scan-line_3s_linear_infinite]"></div>
+                <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-accent/40 to-transparent animate-[scan-line_4s_linear_infinite_reverse]"></div>
+              </div>
+
+              <h3 className="text-2xl font-bold text-holographic mb-6 font-orbitron relative z-10">
+                Campus Layout
+              </h3>
+              
+              {/* Enhanced Grid Container */}
+              <div className="grid grid-cols-3 gap-4 mb-8 relative z-10">
+                {campusBlocks.map((block, index) => (
+                  <motion.div
+                    key={block.id}
+                    initial={{ opacity: 0, scale: 0.8, rotateY: -15 }}
+                    whileInView={{ opacity: 1, scale: 1, rotateY: 0 }}
+                    transition={{ duration: 0.6, delay: index * 0.1 }}
+                    whileHover={{ 
+                      scale: 1.08,
+                      rotateY: 8,
+                      rotateX: 5,
+                      z: 50
+                    }}
+                    className={`
+                      relative h-32 flex flex-col items-center justify-center
+                      cursor-pointer card-3d overflow-hidden
+                      ${block.id === 'NEW' ? 'col-span-1' : ''}
+                    `}
+                    style={{
+                      gridColumn: block.position.col,
+                      gridRow: block.position.row
+                    }}
+                  >
+                    {/* Liquid Crystal Card Background */}
+                    <div className="absolute inset-0 liquid-glass rounded-2xl">
+                      <div className={`absolute inset-0 bg-gradient-to-br ${block.color} opacity-80 rounded-2xl`}></div>
+                      
+                      {/* Crystal Facets Effect */}
+                      <div className="absolute inset-0 opacity-40">
+                        <div className="absolute top-0 left-0 w-full h-1/2 bg-gradient-to-br from-white/30 to-transparent rounded-t-2xl"></div>
+                        <div className="absolute bottom-0 right-0 w-1/2 h-1/2 bg-gradient-to-tl from-white/20 to-transparent rounded-br-2xl"></div>
+                      </div>
+                      
+                      {/* Animated Liquid Flow */}
+                      <div className="absolute inset-0 overflow-hidden rounded-2xl">
+                        <div className="absolute -top-1/2 -left-1/2 w-full h-full bg-gradient-to-br from-white/10 to-transparent rounded-full animate-[liquid-flow_6s_ease-in-out_infinite]"></div>
+                      </div>
+                      
+                      {/* HUD Elements */}
+                      <div className="absolute top-2 right-2 w-8 h-8 border border-white/40 rounded-full backdrop-blur-sm"></div>
+                      <div className="absolute bottom-2 left-2 w-6 h-6 border border-white/30 rounded backdrop-blur-sm"></div>
+                      <div className="absolute top-2 left-2 w-1 h-6 bg-white/30 rounded-full"></div>
+                    </div>
+                    
+                    {/* Content */}
+                    <Building className="w-8 h-8 mb-2 z-10 text-white drop-shadow-lg" />
+                    <span className="text-2xl font-bold font-orbitron z-10 text-white drop-shadow-lg">{block.id}</span>
+                    <span className="text-sm font-medium z-10 text-white/90 drop-shadow-md">{block.name}</span>
+                  </motion.div>
+                ))}
+              </div>
+
+              {/* Enhanced Legend */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.3 }}
+                className="relative"
+              >
+                <div className="liquid-glass rounded-2xl p-4 relative overflow-hidden">
+                  {/* Legend Background Effects */}
                   <div className="absolute inset-0 opacity-20">
-                    <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent"></div>
-                    <div className="absolute top-2 right-2 w-8 h-8 border border-white/30 rounded-full"></div>
-                    <div className="absolute bottom-2 left-2 w-6 h-6 border border-white/30 rounded"></div>
+                    <div className="absolute top-0 right-0 w-16 h-16 bg-gradient-to-bl from-primary/30 to-transparent rounded-full blur-xl"></div>
                   </div>
                   
-                  <Building className="w-8 h-8 mb-2 z-10" />
-                  <span className="text-2xl font-bold font-orbitron z-10">{block.id}</span>
-                  <span className="text-sm font-medium z-10">{block.name}</span>
-                </motion.div>
-              ))}
+                  <h4 className="font-semibold text-foreground mb-3 flex items-center relative z-10">
+                    <MapPin className="w-4 h-4 mr-2 text-primary" />
+                    Campus Legend
+                  </h4>
+                  <div className="grid grid-cols-2 gap-2 text-sm relative z-10">
+                    <div className="flex items-center">
+                      <div className="w-3 h-3 bg-gradient-to-r from-blue-400 to-blue-600 rounded mr-2 shadow-lg"></div>
+                      <span>Computer Science</span>
+                    </div>
+                    <div className="flex items-center">
+                      <div className="w-3 h-3 bg-gradient-to-r from-purple-400 to-purple-600 rounded mr-2 shadow-lg"></div>
+                      <span>Electronics</span>
+                    </div>
+                    <div className="flex items-center">
+                      <div className="w-3 h-3 bg-gradient-to-r from-green-400 to-green-600 rounded mr-2 shadow-lg"></div>
+                      <span>Science Labs</span>
+                    </div>
+                    <div className="flex items-center">
+                      <div className="w-3 h-3 bg-gradient-to-r from-orange-400 to-orange-600 rounded mr-2 shadow-lg"></div>
+                      <span>Mechanical</span>
+                    </div>
+                    <div className="flex items-center">
+                      <div className="w-3 h-3 bg-gradient-to-r from-cyan-400 to-cyan-600 rounded mr-2 shadow-lg"></div>
+                      <span>Innovation Hub</span>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
             </div>
-
-            {/* Legend */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-              className="glass-card p-4 rounded-2xl"
-            >
-              <h4 className="font-semibold text-foreground mb-3 flex items-center">
-                <MapPin className="w-4 h-4 mr-2 text-primary" />
-                Campus Legend
-              </h4>
-              <div className="grid grid-cols-2 gap-2 text-sm">
-                <div className="flex items-center">
-                  <div className="w-3 h-3 bg-gradient-to-r from-blue-400 to-blue-600 rounded mr-2"></div>
-                  <span>Computer Science</span>
-                </div>
-                <div className="flex items-center">
-                  <div className="w-3 h-3 bg-gradient-to-r from-purple-400 to-purple-600 rounded mr-2"></div>
-                  <span>Electronics</span>
-                </div>
-                <div className="flex items-center">
-                  <div className="w-3 h-3 bg-gradient-to-r from-green-400 to-green-600 rounded mr-2"></div>
-                  <span>Science Labs</span>
-                </div>
-                <div className="flex items-center">
-                  <div className="w-3 h-3 bg-gradient-to-r from-orange-400 to-orange-600 rounded mr-2"></div>
-                  <span>Mechanical</span>
-                </div>
-                <div className="flex items-center">
-                  <div className="w-3 h-3 bg-gradient-to-r from-cyan-400 to-cyan-600 rounded mr-2"></div>
-                  <span>Innovation Hub</span>
-                </div>
-              </div>
-            </motion.div>
           </motion.div>
 
           {/* Facilities Details */}
