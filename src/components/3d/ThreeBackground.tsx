@@ -285,34 +285,20 @@ export const ThreeBackground = ({ isDark }: ThreeBackgroundProps) => {
         camera={{ position: [0, 8, 35], fov: 65 }}
         gl={{ 
           alpha: true, 
-          antialias: true,
-          powerPreference: "high-performance"
+          antialias: true
         }}
       >
-        {/* Dynamic Lighting System */}
+        {/* Lighting */}
         <ambientLight intensity={isDark ? 0.2 : 0.4} />
-        
-        {/* Main Directional Light */}
         <directionalLight 
           position={[20, 20, 10]} 
           intensity={isDark ? 0.6 : 1}
           color={isDark ? '#00f6ff' : '#8b5cf6'}
-          castShadow
         />
-        
-        {/* Accent Lights */}
         <pointLight 
           position={[-15, 10, -10]} 
           intensity={isDark ? 0.4 : 0.6}
           color={isDark ? '#41deff' : '#d946ef'}
-          distance={50}
-        />
-        
-        <pointLight 
-          position={[15, -5, 15]} 
-          intensity={isDark ? 0.3 : 0.4}
-          color={isDark ? '#ffd700' : '#06b6d4'}
-          distance={40}
         />
 
         {/* Core 3D Elements */}
@@ -322,7 +308,7 @@ export const ThreeBackground = ({ isDark }: ThreeBackgroundProps) => {
         {/* Theme-specific Elements */}
         {isDark ? <CyberpunkHUD /> : <HolographicElements />}
 
-        {/* Interactive Controls */}
+        {/* Controls */}
         <OrbitControls 
           enableZoom={false}
           enablePan={false}
@@ -330,13 +316,7 @@ export const ThreeBackground = ({ isDark }: ThreeBackgroundProps) => {
           autoRotateSpeed={0.3}
           maxPolarAngle={Math.PI / 1.8}
           minPolarAngle={Math.PI / 4}
-          dampingFactor={0.05}
-          enableDamping
         />
-        
-        {/* Fog for Depth */}
-        {isDark && <fog attach="fog" args={['#0a0f1e', 30, 100]} />}
-        {!isDark && <fog attach="fog" args={['#f1f5f9', 30, 100]} />}
       </Canvas>
     </div>
   );
