@@ -92,7 +92,7 @@ export const Events = () => {
               {/* Day Header */}
               <div className="text-center mb-12">
                 <motion.div
-                  className="inline-flex items-center space-x-4 fluid-glass dark:dark px-8 py-4 mb-4 rounded-2xl shiny-cuts"
+                  className="inline-flex items-center space-x-4 dashboard-glass px-8 py-4 mb-4 rounded-2xl"
                   whileHover={{ scale: 1.05 }}
                   transition={{ type: "spring", stiffness: 300 }}
                 >
@@ -118,7 +118,7 @@ export const Events = () => {
                     }}
                     viewport={{ once: true }}
                   >
-                    <div className="diamond-crystal dark:dark p-6 h-full relative overflow-hidden rounded-2xl hover:scale-105 transition-all duration-300">
+                    <div className="crystal-glass p-6 h-full relative overflow-hidden rounded-2xl hover:scale-105 transition-all duration-300">
                       {/* Background Pattern */}
                       <div className="absolute top-0 right-0 w-32 h-32 opacity-5">
                         <event.icon className="w-full h-full" />
@@ -197,7 +197,7 @@ export const Events = () => {
           transition={{ duration: 0.8, delay: 0.4 }}
           viewport={{ once: true }}
         >
-          <div className="fluid-glass dark:dark p-8 max-w-2xl mx-auto rounded-3xl shiny-cuts">
+          <div className="dashboard-glass p-8 max-w-2xl mx-auto rounded-3xl">
             <h3 className="text-2xl font-bold text-gradient mb-4">
               Ready to Participate?
             </h3>
@@ -209,7 +209,7 @@ export const Events = () => {
                 const element = document.querySelector('#register');
                 if (element) element.scrollIntoView({ behavior: 'smooth' });
               }}
-              className="diamond-crystal dark:dark px-8 py-3 text-lg hover:scale-105 transition-all duration-300 border-primary/30"
+              className="dashboard-glass px-8 py-3 text-lg hover:scale-105 transition-all duration-300 border-primary/30"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >

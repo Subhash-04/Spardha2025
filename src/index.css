@@ -176,227 +176,6 @@ Inspired by iOS 26 Liquid Glass & Cyberpunk Aesthetics
 }
 
 @layer components {
-  /* === FLUID LIQUID GLASS iOS 26 DESIGN === */
-  .fluid-glass {
-    background: linear-gradient(
-      135deg,
-      rgba(255, 255, 255, 0.12) 0%,
-      rgba(255, 255, 255, 0.04) 25%,
-      rgba(255, 255, 255, 0.08) 50%,
-      rgba(255, 255, 255, 0.06) 75%,
-      rgba(255, 255, 255, 0.1) 100%
-    );
-    backdrop-filter: blur(80px) saturate(2.2) brightness(1.15) contrast(1.05);
-    -webkit-backdrop-filter: blur(80px) saturate(2.2) brightness(1.15) contrast(1.05);
-    border: 1px solid rgba(255, 255, 255, 0.25);
-    box-shadow: 
-      0 40px 80px rgba(0, 0, 0, 0.12),
-      inset 0 2px 0 rgba(255, 255, 255, 0.4),
-      inset 0 -2px 0 rgba(255, 255, 255, 0.1),
-      0 0 60px rgba(255, 255, 255, 0.08);
-    position: relative;
-    overflow: hidden;
-  }
-
-  .fluid-glass.dark {
-    background: linear-gradient(
-      135deg,
-      rgba(33, 41, 85, 0.15) 0%,
-      rgba(59, 130, 246, 0.08) 25%,
-      rgba(33, 41, 85, 0.12) 50%,
-      rgba(59, 130, 246, 0.1) 75%,
-      rgba(33, 41, 85, 0.18) 100%
-    );
-    border: 1px solid rgba(59, 130, 246, 0.35);
-    box-shadow: 
-      0 40px 80px rgba(0, 0, 0, 0.4),
-      inset 0 2px 0 rgba(59, 130, 246, 0.5),
-      inset 0 -2px 0 rgba(59, 130, 246, 0.15),
-      0 0 80px rgba(59, 130, 246, 0.25);
-  }
-
-  .fluid-glass::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(
-      90deg,
-      transparent,
-      rgba(255, 255, 255, 0.3),
-      transparent
-    );
-    animation: fluid-sweep 6s ease-in-out infinite;
-  }
-
-  /* === DIAMOND CRYSTAL CUTS DESIGN === */
-  .diamond-crystal {
-    background: linear-gradient(
-      135deg,
-      rgba(255, 255, 255, 0.15) 0%,
-      rgba(255, 255, 255, 0.05) 33%,
-      rgba(255, 255, 255, 0.12) 66%,
-      rgba(255, 255, 255, 0.08) 100%
-    );
-    backdrop-filter: blur(60px) saturate(2.5) brightness(1.2);
-    -webkit-backdrop-filter: blur(60px) saturate(2.5) brightness(1.2);
-    border: 2px solid;
-    border-image: linear-gradient(
-      45deg,
-      rgba(255, 255, 255, 0.4) 0%,
-      rgba(255, 255, 255, 0.1) 25%,
-      rgba(255, 255, 255, 0.6) 50%,
-      rgba(255, 255, 255, 0.2) 75%,
-      rgba(255, 255, 255, 0.5) 100%
-    ) 1;
-    box-shadow: 
-      0 32px 64px rgba(0, 0, 0, 0.15),
-      inset 0 0 20px rgba(255, 255, 255, 0.1),
-      0 0 40px rgba(255, 255, 255, 0.1);
-    position: relative;
-    overflow: hidden;
-    clip-path: polygon(
-      20px 0%, 
-      calc(100% - 20px) 0%, 
-      100% 20px, 
-      100% calc(100% - 20px), 
-      calc(100% - 20px) 100%, 
-      20px 100%, 
-      0% calc(100% - 20px), 
-      0% 20px
-    );
-  }
-
-  .diamond-crystal.dark {
-    background: linear-gradient(
-      135deg,
-      rgba(33, 41, 85, 0.2) 0%,
-      rgba(59, 130, 246, 0.08) 33%,
-      rgba(33, 41, 85, 0.15) 66%,
-      rgba(59, 130, 246, 0.12) 100%
-    );
-    border-image: linear-gradient(
-      45deg,
-      rgba(59, 130, 246, 0.6) 0%,
-      rgba(59, 130, 246, 0.2) 25%,
-      rgba(59, 130, 246, 0.8) 50%,
-      rgba(59, 130, 246, 0.3) 75%,
-      rgba(59, 130, 246, 0.7) 100%
-    ) 1;
-    box-shadow: 
-      0 32px 64px rgba(0, 0, 0, 0.5),
-      inset 0 0 30px rgba(59, 130, 246, 0.15),
-      0 0 60px rgba(59, 130, 246, 0.3);
-  }
-
-  .diamond-crystal::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: conic-gradient(
-      from 0deg,
-      transparent,
-      rgba(255, 255, 255, 0.15),
-      transparent,
-      rgba(255, 255, 255, 0.1),
-      transparent,
-      rgba(255, 255, 255, 0.2),
-      transparent
-    );
-    animation: diamond-rotate 12s linear infinite;
-    pointer-events: none;
-  }
-
-  .diamond-crystal.dark::before {
-    background: conic-gradient(
-      from 0deg,
-      transparent,
-      rgba(59, 130, 246, 0.2),
-      transparent,
-      rgba(59, 130, 246, 0.15),
-      transparent,
-      rgba(59, 130, 246, 0.3),
-      transparent
-    );
-  }
-
-  .diamond-crystal::after {
-    content: '';
-    position: absolute;
-    top: 10%;
-    left: 10%;
-    right: 10%;
-    bottom: 10%;
-    background: linear-gradient(
-      135deg,
-      rgba(255, 255, 255, 0.08) 0%,
-      transparent 50%,
-      rgba(255, 255, 255, 0.05) 100%
-    );
-    clip-path: polygon(
-      15px 0%, 
-      calc(100% - 15px) 0%, 
-      100% 15px, 
-      100% calc(100% - 15px), 
-      calc(100% - 15px) 100%, 
-      15px 100%, 
-      0% calc(100% - 15px), 
-      0% 15px
-    );
-    pointer-events: none;
-  }
-
-  .diamond-crystal.dark::after {
-    background: linear-gradient(
-      135deg,
-      rgba(59, 130, 246, 0.12) 0%,
-      transparent 50%,
-      rgba(59, 130, 246, 0.08) 100%
-    );
-  }
-
-  /* === SHINY CUTS EFFECT === */
-  .shiny-cuts {
-    position: relative;
-  }
-
-  .shiny-cuts::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(
-      45deg,
-      transparent 30%,
-      rgba(255, 255, 255, 0.4) 50%,
-      transparent 70%
-    );
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    pointer-events: none;
-  }
-
-  .shiny-cuts:hover::before {
-    opacity: 1;
-    animation: shiny-sweep 1.5s ease-out;
-  }
-
-  .shiny-cuts.dark::before {
-    background: linear-gradient(
-      45deg,
-      transparent 30%,
-      rgba(59, 130, 246, 0.6) 50%,
-      transparent 70%
-    );
-  }
-
   /* === SOPHISTICATED DASHBOARD GLASSMORPHISM === */
   .dashboard-glass {
     background: linear-gradient(
@@ -416,6 +195,57 @@ Inspired by iOS 26 Liquid Glass & Cyberpunk Aesthetics
       0 0 30px hsl(var(--glass-glow));
     position: relative;
     overflow: hidden;
+  }
+
+  .dashboard-glass.dark {
+    background: linear-gradient(
+      135deg,
+      rgba(33, 41, 85, 0.08) 0%,
+      rgba(59, 130, 246, 0.03) 25%,
+      rgba(33, 41, 85, 0.06) 50%,
+      rgba(59, 130, 246, 0.05) 75%,
+      rgba(33, 41, 85, 0.08) 100%
+    );
+    border: 1px solid rgba(59, 130, 246, 0.25);
+    box-shadow: 
+      0 24px 48px rgba(0, 0, 0, 0.4),
+      inset 0 1px 0 rgba(59, 130, 246, 0.3),
+      0 0 40px rgba(59, 130, 246, 0.2);
+  }
+
+  /* === PREMIUM CRYSTAL GLASSMORPHISM (Ultra-Refined) === */
+  .crystal-glass {
+    background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.15) 0%,
+      rgba(255, 255, 255, 0.03) 50%,
+      rgba(255, 255, 255, 0.08) 100%
+    );
+    backdrop-filter: blur(60px) saturate(2) brightness(1.1);
+    -webkit-backdrop-filter: blur(60px) saturate(2) brightness(1.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 
+      0 32px 64px rgba(0, 0, 0, 0.1),
+      inset 0 1px 0 rgba(255, 255, 255, 0.3),
+      inset 0 -1px 0 rgba(255, 255, 255, 0.08),
+      0 0 40px rgba(255, 255, 255, 0.06);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .crystal-glass.dark {
+    background: linear-gradient(
+      135deg,
+      rgba(33, 41, 85, 0.12) 0%,
+      rgba(59, 130, 246, 0.04) 50%,
+      rgba(33, 41, 85, 0.08) 100%
+    );
+    border: 1px solid rgba(59, 130, 246, 0.3);
+    box-shadow: 
+      0 32px 64px rgba(0, 0, 0, 0.3),
+      inset 0 1px 0 rgba(59, 130, 246, 0.4),
+      inset 0 -1px 0 rgba(59, 130, 246, 0.1),
+      0 0 50px rgba(59, 130, 246, 0.15);
   }
 
   .crystal-glass::before {

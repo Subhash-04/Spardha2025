@@ -90,8 +90,8 @@ export const RegistrationForm = () => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6 }}
     >
-      {/* Fluid Liquid Glass Container */}
-      <div className="fluid-glass dark:dark rounded-3xl p-10 relative overflow-hidden shiny-cuts">
+      {/* Sophisticated Dashboard Container */}
+      <div className="dashboard-glass rounded-3xl p-10 relative overflow-hidden">
         {/* Ultra Crystal Background Effects */}
         <div className="absolute inset-0 opacity-15">
           <div className="absolute top-0 left-0 w-48 h-48 gradient-glass-blue rounded-full blur-3xl"></div>
@@ -109,7 +109,7 @@ export const RegistrationForm = () => {
         <div className="text-center mb-10 relative z-10">
           {/* Enhanced ACM VVITU Logo */}
           <motion.div
-            className="mx-auto w-20 h-20 mb-6 diamond-crystal dark:dark rounded-3xl flex items-center justify-center hover:scale-110 transition-all duration-300"
+            className="mx-auto w-20 h-20 mb-6 crystal-glass rounded-3xl flex items-center justify-center hover:scale-110 transition-all duration-300"
             initial={{ scale: 0, rotate: -180, opacity: 0 }}
             animate={{ scale: 1, rotate: 0, opacity: 1 }}
             transition={{ duration: 1.2, type: "spring", bounce: 0.4 }}
