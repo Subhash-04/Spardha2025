@@ -1,6 +1,6 @@
 import { useRef, useMemo } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { OrbitControls, Float, Sphere, Ring, Box } from '@react-three/drei';
+import { OrbitControls, Float, Sphere } from '@react-three/drei';
 import * as THREE from 'three';
 
 interface ThemeColors {
@@ -58,23 +58,24 @@ function FloatingShapes({ isDark }: { isDark: boolean }) {
       {/* Floating Rings */}
       {[...Array(5)].map((_, i) => (
         <Float key={i} speed={1 + i * 0.2} rotationIntensity={0.3} floatIntensity={0.3}>
-          <Ring 
+          <mesh 
             position={[
               Math.cos(i * 2) * (10 + i * 2),
               Math.sin(i * 3) * 3,
               Math.sin(i * 2) * (10 + i * 2)
             ]}
-            args={[2 + i * 0.5, 2.5 + i * 0.5, 32]}
             rotation={[Math.PI / 2, 0, i]}
           >
+            <ringGeometry args={[2 + i * 0.5, 2.5 + i * 0.5, 32]} />
             <meshPhongMaterial 
               color={currentColors.secondary} 
               transparent 
               opacity={0.4}
               emissive={currentColors.secondary}
               emissiveIntensity={0.05}
+              side={THREE.DoubleSide}
             />
-          </Ring>
+          </mesh>
         </Float>
       ))}
 
