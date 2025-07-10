@@ -6,6 +6,7 @@ import { ThreeBackground } from '@/components/3d/ThreeBackground';
 import { Hero } from '@/components/sections/Hero';
 import { About } from '@/components/sections/About';
 import { Events } from '@/components/sections/Events';
+import { Navigation } from '@/components/sections/Navigation';
 import { RegistrationForm } from '@/components/forms/RegistrationForm';
 import { Contact } from '@/components/sections/Contact';
 
@@ -41,6 +42,7 @@ const Index = () => {
             <Hero />
             <About />
             <Events />
+            <Navigation />
             
             <section id="register" className="py-20">
               <div className="container mx-auto px-6">
