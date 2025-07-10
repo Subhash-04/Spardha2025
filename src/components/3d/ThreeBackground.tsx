@@ -131,62 +131,220 @@ function GlowingCircles({ isDark }: { isDark: boolean }) {
   );
 }
 
-// Tech Lines Network
+// Enhanced Tech Network with Glassmorphism
 function TechLines({ isDark }: { isDark: boolean }) {
   const groupRef = useRef<THREE.Group>(null);
   
-  const lines = useMemo(() => {
-    const lineData = [];
-    const nodeCount = 20;
+  const { nodes, connections } = useMemo(() => {
+    const nodeCount = 25;
+    const nodes = [];
+    const connections = [];
     
+    // Create nodes
     for (let i = 0; i < nodeCount; i++) {
-      const connections = Math.floor(Math.random() * 3) + 1;
-      for (let j = 0; j < connections; j++) {
-        const start = new THREE.Vector3(
-          (Math.random() - 0.5) * 100,
-          (Math.random() - 0.5) * 60,
-          (Math.random() - 0.5) * 100
-        );
-        
-        const end = new THREE.Vector3(
-          start.x + (Math.random() - 0.5) * 30,
-          start.y + (Math.random() - 0.5) * 20,
-          start.z + (Math.random() - 0.5) * 30
-        );
-        
-        lineData.push({ start, end, opacity: Math.random() * 0.5 + 0.2 });
+      nodes.push({
+        position: new THREE.Vector3(
+          (Math.random() - 0.5) * 80,
+          (Math.random() - 0.5) * 40,
+          (Math.random() - 0.5) * 80
+        ),
+        size: Math.random() * 0.3 + 0.2,
+        pulse: Math.random() * 2 + 1
+      });
+    }
+    
+    // Create connections between nearby nodes
+    for (let i = 0; i < nodes.length; i++) {
+      for (let j = i + 1; j < nodes.length; j++) {
+        const distance = nodes[i].position.distanceTo(nodes[j].position);
+        if (distance < 25 && Math.random() > 0.7) {
+          connections.push({
+            start: nodes[i].position,
+            end: nodes[j].position,
+            opacity: Math.max(0.1, 1 - distance / 25) * 0.6
+          });
+        }
       }
     }
-    return lineData;
+    
+    return { nodes, connections };
   }, []);
 
   useFrame((state) => {
     if (groupRef.current) {
-      groupRef.current.rotation.y = state.clock.elapsedTime * 0.05;
+      const time = state.clock.elapsedTime;
+      groupRef.current.rotation.y = time * 0.02;
+      
+      // Animate node pulses
+      groupRef.current.children.forEach((child, i) => {
+        if (i < nodes.length) {
+          const node = nodes[i];
+          const scale = 1 + Math.sin(time * node.pulse) * 0.2;
+          child.scale.setScalar(scale);
+        }
+      });
     }
   });
 
   return (
     <group ref={groupRef}>
-      {lines.map((line, i) => (
-        <line key={i}>
-          <bufferGeometry>
-            <bufferAttribute
-              attach="attributes-position"
-              count={2}
-              array={new Float32Array([
-                line.start.x, line.start.y, line.start.z,
-                line.end.x, line.end.y, line.end.z
-              ])}
-              itemSize={3}
-            />
-          </bufferGeometry>
-          <lineBasicMaterial
-            color={isDark ? '#00d4ff' : '#8b5cf6'}
+      {/* Network nodes */}
+      {nodes.map((node, i) => (
+        <mesh key={`node-${i}`} position={node.position}>
+          <sphereGeometry args={[node.size, 8, 8]} />
+          <meshPhongMaterial
+            color={isDark ? '#00f6ff' : '#8b5cf6'}
             transparent
-            opacity={line.opacity}
+            opacity={0.8}
+            emissive={isDark ? '#00d4ff' : '#7c3aed'}
+            emissiveIntensity={0.3}
           />
-        </line>
+        </mesh>
+      ))}
+      
+      {/* Network connections */}
+      {connections.map((connection, i) => {
+        const direction = new THREE.Vector3().subVectors(connection.end, connection.start);
+        const distance = direction.length();
+        const center = new THREE.Vector3().addVectors(connection.start, connection.end).multiplyScalar(0.5);
+        
+        return (
+          <mesh key={`connection-${i}`} position={center}>
+            <cylinderGeometry args={[0.02, 0.02, distance, 8]} />
+            <meshBasicMaterial
+              color={isDark ? '#00d4ff' : '#8b5cf6'}
+              transparent
+              opacity={connection.opacity}
+            />
+          </mesh>
+        );
+      })}
+    </group>
+  );
+}
+
+// Holographic Data Streams
+function DataStreams({ isDark }: { isDark: boolean }) {
+  const groupRef = useRef<THREE.Group>(null);
+  
+  const streams = useMemo(() => {
+    return [...Array(8)].map((_, i) => ({
+      radius: 15 + i * 3,
+      speed: 0.5 + Math.random() * 0.5,
+      offset: Math.random() * Math.PI * 2,
+      particles: 20 + i * 5
+    }));
+  }, []);
+
+  useFrame((state) => {
+    if (groupRef.current) {
+      const time = state.clock.elapsedTime;
+      
+      groupRef.current.children.forEach((streamGroup, streamIndex) => {
+        const stream = streams[streamIndex];
+        streamGroup.rotation.y = time * stream.speed + stream.offset;
+        
+        streamGroup.children.forEach((particle, particleIndex) => {
+          const particleOffset = (particleIndex / stream.particles) * Math.PI * 2;
+          const waveHeight = Math.sin(time * 2 + particleOffset) * 2;
+          particle.position.y = waveHeight;
+          
+          // Particle glow effect
+          const scale = 1 + Math.sin(time * 3 + particleIndex) * 0.3;
+          particle.scale.setScalar(scale);
+        });
+      });
+    }
+  });
+
+  return (
+    <group ref={groupRef} position={[0, 0, 0]}>
+      {streams.map((stream, streamIndex) => (
+        <group key={`stream-${streamIndex}`}>
+          {[...Array(stream.particles)].map((_, particleIndex) => {
+            const angle = (particleIndex / stream.particles) * Math.PI * 2;
+            const x = Math.cos(angle) * stream.radius;
+            const z = Math.sin(angle) * stream.radius;
+            
+            return (
+              <mesh key={`particle-${particleIndex}`} position={[x, 0, z]}>
+                <sphereGeometry args={[0.1, 6, 6]} />
+                <meshPhongMaterial
+                  color={isDark ? '#41deff' : '#d946ef'}
+                  transparent
+                  opacity={0.7}
+                  emissive={isDark ? '#00f6ff' : '#8b5cf6'}
+                  emissiveIntensity={0.4}
+                />
+              </mesh>
+            );
+          })}
+        </group>
+      ))}
+    </group>
+  );
+}
+
+// Crystal Formations
+function CrystalFormations({ isDark }: { isDark: boolean }) {
+  const groupRef = useRef<THREE.Group>(null);
+  
+  const crystals = useMemo(() => {
+    return [...Array(15)].map((_, i) => ({
+      position: [
+        (Math.random() - 0.5) * 100,
+        Math.random() * 20 - 10,
+        (Math.random() - 0.5) * 100
+      ] as [number, number, number],
+      rotation: [Math.random() * Math.PI, Math.random() * Math.PI, Math.random() * Math.PI] as [number, number, number],
+      scale: Math.random() * 3 + 1,
+      type: Math.floor(Math.random() * 3),
+      speed: Math.random() * 0.01 + 0.005
+    }));
+  }, []);
+
+  useFrame((state) => {
+    if (groupRef.current) {
+      groupRef.current.children.forEach((crystal, i) => {
+        const crystalData = crystals[i];
+        crystal.rotation.y += crystalData.speed;
+        crystal.rotation.x += crystalData.speed * 0.7;
+        crystal.position.y = crystalData.position[1] + Math.sin(state.clock.elapsedTime + i) * 1.5;
+      });
+    }
+  });
+
+  const colors = isDark 
+    ? ['#00f6ff', '#41deff', '#ffd700']
+    : ['#8b5cf6', '#d946ef', '#06b6d4'];
+
+  return (
+    <group ref={groupRef}>
+      {crystals.map((crystal, i) => (
+        <mesh
+          key={i}
+          position={crystal.position}
+          rotation={crystal.rotation}
+          scale={[crystal.scale, crystal.scale, crystal.scale]}
+        >
+          {crystal.type === 0 && <octahedronGeometry args={[1]} />}
+          {crystal.type === 1 && <icosahedronGeometry args={[1]} />}
+          {crystal.type === 2 && <dodecahedronGeometry args={[1]} />}
+          
+          <meshPhysicalMaterial
+            color={colors[crystal.type]}
+            transparent
+            opacity={0.6}
+            transmission={0.8}
+            thickness={0.5}
+            roughness={0.1}
+            metalness={0.1}
+            clearcoat={1}
+            clearcoatRoughness={0.1}
+            emissive={colors[crystal.type]}
+            emissiveIntensity={0.2}
+          />
+        </mesh>
       ))}
     </group>
   );
@@ -349,6 +507,8 @@ export const ThreeBackground = ({ isDark }: ThreeBackgroundProps) => {
         <EnhancedParticles isDark={isDark} />
         <GlowingCircles isDark={isDark} />
         <TechLines isDark={isDark} />
+        <DataStreams isDark={isDark} />
+        <CrystalFormations isDark={isDark} />
         <CrystalGrid isDark={isDark} />
         <FloatingGeometry isDark={isDark} />
         <MouseInteraction isDark={isDark} />
