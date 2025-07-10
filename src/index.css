@@ -78,68 +78,68 @@ Inspired by iOS 26 Liquid Glass & Cyberpunk Aesthetics
   }
 
   .dark {
-    /* Dark Theme - Cyberpunk HUD */
-    --background: 223 47% 6%;
-    --foreground: 194 100% 95%;
+    /* Dark Theme - Sophisticated Dashboard */
+    --background: 220 50% 4%;
+    --foreground: 210 100% 95%;
 
-    --card: 223 47% 8%;
-    --card-foreground: 194 100% 95%;
-    --card-glass: 223 47% 8% / 0.85;
+    --card: 220 50% 6%;
+    --card-foreground: 210 100% 95%;
+    --card-glass: 220 50% 8% / 0.15;
 
-    --popover: 223 47% 8%;
-    --popover-foreground: 194 100% 95%;
+    --popover: 220 50% 7%;
+    --popover-foreground: 210 100% 95%;
 
-    --primary: 194 100% 55%;
-    --primary-foreground: 223 47% 6%;
-    --primary-glow: 187 100% 65%;
+    --primary: 210 100% 65%;
+    --primary-foreground: 220 50% 4%;
+    --primary-glow: 215 100% 75%;
 
-    --secondary: 223 47% 12%;
-    --secondary-foreground: 194 100% 95%;
+    --secondary: 220 50% 10%;
+    --secondary-foreground: 210 100% 95%;
 
-    --muted: 223 47% 10%;
-    --muted-foreground: 194 50% 65%;
+    --muted: 220 50% 8%;
+    --muted-foreground: 210 60% 70%;
 
-    --accent: 41 100% 65%;
-    --accent-foreground: 223 47% 6%;
+    --accent: 195 100% 60%;
+    --accent-foreground: 220 50% 4%;
 
-    --destructive: 0 62% 55%;
+    --destructive: 0 72% 55%;
     --destructive-foreground: 0 85% 97%;
 
-    --border: 223 47% 15%;
-    --input: 223 47% 12%;
-    --ring: 194 100% 55%;
+    --border: 220 50% 18% / 0.4;
+    --input: 220 50% 12%;
+    --ring: 210 100% 65%;
 
-    /* Cyberpunk Glass Effects */
-    --glass-bg: 223 47% 8% / 0.12;
-    --glass-border: 194 100% 55% / 0.3;
-    --glass-shadow: 194 100% 55% / 0.4;
-    --glass-glow: 187 100% 65% / 0.5;
+    /* Sophisticated Glass Effects */
+    --glass-bg: 220 50% 8% / 0.08;
+    --glass-border: 210 100% 65% / 0.25;
+    --glass-shadow: 210 100% 65% / 0.15;
+    --glass-glow: 215 100% 75% / 0.4;
 
-    /* Liquid Glass - Dark */
-    --liquid-glass: 223 47% 8% / 0.08;
-    --liquid-border: 194 100% 55% / 0.25;
-    --liquid-glow: 187 100% 65% / 0.8;
+    /* Premium Liquid Glass - Dark */
+    --liquid-glass: 220 50% 8% / 0.06;
+    --liquid-border: 210 100% 65% / 0.3;
+    --liquid-glow: 215 100% 75% / 0.6;
 
-    /* Neumorphism - Dark */
-    --neu-light: 223 47% 12%;
-    --neu-dark: 223 47% 3%;
-    --neu-shadow-light: 223 47% 15% / 0.7;
-    --neu-shadow-dark: 223 47% 1% / 0.8;
+    /* Enhanced Neumorphism - Dark */
+    --neu-light: 220 50% 12%;
+    --neu-dark: 220 50% 2%;
+    --neu-shadow-light: 220 50% 15% / 0.8;
+    --neu-shadow-dark: 220 50% 1% / 0.9;
 
-    /* Cyberpunk Colors */
-    --cyber-primary: 194 100% 55%;
-    --cyber-secondary: 187 100% 65%;
-    --cyber-accent: 41 100% 65%;
-    --cyber-tertiary: 160 100% 60%;
+    /* Dashboard Colors */
+    --dashboard-primary: 210 100% 65%;
+    --dashboard-secondary: 195 100% 60%;
+    --dashboard-accent: 240 100% 70%;
+    --dashboard-tertiary: 180 100% 65%;
 
-    --sidebar-background: 223 47% 6%;
-    --sidebar-foreground: 194 100% 95%;
-    --sidebar-primary: 194 100% 55%;
-    --sidebar-primary-foreground: 223 47% 6%;
-    --sidebar-accent: 223 47% 12%;
-    --sidebar-accent-foreground: 194 100% 95%;
-    --sidebar-border: 223 47% 15%;
-    --sidebar-ring: 194 100% 55%;
+    --sidebar-background: 220 50% 4%;
+    --sidebar-foreground: 210 100% 95%;
+    --sidebar-primary: 210 100% 65%;
+    --sidebar-primary-foreground: 220 50% 4%;
+    --sidebar-accent: 220 50% 10%;
+    --sidebar-accent-foreground: 210 100% 95%;
+    --sidebar-border: 220 50% 18% / 0.4;
+    --sidebar-ring: 210 100% 65%;
   }
 
   * {
@@ -176,24 +176,76 @@ Inspired by iOS 26 Liquid Glass & Cyberpunk Aesthetics
 }
 
 @layer components {
+  /* === SOPHISTICATED DASHBOARD GLASSMORPHISM === */
+  .dashboard-glass {
+    background: linear-gradient(
+      135deg,
+      hsl(var(--glass-bg)) 0%,
+      rgba(255, 255, 255, 0.02) 25%,
+      hsl(var(--glass-bg)) 50%,
+      rgba(255, 255, 255, 0.04) 75%,
+      hsl(var(--glass-bg)) 100%
+    );
+    backdrop-filter: blur(40px) saturate(1.8) brightness(1.1);
+    -webkit-backdrop-filter: blur(40px) saturate(1.8) brightness(1.1);
+    border: 1px solid hsl(var(--glass-border));
+    box-shadow: 
+      0 24px 48px hsl(var(--glass-shadow)),
+      inset 0 1px 0 hsl(var(--glass-border)),
+      0 0 30px hsl(var(--glass-glow));
+    position: relative;
+    overflow: hidden;
+  }
+
+  .dashboard-glass.dark {
+    background: linear-gradient(
+      135deg,
+      rgba(33, 41, 85, 0.08) 0%,
+      rgba(59, 130, 246, 0.03) 25%,
+      rgba(33, 41, 85, 0.06) 50%,
+      rgba(59, 130, 246, 0.05) 75%,
+      rgba(33, 41, 85, 0.08) 100%
+    );
+    border: 1px solid rgba(59, 130, 246, 0.25);
+    box-shadow: 
+      0 24px 48px rgba(0, 0, 0, 0.4),
+      inset 0 1px 0 rgba(59, 130, 246, 0.3),
+      0 0 40px rgba(59, 130, 246, 0.2);
+  }
+
   /* === PREMIUM CRYSTAL GLASSMORPHISM (Ultra-Refined) === */
   .crystal-glass {
     background: linear-gradient(
       135deg,
-      rgba(255, 255, 255, 0.25) 0%,
-      rgba(255, 255, 255, 0.05) 50%,
-      rgba(255, 255, 255, 0.1) 100%
+      rgba(255, 255, 255, 0.15) 0%,
+      rgba(255, 255, 255, 0.03) 50%,
+      rgba(255, 255, 255, 0.08) 100%
     );
     backdrop-filter: blur(60px) saturate(2) brightness(1.1);
     -webkit-backdrop-filter: blur(60px) saturate(2) brightness(1.1);
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.2);
     box-shadow: 
-      0 32px 64px rgba(0, 0, 0, 0.15),
-      inset 0 1px 0 rgba(255, 255, 255, 0.4),
-      inset 0 -1px 0 rgba(255, 255, 255, 0.1),
-      0 0 60px rgba(255, 255, 255, 0.1);
+      0 32px 64px rgba(0, 0, 0, 0.1),
+      inset 0 1px 0 rgba(255, 255, 255, 0.3),
+      inset 0 -1px 0 rgba(255, 255, 255, 0.08),
+      0 0 40px rgba(255, 255, 255, 0.06);
     position: relative;
     overflow: hidden;
+  }
+
+  .crystal-glass.dark {
+    background: linear-gradient(
+      135deg,
+      rgba(33, 41, 85, 0.12) 0%,
+      rgba(59, 130, 246, 0.04) 50%,
+      rgba(33, 41, 85, 0.08) 100%
+    );
+    border: 1px solid rgba(59, 130, 246, 0.3);
+    box-shadow: 
+      0 32px 64px rgba(0, 0, 0, 0.3),
+      inset 0 1px 0 rgba(59, 130, 246, 0.4),
+      inset 0 -1px 0 rgba(59, 130, 246, 0.1),
+      0 0 50px rgba(59, 130, 246, 0.15);
   }
 
   .crystal-glass::before {
@@ -358,25 +410,43 @@ Inspired by iOS 26 Liquid Glass & Cyberpunk Aesthetics
   /* === ADVANCED GLASSMORPHISM === */
   .glass-card {
     background: hsl(var(--glass-bg));
-    backdrop-filter: blur(30px) saturate(1.8);
-    -webkit-backdrop-filter: blur(30px) saturate(1.8);
+    backdrop-filter: blur(40px) saturate(1.8) brightness(1.05);
+    -webkit-backdrop-filter: blur(40px) saturate(1.8) brightness(1.05);
     border: 1px solid hsl(var(--glass-border));
     box-shadow: 
-      0 12px 48px hsl(var(--glass-shadow)),
-      inset 0 1px 0 hsl(var(--glass-border));
-    @apply rounded-2xl;
+      0 16px 48px hsl(var(--glass-shadow)),
+      inset 0 1px 0 hsl(var(--glass-border)),
+      0 0 24px hsl(var(--glass-glow));
+    @apply rounded-2xl transition-all duration-300;
+  }
+
+  .glass-card:hover {
+    border-color: hsl(var(--primary) / 0.4);
+    box-shadow: 
+      0 24px 64px hsl(var(--glass-shadow)),
+      inset 0 1px 0 hsl(var(--primary) / 0.3),
+      0 0 40px hsl(var(--glass-glow));
   }
 
   .glass-intense {
     background: hsl(var(--glass-bg));
-    backdrop-filter: blur(50px) saturate(2);
-    -webkit-backdrop-filter: blur(50px) saturate(2);
+    backdrop-filter: blur(60px) saturate(2) brightness(1.1);
+    -webkit-backdrop-filter: blur(60px) saturate(2) brightness(1.1);
     border: 1px solid hsl(var(--glass-border));
     box-shadow: 
-      0 20px 64px hsl(var(--glass-shadow)),
+      0 24px 72px hsl(var(--glass-shadow)),
       inset 0 2px 0 hsl(var(--glass-border)),
-      0 0 40px hsl(var(--glass-glow));
-    @apply rounded-3xl;
+      0 0 50px hsl(var(--glass-glow));
+    @apply rounded-3xl transition-all duration-500;
+  }
+
+  .glass-intense:hover {
+    transform: translateY(-2px);
+    border-color: hsl(var(--primary) / 0.5);
+    box-shadow: 
+      0 32px 96px hsl(var(--glass-shadow)),
+      inset 0 2px 0 hsl(var(--primary) / 0.4),
+      0 0 70px hsl(var(--glass-glow));
   }
 
   /* === NEUMORPHISM COMPONENTS === */
