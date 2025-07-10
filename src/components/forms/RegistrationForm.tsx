@@ -13,6 +13,7 @@ const registrationSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters'),
   email: z.string().email('Please enter a valid email address'),
   mobile: z.string().regex(/^\d{10}$/, 'Please enter a valid 10-digit mobile number'),
+  event: z.string().min(1, 'Please select an event'),
   collegeId: z.string().min(3, 'College ID must be at least 3 characters'),
   collegeName: z.string().min(3, 'College name must be at least 3 characters'),
   yearOfStudy: z.string().min(1, 'Please select your year of study'),
@@ -36,6 +37,23 @@ export const RegistrationForm = () => {
   });
 
   const yearOfStudy = watch('yearOfStudy');
+  const selectedEvent = watch('event');
+
+  // Define event options
+  const events = [
+    { value: 'coding-contest', label: '💻 Coding Contest' },
+    { value: 'web-development', label: '🌐 Web Development' },
+    { value: 'ai-ml-challenge', label: '🤖 AI/ML Challenge' },
+    { value: 'robotics', label: '🤖 Robotics Competition' },
+    { value: 'hackathon', label: '⚡ 24hr Hackathon' },
+    { value: 'quiz-competition', label: '🧠 Tech Quiz' },
+    { value: 'photography', label: '📸 Photography Contest' },
+    { value: 'cultural-dance', label: '💃 Cultural Dance' },
+    { value: 'music-competition', label: '🎵 Music Competition' },
+    { value: 'drama-theatre', label: '🎭 Drama & Theatre' },
+    { value: 'startup-pitch', label: '🚀 Startup Pitch' },
+    { value: 'gaming-esports', label: '🎮 Gaming & E-Sports' }
+  ];
 
   const onSubmit = async (data: RegistrationFormData) => {
     setIsSubmitting(true);
@@ -67,14 +85,38 @@ export const RegistrationForm = () => {
 
   return (
     <motion.div
-      className="max-w-2xl mx-auto"
+      className="max-w-2xl mx-auto relative"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6 }}
     >
-      <div className="glass-card p-8">
-        <div className="text-center mb-8">
-          <h2 className="text-3xl font-bold text-gradient mb-2">
+      {/* Enhanced Liquid Crystal Container */}
+      <div className="liquid-glass rounded-3xl p-8 relative overflow-hidden">
+        {/* Liquid Crystal Background Effects */}
+        <div className="absolute inset-0 opacity-20">
+          <div className="absolute top-0 left-0 w-40 h-40 bg-gradient-to-br from-primary/30 to-transparent rounded-full blur-3xl"></div>
+          <div className="absolute bottom-0 right-0 w-48 h-48 bg-gradient-to-tl from-accent/25 to-transparent rounded-full blur-3xl"></div>
+          <div className="absolute top-1/2 left-1/2 w-32 h-32 bg-gradient-to-r from-primary-glow/20 to-accent/20 rounded-full blur-2xl -translate-x-1/2 -translate-y-1/2"></div>
+        </div>
+
+        {/* Animated Scan Lines */}
+        <div className="absolute inset-0 pointer-events-none overflow-hidden rounded-3xl">
+          <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary/60 to-transparent animate-[scan-line_4s_linear_infinite]"></div>
+          <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-accent/50 to-transparent animate-[scan-line_5s_linear_infinite_reverse]"></div>
+        </div>
+
+        <div className="text-center mb-8 relative z-10">
+          {/* ACM VVITU Logo Placeholder */}
+          <motion.div
+            className="mx-auto w-16 h-16 mb-4 liquid-glass rounded-2xl flex items-center justify-center"
+            initial={{ scale: 0, rotate: -180 }}
+            animate={{ scale: 1, rotate: 0 }}
+            transition={{ duration: 0.8, type: "spring" }}
+          >
+            <span className="text-2xl font-bold text-holographic font-orbitron">ACM</span>
+          </motion.div>
+          
+          <h2 className="text-3xl font-bold text-holographic mb-2 font-orbitron">
             Register for Spardha 2025
           </h2>
           <p className="text-muted-foreground">
@@ -146,6 +188,39 @@ export const RegistrationForm = () => {
             )}
           </motion.div>
 
+          {/* Event Selection */}
+          <motion.div
+            className="space-y-2"
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.35 }}
+          >
+            <Label htmlFor="event">Select Event *</Label>
+            <Select
+              value={selectedEvent}
+              onValueChange={(value) => setValue('event', value)}
+              disabled={isSubmitting}
+            >
+              <SelectTrigger className="neu-input">
+                <SelectValue placeholder="Choose your event" />
+              </SelectTrigger>
+              <SelectContent className="liquid-glass border border-border/30 backdrop-blur-xl z-50 max-h-60 overflow-y-auto">
+                {events.map((event) => (
+                  <SelectItem 
+                    key={event.value} 
+                    value={event.value}
+                    className="hover:bg-primary/10 focus:bg-primary/10 cursor-pointer"
+                  >
+                    {event.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            {errors.event && (
+              <p className="text-destructive text-sm">{errors.event.message}</p>
+            )}
+          </motion.div>
+
           {/* College ID and Name Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* College ID */}
@@ -184,11 +259,11 @@ export const RegistrationForm = () => {
                 <SelectTrigger className="neu-input">
                   <SelectValue placeholder="Select your year" />
                 </SelectTrigger>
-                <SelectContent className="glass-card border">
-                  <SelectItem value="1st Year">1st Year</SelectItem>
-                  <SelectItem value="2nd Year">2nd Year</SelectItem>
-                  <SelectItem value="3rd Year">3rd Year</SelectItem>
-                  <SelectItem value="4th Year">4th Year</SelectItem>
+                <SelectContent className="liquid-glass border border-border/30 backdrop-blur-xl z-50">
+                  <SelectItem value="1st Year" className="hover:bg-primary/10 focus:bg-primary/10 cursor-pointer">1st Year</SelectItem>
+                  <SelectItem value="2nd Year" className="hover:bg-primary/10 focus:bg-primary/10 cursor-pointer">2nd Year</SelectItem>
+                  <SelectItem value="3rd Year" className="hover:bg-primary/10 focus:bg-primary/10 cursor-pointer">3rd Year</SelectItem>
+                  <SelectItem value="4th Year" className="hover:bg-primary/10 focus:bg-primary/10 cursor-pointer">4th Year</SelectItem>
                 </SelectContent>
               </Select>
               {errors.yearOfStudy && (

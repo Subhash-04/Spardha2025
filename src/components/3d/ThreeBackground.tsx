@@ -285,20 +285,65 @@ export const ThreeBackground = ({ isDark }: ThreeBackgroundProps) => {
         camera={{ position: [0, 8, 35], fov: 65 }}
         gl={{ alpha: true, antialias: true }}
       >
-        <ambientLight intensity={0.4} />
-        <directionalLight position={[10, 10, 5]} intensity={0.8} />
+        <ambientLight intensity={isDark ? 0.3 : 0.5} />
+        <directionalLight 
+          position={[20, 20, 10]} 
+          intensity={isDark ? 0.8 : 1.2}
+          color={isDark ? '#00f6ff' : '#8b5cf6'}
+        />
+        <pointLight 
+          position={[-15, 10, -10]} 
+          intensity={isDark ? 0.6 : 0.8}
+          color={isDark ? '#41deff' : '#d946ef'}
+        />
+        <pointLight 
+          position={[15, -5, 15]} 
+          intensity={isDark ? 0.4 : 0.6}
+          color={isDark ? '#ffd700' : '#06b6d4'}
+        />
+
+        {/* Enhanced 3D Elements */}
+        <HolographicPlatform isDark={isDark} />
+        <EnhancedParticles isDark={isDark} />
         
-        {/* Simple working geometry */}
-        <mesh position={[0, 0, 0]}>
-          <sphereGeometry args={[2, 32, 32]} />
-          <meshPhongMaterial 
-            color={isDark ? '#00f6ff' : '#8b5cf6'} 
-            transparent 
-            opacity={0.3}
-          />
-        </mesh>
-        
-        <OrbitControls enableZoom={false} autoRotate />
+        {/* Theme-specific Elements */}
+        {isDark ? <CyberpunkHUD /> : <HolographicElements />}
+
+        {/* Additional Floating Elements for More Presence */}
+        <Float speed={0.5} rotationIntensity={0.1} floatIntensity={0.3}>
+          <mesh position={[25, 5, -20]} rotation={[0, Math.PI / 4, 0]}>
+            <boxGeometry args={[2, 2, 2]} />
+            <meshPhongMaterial 
+              color={isDark ? '#00f6ff' : '#8b5cf6'} 
+              transparent 
+              opacity={0.4}
+              emissive={isDark ? '#00f6ff' : '#8b5cf6'}
+              emissiveIntensity={0.2}
+            />
+          </mesh>
+        </Float>
+
+        <Float speed={0.3} rotationIntensity={0.2} floatIntensity={0.4}>
+          <mesh position={[-25, -5, -15]}>
+            <octahedronGeometry args={[1.5]} />
+            <meshPhongMaterial 
+              color={isDark ? '#41deff' : '#d946ef'} 
+              transparent 
+              opacity={0.5}
+              emissive={isDark ? '#41deff' : '#d946ef'}
+              emissiveIntensity={0.15}
+            />
+          </mesh>
+        </Float>
+
+        <OrbitControls 
+          enableZoom={false}
+          enablePan={false}
+          autoRotate
+          autoRotateSpeed={0.4}
+          maxPolarAngle={Math.PI / 1.8}
+          minPolarAngle={Math.PI / 4}
+        />
       </Canvas>
     </div>
   );
