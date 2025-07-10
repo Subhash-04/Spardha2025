@@ -335,7 +335,8 @@ export const ThreeBackground = ({ isDark }: ThreeBackgroundProps) => {
         />
         
         {/* Fog for Depth */}
-        <fog attach="fog" args={[isDark ? '#0a0f1e' : '#f1f5f9', 30, 100]} />
+        {isDark && <fog attach="fog" args={['#0a0f1e', 30, 100]} />}
+        {!isDark && <fog attach="fog" args={['#f1f5f9', 30, 100]} />}
       </Canvas>
     </div>
   );
