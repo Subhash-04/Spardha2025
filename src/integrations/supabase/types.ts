@@ -14,7 +14,150 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      admin_credentials: {
+        Row: {
+          created_at: string
+          email: string
+          full_name: string
+          id: string
+          is_active: boolean
+          last_login: string | null
+          password_hash: string
+          role: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          full_name: string
+          id?: string
+          is_active?: boolean
+          last_login?: string | null
+          password_hash: string
+          role?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          full_name?: string
+          id?: string
+          is_active?: boolean
+          last_login?: string | null
+          password_hash?: string
+          role?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      events: {
+        Row: {
+          created_at: string
+          description: string | null
+          event_date: string | null
+          event_type: string
+          id: string
+          image_url: string | null
+          is_active: boolean | null
+          is_team_event: boolean | null
+          max_participants: number | null
+          max_team_size: number | null
+          registration_fee: number | null
+          title: string
+          updated_at: string
+          venue: string | null
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          event_date?: string | null
+          event_type: string
+          id?: string
+          image_url?: string | null
+          is_active?: boolean | null
+          is_team_event?: boolean | null
+          max_participants?: number | null
+          max_team_size?: number | null
+          registration_fee?: number | null
+          title: string
+          updated_at?: string
+          venue?: string | null
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          event_date?: string | null
+          event_type?: string
+          id?: string
+          image_url?: string | null
+          is_active?: boolean | null
+          is_team_event?: boolean | null
+          max_participants?: number | null
+          max_team_size?: number | null
+          registration_fee?: number | null
+          title?: string
+          updated_at?: string
+          venue?: string | null
+        }
+        Relationships: []
+      }
+      user_registrations: {
+        Row: {
+          college: string | null
+          created_at: string
+          department: string | null
+          email: string
+          events_registered: Json | null
+          full_name: string
+          id: string
+          is_verified: boolean
+          payment_status: string
+          phone: string | null
+          registration_fee: number | null
+          registration_type: string
+          team_members: Json | null
+          team_name: string | null
+          updated_at: string
+          year_of_study: number | null
+        }
+        Insert: {
+          college?: string | null
+          created_at?: string
+          department?: string | null
+          email: string
+          events_registered?: Json | null
+          full_name: string
+          id?: string
+          is_verified?: boolean
+          payment_status?: string
+          phone?: string | null
+          registration_fee?: number | null
+          registration_type: string
+          team_members?: Json | null
+          team_name?: string | null
+          updated_at?: string
+          year_of_study?: number | null
+        }
+        Update: {
+          college?: string | null
+          created_at?: string
+          department?: string | null
+          email?: string
+          events_registered?: Json | null
+          full_name?: string
+          id?: string
+          is_verified?: boolean
+          payment_status?: string
+          phone?: string | null
+          registration_fee?: number | null
+          registration_type?: string
+          team_members?: Json | null
+          team_name?: string | null
+          updated_at?: string
+          year_of_study?: number | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

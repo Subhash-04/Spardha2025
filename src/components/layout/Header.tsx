@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { Moon, Sun, Menu, X, Shield } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { PinVerification } from '@/components/admin/PinVerification';
+import { Link } from 'react-router-dom';
 
 interface HeaderProps {
   isDark: boolean;
@@ -72,16 +73,17 @@ export const Header = ({ isDark, onThemeToggle }: HeaderProps) => {
 
             {/* Controls */}
             <div className="flex items-center space-x-4">
-              {/* Admin Login Button */}
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setShowPinDialog(true)}
-                className="hidden md:flex items-center space-x-2 neu-button"
-              >
-                <Shield className="w-4 h-4" />
-                <span>Admin</span>
-              </Button>
+              {/* Admin Dashboard Link */}
+              <Link to="/admin">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="hidden md:flex items-center space-x-2 neu-button"
+                >
+                  <Shield className="w-4 h-4" />
+                  <span>Admin</span>
+                </Button>
+              </Link>
 
               {/* Theme Toggle */}
               <Button
@@ -133,16 +135,15 @@ export const Header = ({ isDark, onThemeToggle }: HeaderProps) => {
                   {item.label}
                 </button>
               ))}
-              <button
-                onClick={() => {
-                  setShowPinDialog(true);
-                  setIsMenuOpen(false);
-                }}
-                className="flex items-center space-x-2 text-foreground hover:text-primary transition-colors py-2"
-              >
-                <Shield className="w-4 h-4" />
-                <span>Admin Login</span>
-              </button>
+              <Link to="/admin" className="block w-full">
+                <button
+                  onClick={() => setIsMenuOpen(false)}
+                  className="flex items-center space-x-2 text-foreground hover:text-primary transition-colors py-2 w-full"
+                >
+                  <Shield className="w-4 h-4" />
+                  <span>Admin Dashboard</span>
+                </button>
+              </Link>
             </div>
           </motion.div>
         </nav>
