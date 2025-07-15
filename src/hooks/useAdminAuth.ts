@@ -44,7 +44,7 @@ export const useAdminAuth = () => {
       }
 
       // Verify password (simplified for demo - in production use proper hashing)
-      const isValidPassword = password === 'admin123';
+      const isValidPassword = password === 'ACMvvitu-Spardha@2025';
       
       if (!isValidPassword) {
         throw new Error('Invalid credentials');

@@ -8,20 +8,18 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { 
   Users, 
-  Calendar, 
-  DollarSign, 
-  TrendingUp, 
+  Calendar,
   LogOut, 
   Shield,
-  UserCheck,
-  UserX,
   Mail,
   Phone,
   Building,
-  Clock
+  Clock,
+  Download
 } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import * as XLSX from 'xlsx';
 
 interface UserRegistration {
   id: string;
@@ -35,9 +33,6 @@ interface UserRegistration {
   team_name?: string;
   team_members?: any;
   events_registered: any;
-  payment_status: string;
-  registration_fee: number;
-  is_verified: boolean;
   created_at: string;
 }
 
@@ -48,7 +43,6 @@ interface Event {
   event_type: string;
   venue?: string;
   event_date?: string;
-  registration_fee: number;
   max_participants?: number;
   is_team_event: boolean;
   max_team_size?: number;
@@ -58,9 +52,9 @@ interface Event {
 
 interface DashboardStats {
   totalRegistrations: number;
-  totalRevenue: number;
-  pendingPayments: number;
   activeEvents: number;
+  teamRegistrations: number;
+  individualRegistrations: number;
 }
 
 const AdminDashboard = () => {
@@ -69,9 +63,9 @@ const AdminDashboard = () => {
   const [events, setEvents] = useState<Event[]>([]);
   const [stats, setStats] = useState<DashboardStats>({
     totalRegistrations: 0,
-    totalRevenue: 0,
-    pendingPayments: 0,
-    activeEvents: 0
+    activeEvents: 0,
+    teamRegistrations: 0,
+    individualRegistrations: 0
   });
   const [loadingData, setLoadingData] = useState(true);
   const { toast } = useToast();
@@ -107,15 +101,15 @@ const AdminDashboard = () => {
 
       // Calculate stats
       const totalRegistrations = registrationsData?.length || 0;
-      const totalRevenue = registrationsData?.reduce((sum, reg) => sum + (reg.registration_fee || 0), 0) || 0;
-      const pendingPayments = registrationsData?.filter(reg => reg.payment_status === 'pending').length || 0;
+      const teamRegistrations = registrationsData?.filter(reg => reg.registration_type === 'team').length || 0;
+      const individualRegistrations = registrationsData?.filter(reg => reg.registration_type === 'individual').length || 0;
       const activeEvents = eventsData?.filter(event => event.is_active).length || 0;
 
       setStats({
         totalRegistrations,
-        totalRevenue,
-        pendingPayments,
-        activeEvents
+        activeEvents,
+        teamRegistrations,
+        individualRegistrations
       });
 
     } catch (error: any) {
@@ -129,57 +123,40 @@ const AdminDashboard = () => {
     }
   };
 
-  const updateRegistrationStatus = async (id: string, isVerified: boolean) => {
+  const downloadExcel = () => {
     try {
-      const { error } = await supabase
-        .from('user_registrations')
-        .update({ is_verified: isVerified })
-        .eq('id', id);
+      // Prepare data for Excel
+      const excelData = registrations.map(reg => ({
+        'Full Name': reg.full_name,
+        'Email': reg.email,
+        'Phone': reg.phone || 'N/A',
+        'College': reg.college || 'N/A',
+        'Department': reg.department || 'N/A',
+        'Year of Study': reg.year_of_study || 'N/A',
+        'Registration Type': reg.registration_type,
+        'Team Name': reg.team_name || 'N/A',
+        'Events Registered': Array.isArray(reg.events_registered) ? reg.events_registered.join(', ') : 'N/A',
+        'Registration Date': formatDate(reg.created_at)
+      }));
 
-      if (error) throw error;
+      // Create workbook and worksheet
+      const wb = XLSX.utils.book_new();
+      const ws = XLSX.utils.json_to_sheet(excelData);
 
-      setRegistrations(prev => 
-        prev.map(reg => 
-          reg.id === id ? { ...reg, is_verified: isVerified } : reg
-        )
-      );
+      // Add the worksheet to the workbook
+      XLSX.utils.book_append_sheet(wb, ws, 'Registrations');
+
+      // Generate Excel file and download
+      XLSX.writeFile(wb, `Spardha_2025_Registrations_${new Date().toISOString().split('T')[0]}.xlsx`);
 
       toast({
         title: "Success",
-        description: `Registration ${isVerified ? 'approved' : 'rejected'} successfully`
+        description: "Excel file downloaded successfully"
       });
     } catch (error: any) {
       toast({
         title: "Error",
-        description: error.message,
-        variant: "destructive"
-      });
-    }
-  };
-
-  const updatePaymentStatus = async (id: string, status: 'pending' | 'completed' | 'failed') => {
-    try {
-      const { error } = await supabase
-        .from('user_registrations')
-        .update({ payment_status: status })
-        .eq('id', id);
-
-      if (error) throw error;
-
-      setRegistrations(prev => 
-        prev.map(reg => 
-          reg.id === id ? { ...reg, payment_status: status } : reg
-        )
-      );
-
-      toast({
-        title: "Success",
-        description: "Payment status updated successfully"
-      });
-    } catch (error: any) {
-      toast({
-        title: "Error",
-        description: error.message,
+        description: "Failed to download Excel file",
         variant: "destructive"
       });
     }
@@ -193,23 +170,6 @@ const AdminDashboard = () => {
       hour: '2-digit',
       minute: '2-digit'
     });
-  };
-
-  const getStatusBadge = (status: string | boolean, type: 'payment' | 'verification') => {
-    if (type === 'payment') {
-      switch (status) {
-        case 'completed':
-          return <Badge className="bg-green-500">Completed</Badge>;
-        case 'failed':
-          return <Badge variant="destructive">Failed</Badge>;
-        default:
-          return <Badge variant="secondary">Pending</Badge>;
-      }
-    } else {
-      return (status === 'true' || status === true) ? 
-        <Badge className="bg-green-500">Verified</Badge> : 
-        <Badge variant="secondary">Pending</Badge>;
-    }
   };
 
   if (loading) {
@@ -264,33 +224,33 @@ const AdminDashboard = () => {
             <CardContent>
               <div className="text-2xl font-bold">{stats.totalRegistrations}</div>
               <p className="text-xs text-muted-foreground">
-                +12% from last month
+                All participants registered
               </p>
             </CardContent>
           </Card>
 
           <Card className="glass-card">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Total Revenue</CardTitle>
-              <DollarSign className="h-4 w-4 text-primary" />
+              <CardTitle className="text-sm font-medium">Team Registrations</CardTitle>
+              <Users className="h-4 w-4 text-primary" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">₹{stats.totalRevenue.toLocaleString()}</div>
+              <div className="text-2xl font-bold">{stats.teamRegistrations}</div>
               <p className="text-xs text-muted-foreground">
-                +19% from last month
+                Teams registered
               </p>
             </CardContent>
           </Card>
 
           <Card className="glass-card">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Pending Payments</CardTitle>
-              <TrendingUp className="h-4 w-4 text-primary" />
+              <CardTitle className="text-sm font-medium">Individual Registrations</CardTitle>
+              <Users className="h-4 w-4 text-primary" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{stats.pendingPayments}</div>
+              <div className="text-2xl font-bold">{stats.individualRegistrations}</div>
               <p className="text-xs text-muted-foreground">
-                Awaiting confirmation
+                Individual participants
               </p>
             </CardContent>
           </Card>
@@ -320,13 +280,21 @@ const AdminDashboard = () => {
             <TabsContent value="registrations" className="space-y-4">
               <Card className="glass-card">
                 <CardHeader>
-                  <CardTitle className="flex items-center space-x-2">
-                    <Users className="h-5 w-5" />
-                    <span>User Registrations</span>
-                  </CardTitle>
-                  <CardDescription>
-                    Manage user registrations, verify participants, and update payment status
-                  </CardDescription>
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <CardTitle className="flex items-center space-x-2">
+                        <Users className="h-5 w-5" />
+                        <span>User Registrations</span>
+                      </CardTitle>
+                      <CardDescription>
+                        View and manage all user registrations for Spardha 2025
+                      </CardDescription>
+                    </div>
+                    <Button onClick={downloadExcel} className="flex items-center space-x-2">
+                      <Download className="h-4 w-4" />
+                      <span>Download Excel</span>
+                    </Button>
+                  </div>
                 </CardHeader>
                 <CardContent>
                   {loadingData ? (
@@ -342,10 +310,8 @@ const AdminDashboard = () => {
                             <TableHead>Email</TableHead>
                             <TableHead>College</TableHead>
                             <TableHead>Type</TableHead>
-                            <TableHead>Payment</TableHead>
-                            <TableHead>Status</TableHead>
+                            <TableHead>Events</TableHead>
                             <TableHead>Registered</TableHead>
-                            <TableHead>Actions</TableHead>
                           </TableRow>
                         </TableHeader>
                         <TableBody>
@@ -380,53 +346,23 @@ const AdminDashboard = () => {
                                 <Badge variant="outline">
                                   {registration.registration_type}
                                 </Badge>
-                              </TableCell>
-                              <TableCell>
-                                <div className="space-y-1">
-                                  {getStatusBadge(registration.payment_status, 'payment')}
-                                  <p className="text-xs text-muted-foreground">
-                                    ₹{registration.registration_fee}
+                                {registration.team_name && (
+                                  <p className="text-xs text-muted-foreground mt-1">
+                                    Team: {registration.team_name}
                                   </p>
-                                </div>
+                                )}
                               </TableCell>
                               <TableCell>
-                                {getStatusBadge(registration.is_verified.toString(), 'verification')}
+                                <div className="text-sm">
+                                  {Array.isArray(registration.events_registered) 
+                                    ? registration.events_registered.join(', ') 
+                                    : 'N/A'}
+                                </div>
                               </TableCell>
                               <TableCell>
                                 <div className="flex items-center space-x-1">
                                   <Clock className="h-3 w-3" />
                                   <span className="text-xs">{formatDate(registration.created_at)}</span>
-                                </div>
-                              </TableCell>
-                              <TableCell>
-                                <div className="flex space-x-2">
-                                  {!registration.is_verified && (
-                                    <Button
-                                      size="sm"
-                                      variant="outline"
-                                      onClick={() => updateRegistrationStatus(registration.id, true)}
-                                    >
-                                      <UserCheck className="h-3 w-3" />
-                                    </Button>
-                                  )}
-                                  {registration.is_verified && (
-                                    <Button
-                                      size="sm"
-                                      variant="outline"
-                                      onClick={() => updateRegistrationStatus(registration.id, false)}
-                                    >
-                                      <UserX className="h-3 w-3" />
-                                    </Button>
-                                  )}
-                                  {registration.payment_status === 'pending' && (
-                                    <Button
-                                      size="sm"
-                                      variant="outline"
-                                      onClick={() => updatePaymentStatus(registration.id, 'completed')}
-                                    >
-                                      ✓
-                                    </Button>
-                                  )}
                                 </div>
                               </TableCell>
                             </TableRow>
@@ -464,7 +400,6 @@ const AdminDashboard = () => {
                             <TableHead>Type</TableHead>
                             <TableHead>Venue</TableHead>
                             <TableHead>Date</TableHead>
-                            <TableHead>Fee</TableHead>
                             <TableHead>Participants</TableHead>
                             <TableHead>Status</TableHead>
                           </TableRow>
@@ -489,9 +424,13 @@ const AdminDashboard = () => {
                               <TableCell>
                                 {event.event_date ? formatDate(event.event_date) : 'TBA'}
                               </TableCell>
-                              <TableCell>₹{event.registration_fee}</TableCell>
                               <TableCell>
                                 {event.max_participants ? `Max: ${event.max_participants}` : 'Unlimited'}
+                                {event.is_team_event && (
+                                  <p className="text-xs text-muted-foreground">
+                                    Team Event (Max: {event.max_team_size || 'N/A'} per team)
+                                  </p>
+                                )}
                               </TableCell>
                               <TableCell>
                                 {event.is_active ? (

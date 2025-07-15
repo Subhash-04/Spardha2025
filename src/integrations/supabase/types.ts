@@ -62,7 +62,6 @@ export type Database = {
           is_team_event: boolean | null
           max_participants: number | null
           max_team_size: number | null
-          registration_fee: number | null
           title: string
           updated_at: string
           venue: string | null
@@ -78,7 +77,6 @@ export type Database = {
           is_team_event?: boolean | null
           max_participants?: number | null
           max_team_size?: number | null
-          registration_fee?: number | null
           title: string
           updated_at?: string
           venue?: string | null
@@ -94,7 +92,6 @@ export type Database = {
           is_team_event?: boolean | null
           max_participants?: number | null
           max_team_size?: number | null
-          registration_fee?: number | null
           title?: string
           updated_at?: string
           venue?: string | null
@@ -110,10 +107,7 @@ export type Database = {
           events_registered: Json | null
           full_name: string
           id: string
-          is_verified: boolean
-          payment_status: string
           phone: string | null
-          registration_fee: number | null
           registration_type: string
           team_members: Json | null
           team_name: string | null
@@ -128,10 +122,7 @@ export type Database = {
           events_registered?: Json | null
           full_name: string
           id?: string
-          is_verified?: boolean
-          payment_status?: string
           phone?: string | null
-          registration_fee?: number | null
           registration_type: string
           team_members?: Json | null
           team_name?: string | null
@@ -146,10 +137,7 @@ export type Database = {
           events_registered?: Json | null
           full_name?: string
           id?: string
-          is_verified?: boolean
-          payment_status?: string
           phone?: string | null
-          registration_fee?: number | null
           registration_type?: string
           team_members?: Json | null
           team_name?: string | null
