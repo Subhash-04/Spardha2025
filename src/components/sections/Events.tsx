@@ -70,7 +70,7 @@ export const Events = () => {
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
         >
-          <h2 className="text-4xl md:text-5xl font-bold text-gradient mb-4">
+          <h2 className="text-4xl md:text-5xl font-bold text-gradient mb-4 font-audiowide" style={{fontFamily: 'Audiowide, cursive'}}>
             Event Schedule
           </h2>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">

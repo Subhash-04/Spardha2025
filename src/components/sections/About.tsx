@@ -29,7 +29,7 @@ export const About = () => {
               transition={{ duration: 0.6, delay: 0.2 }}
               viewport={{ once: true }}
             >
-              <h2 className="text-4xl md:text-5xl font-bold text-gradient mb-4">
+              <h2 className="text-4xl md:text-5xl font-bold text-gradient mb-4 font-audiowide" style={{fontFamily: 'Audiowide, cursive'}}>
                 About Spardha 2025
               </h2>
               <div className="w-24 h-1 bg-primary mx-auto rounded-full" />
