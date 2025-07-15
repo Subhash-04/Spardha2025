@@ -226,7 +226,7 @@ export const RegistrationForm = () => {
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.35 }}
           >
-            <Label className="text-foreground font-medium">Registration Type *</Label>
+            <Label htmlFor="registration_type" className="text-foreground font-medium">Registration Type *</Label>
             <Select
               value={registrationType}
               onValueChange={(value: 'individual' | 'team') => {
@@ -235,7 +235,7 @@ export const RegistrationForm = () => {
               }}
               disabled={isSubmitting}
             >
-              <SelectTrigger className="neu-input">
+              <SelectTrigger id="registration_type" className="neu-input">
                 <SelectValue placeholder="Choose registration type" />
               </SelectTrigger>
               <SelectContent>
@@ -287,7 +287,7 @@ export const RegistrationForm = () => {
               onValueChange={(value) => setValue('event_registered', value)}
               disabled={isSubmitting}
             >
-              <SelectTrigger className="neu-input">
+              <SelectTrigger id="event_registered" className="neu-input">
                 <SelectValue placeholder="Choose your event" />
               </SelectTrigger>
               <SelectContent className="max-h-60 overflow-y-auto">
@@ -363,7 +363,7 @@ export const RegistrationForm = () => {
               onValueChange={(value) => setValue('year_of_study', parseInt(value))}
               disabled={isSubmitting}
             >
-              <SelectTrigger className="neu-input">
+              <SelectTrigger id="year_of_study" className="neu-input">
                 <SelectValue placeholder="Select your year" />
               </SelectTrigger>
               <SelectContent>

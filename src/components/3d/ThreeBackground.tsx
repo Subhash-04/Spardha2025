@@ -50,17 +50,22 @@ export const ThreeBackground = ({ isDark }: ThreeBackgroundProps) => {
       pointLight2.position.set(-10, -10, -10);
       scene.add(pointLight2);
 
+      console.log('Initializing 3D background with rotating rings...');
+      
       // Create rotating rings system
       const rotatingRings = createRotatingRings();
       scene.add(rotatingRings);
+      console.log('Rotating rings added to scene');
       
       // Create particle system
       const particles = createParticleSystem();
       scene.add(particles);
+      console.log('Particles added to scene');
       
       // Create centered logo
       createCenteredLogo().then(logo => {
         scene.add(logo);
+        console.log('Logo added to scene');
       });
       
       // Mouse movement tracking for interactive effects
@@ -374,8 +379,11 @@ export const ThreeBackground = ({ isDark }: ThreeBackgroundProps) => {
         return new Promise<THREE.Group>((resolve) => {
           const textureLoader = new THREE.TextureLoader();
           
+          console.log('Loading VVITU logo for 3D background...');
+          
           // Load VVITU logo
           textureLoader.load(vvituLogo, (texture) => {
+            console.log('VVITU logo loaded successfully for 3D background');
             const material = new THREE.SpriteMaterial({ 
               map: texture,
               transparent: true,
@@ -411,7 +419,7 @@ export const ThreeBackground = ({ isDark }: ThreeBackgroundProps) => {
             
             resolve(group);
           }, undefined, (error) => {
-            console.log('VVITU logo not found, creating text placeholder');
+            console.error('Failed to load VVITU logo for 3D background:', error);
             // Create a simple text placeholder
             const group = new THREE.Group();
             resolve(group);
