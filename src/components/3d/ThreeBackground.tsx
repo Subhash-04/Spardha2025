@@ -10,436 +10,120 @@ export const ThreeBackground = ({ isDark }: ThreeBackgroundProps) => {
   const canvasRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // Initialize Three.js Animation
-    const initThreeAnimation = () => {
-      // Check if canvas container exists
-      const container = canvasRef.current;
-      if (!container) return;
+    if (!canvasRef.current) return;
 
-      // Clear any existing canvas
-      while (container.firstChild) {
-        container.removeChild(container.firstChild);
-      }
-
-      // Scene setup
-      const scene = new THREE.Scene();
-      
-      // Camera setup
-      const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-      camera.position.z = 30;
-      
-      // Renderer setup
-      const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-      renderer.setSize(window.innerWidth, window.innerHeight);
-      renderer.setPixelRatio(window.devicePixelRatio);
-      container.appendChild(renderer.domElement);
-      
-      // Lights setup
-      const ambientLight = new THREE.AmbientLight(0x404040, 2);
-      scene.add(ambientLight);
-      
-      const directionalLight = new THREE.DirectionalLight(isDark ? 0x4594e1 : 0x8b5cf6, 1);
-      directionalLight.position.set(1, 1, 1);
-      scene.add(directionalLight);
-      
-      const pointLight1 = new THREE.PointLight(isDark ? 0x4594e1 : 0x8b5cf6, 2, 50);
-      pointLight1.position.set(10, 10, 10);
-      scene.add(pointLight1);
-      
-      const pointLight2 = new THREE.PointLight(isDark ? 0x60a5fa : 0xd946ef, 2, 50);
-      pointLight2.position.set(-10, -10, -10);
-      scene.add(pointLight2);
-
-      console.log('Initializing 3D background with rotating rings...');
-      
-      // Create rotating rings system
-      const rotatingRings = createRotatingRings();
-      scene.add(rotatingRings);
-      console.log('Rotating rings added to scene');
-      
-      // Create particle system
-      const particles = createParticleSystem();
-      scene.add(particles);
-      console.log('Particles added to scene');
-      
-      // Create centered logo
-      createCenteredLogo().then(logo => {
-        scene.add(logo);
-        console.log('Logo added to scene');
-      });
-      
-      // Mouse movement tracking for interactive effects
-      let mouseX = 0;
-      let mouseY = 0;
-      let targetX = 0;
-      let targetY = 0;
-      
-      const handleMouseMove = (event: MouseEvent) => {
-        mouseX = (event.clientX / window.innerWidth) * 2 - 1;
-        mouseY = -(event.clientY / window.innerHeight) * 2 + 1;
-      };
-      
-      window.addEventListener('mousemove', handleMouseMove);
-      
-      // Handle window resize
-      const handleResize = () => {
-        camera.aspect = window.innerWidth / window.innerHeight;
-        camera.updateProjectionMatrix();
-        renderer.setSize(window.innerWidth, window.innerHeight);
-      };
-      
-      window.addEventListener('resize', handleResize);
-      
-      // Animation loop
-      let animationId: number;
-      
-      const animate = () => {
-        animationId = requestAnimationFrame(animate);
-        
-        // Update time for animations
-        const time = performance.now() * 0.001; // time in seconds
-        
-        // Smooth mouse movement
-        targetX = mouseX * 0.1;
-        targetY = mouseY * 0.1;
-        
-        // Animate rotating rings
-        if (rotatingRings) {
-          rotatingRings.children.forEach((ring, index) => {
-            if (ring.userData && ring.userData.rotationSpeed) {
-              const { rotationSpeed, rotationAxis } = ring.userData;
-              
-              // Apply rotation based on axis
-              if (rotationAxis === 'x') {
-                ring.rotation.x += rotationSpeed;
-              } else if (rotationAxis === 'y') {
-                ring.rotation.y += rotationSpeed;
-              } else if (rotationAxis === 'z') {
-                ring.rotation.z += rotationSpeed;
-              } else if (rotationAxis === 'xy') {
-                ring.rotation.x += rotationSpeed * 0.7;
-                ring.rotation.y += rotationSpeed * 0.8;
-              } else if (rotationAxis === 'xz') {
-                ring.rotation.x += rotationSpeed * 0.6;
-                ring.rotation.z += rotationSpeed * 0.9;
-              }
-              
-              // Pulse animation
-              if (ring.userData.pulseSpeed) {
-                const { pulseSpeed, pulseAmount, phase } = ring.userData;
-                const pulseFactor = 1 + Math.sin(time * pulseSpeed + phase) * pulseAmount;
-                ring.scale.set(pulseFactor, pulseFactor, pulseFactor);
-              }
-            }
-          });
-          
-          // Subtle movement based on mouse position
-          rotatingRings.position.x += (targetX - rotatingRings.position.x) * 0.02;
-          rotatingRings.position.y += (targetY - rotatingRings.position.y) * 0.02;
-        }
-        
-        // Animate particles
-        if (particles) {
-          particles.rotation.x += 0.0005;
-          particles.rotation.y += 0.001;
-          
-          // Update particle sizes for twinkling effect
-          const sizes = particles.geometry.attributes.size.array as Float32Array;
-          for (let i = 0; i < sizes.length; i++) {
-            // Create a subtle pulsing effect
-            const pulseFactor = Math.sin(time + i * 0.1) * 0.3 + 0.7;
-            const originalSize = Math.random() * 0.7 + 0.2;
-            sizes[i] = originalSize * pulseFactor;
-          }
-          particles.geometry.attributes.size.needsUpdate = true;
-        }
-        
-        renderer.render(scene, camera);
-      };
-      
-      animate();
-
-      // Create rotating rings system
-      function createRotatingRings() {
-        const group = new THREE.Group();
-        
-        // Define ring configurations
-        const ringConfigs = [
-          {
-            radius: 8,
-            tubeRadius: 0.15,
-            color: isDark ? 0x4f46e5 : 0x8b5cf6,
-            opacity: 0.9,
-            rotationSpeed: 0.008,
-            rotationAxis: 'x',
-            pulseSpeed: 0.6,
-            pulseAmount: 0.05,
-            initialRotation: { x: 0, y: 0, z: 0 }
-          },
-          {
-            radius: 10,
-            tubeRadius: 0.12,
-            color: isDark ? 0xa855f7 : 0xd946ef,
-            opacity: 0.8,
-            rotationSpeed: 0.006,
-            rotationAxis: 'y',
-            pulseSpeed: 0.8,
-            pulseAmount: 0.08,
-            initialRotation: { x: Math.PI / 4, y: 0, z: 0 }
-          },
-          {
-            radius: 12,
-            tubeRadius: 0.18,
-            color: isDark ? 0xec4899 : 0xec4899,
-            opacity: 0.7,
-            rotationSpeed: 0.004,
-            rotationAxis: 'z',
-            pulseSpeed: 0.5,
-            pulseAmount: 0.06,
-            initialRotation: { x: 0, y: Math.PI / 3, z: 0 }
-          },
-          {
-            radius: 14,
-            tubeRadius: 0.1,
-            color: isDark ? 0x818cf8 : 0x6366f1,
-            opacity: 0.6,
-            rotationSpeed: 0.005,
-            rotationAxis: 'xy',
-            pulseSpeed: 0.7,
-            pulseAmount: 0.04,
-            initialRotation: { x: Math.PI / 6, y: Math.PI / 2, z: 0 }
-          },
-          {
-            radius: 16,
-            tubeRadius: 0.08,
-            color: isDark ? 0x60a5fa : 0x3b82f6,
-            opacity: 0.5,
-            rotationSpeed: 0.003,
-            rotationAxis: 'xz',
-            pulseSpeed: 0.4,
-            pulseAmount: 0.03,
-            initialRotation: { x: Math.PI / 2, y: 0, z: Math.PI / 4 }
-          }
-        ];
-        
-        // Create rings
-        ringConfigs.forEach((config, index) => {
-          const geometry = new THREE.TorusGeometry(config.radius, config.tubeRadius, 16, 100);
-          const material = new THREE.MeshBasicMaterial({
-            color: config.color,
-            transparent: true,
-            opacity: config.opacity
-          });
-          
-          const ring = new THREE.Mesh(geometry, material);
-          
-          // Set initial rotation
-          ring.rotation.x = config.initialRotation.x;
-          ring.rotation.y = config.initialRotation.y;
-          ring.rotation.z = config.initialRotation.z;
-          
-          // Add animation data
-          ring.userData = {
-            rotationSpeed: config.rotationSpeed,
-            rotationAxis: config.rotationAxis,
-            pulseSpeed: config.pulseSpeed,
-            pulseAmount: config.pulseAmount,
-            phase: index * Math.PI * 0.5
-          };
-          
-          group.add(ring);
-        });
-        
-        // Add glow effects
-        const innerGlowGeometry = new THREE.TorusGeometry(10, 0.4, 16, 100);
-        const innerGlowMaterial = createGlowMaterial(isDark ? 0x4f46e5 : 0x8b5cf6, 0.5, 2);
-        const innerGlow = new THREE.Mesh(innerGlowGeometry, innerGlowMaterial);
-        innerGlow.scale.multiplyScalar(0.9);
-        group.add(innerGlow);
-        
-        const outerGlowGeometry = new THREE.TorusGeometry(12, 0.3, 16, 100);
-        const outerGlowMaterial = createGlowMaterial(isDark ? 0xec4899 : 0xec4899, 0.3, 3);
-        const outerGlow = new THREE.Mesh(outerGlowGeometry, outerGlowMaterial);
-        outerGlow.scale.multiplyScalar(1.15);
-        group.add(outerGlow);
-        
-        return group;
-      }
-
-      // Create a glow material using shaders
-      function createGlowMaterial(color: number, intensity: number, power: number) {
-        const glowMaterial = new THREE.ShaderMaterial({
-          uniforms: {
-            'c': { value: intensity },
-            'p': { value: power },
-            glowColor: { value: new THREE.Color(color) },
-            viewVector: { value: new THREE.Vector3(0, 0, 1) }
-          },
-          vertexShader: `
-            uniform vec3 viewVector;
-            uniform float c;
-            uniform float p;
-            varying float intensity;
-            void main() {
-              vec3 vNormal = normalize(normalMatrix * normal);
-              vec3 vNormel = normalize(normalMatrix * viewVector);
-              intensity = pow(c - dot(vNormal, vNormel), p);
-              gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-            }
-          `,
-          fragmentShader: `
-            uniform vec3 glowColor;
-            varying float intensity;
-            void main() {
-              vec3 glow = glowColor * intensity;
-              gl_FragColor = vec4(glow, 1.0);
-            }
-          `,
-          side: THREE.FrontSide,
-          blending: THREE.AdditiveBlending,
-          transparent: true
-        });
-        
-        return glowMaterial;
-      }
-
-      // Create a particle system for background effect
-      function createParticleSystem() {
-        const particleCount = 2000;
-        const particles = new THREE.BufferGeometry();
-        
-        const positions = new Float32Array(particleCount * 3);
-        const colors = new Float32Array(particleCount * 3);
-        const sizes = new Float32Array(particleCount);
-        
-        const color = new THREE.Color();
-        
-        for (let i = 0; i < particleCount; i++) {
-          // Position - create a more spherical distribution
-          const radius = 50 + Math.random() * 50;
-          const theta = Math.random() * Math.PI * 2;
-          const phi = Math.acos(2 * Math.random() - 1);
-          
-          const x = radius * Math.sin(phi) * Math.cos(theta);
-          const y = radius * Math.sin(phi) * Math.sin(theta);
-          const z = radius * Math.cos(phi);
-          
-          positions[i * 3] = x;
-          positions[i * 3 + 1] = y;
-          positions[i * 3 + 2] = z;
-          
-          // Updated color palette to match our design
-          const colorChoice = Math.random();
-          if (colorChoice < 0.3) {
-            color.setHex(isDark ? 0x4f46e5 : 0x8b5cf6);
-          } else if (colorChoice < 0.5) {
-            color.setHex(isDark ? 0x818cf8 : 0x6366f1);
-          } else if (colorChoice < 0.7) {
-            color.setHex(isDark ? 0xa855f7 : 0xd946ef);
-          } else if (colorChoice < 0.9) {
-            color.setHex(isDark ? 0xec4899 : 0xec4899);
-          } else {
-            color.setHex(0xffffff);
-          }
-          
-          colors[i * 3] = color.r;
-          colors[i * 3 + 1] = color.g;
-          colors[i * 3 + 2] = color.b;
-          
-          // Size - vary for depth effect with some larger particles
-          if (colorChoice > 0.9) {
-            // Make white particles (stars) twinkle
-            sizes[i] = Math.random() * 0.8 + 0.3;
-          } else {
-            sizes[i] = Math.random() * 0.7 + 0.2;
-          }
-        }
-        
-        particles.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-        particles.setAttribute('color', new THREE.BufferAttribute(colors, 3));
-        particles.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
-        
-        // Create a custom shader material for better particle rendering
-        const particleMaterial = new THREE.PointsMaterial({
-          size: 0.7,
-          vertexColors: true,
-          transparent: true,
-          opacity: 0.8,
-          sizeAttenuation: true,
-          blending: THREE.AdditiveBlending
-        });
-        
-        const particleSystem = new THREE.Points(particles, particleMaterial);
-        
-        return particleSystem;
-      }
-
-      // Create centered logo that always faces camera
-      async function createCenteredLogo() {
-        return new Promise<THREE.Group>((resolve) => {
-          const textureLoader = new THREE.TextureLoader();
-          
-          console.log('Loading VVITU logo for 3D background...');
-          
-          // Load VVITU logo
-          textureLoader.load(vvituLogo, (texture) => {
-            console.log('VVITU logo loaded successfully for 3D background');
-            const material = new THREE.SpriteMaterial({ 
-              map: texture,
-              transparent: true,
-              opacity: 0.9
-            });
-            
-            const group = new THREE.Group();
-            const logo = new THREE.Sprite(material);
-            
-            // Position at center of rings
-            logo.position.set(0, 0, 0);
-            
-            // Scale appropriately for VVITU logo
-            logo.scale.set(8, 8, 1);
-            
-            // Add subtle pulsing animation
-            logo.userData = {
-              pulseSpeed: 0.4,
-              pulseAmount: 0.08,
-              phase: 0
-            };
-            
-            group.add(logo);
-            
-            // Animate logo pulsing with the rings
-            const animateLogo = () => {
-              const time = performance.now() * 0.001;
-              const pulseFactor = 1 + Math.sin(time * logo.userData.pulseSpeed) * logo.userData.pulseAmount;
-              logo.scale.set(8 * pulseFactor, 8 * pulseFactor, 1);
-              requestAnimationFrame(animateLogo);
-            };
-            animateLogo();
-            
-            resolve(group);
-          }, undefined, (error) => {
-            console.error('Failed to load VVITU logo for 3D background:', error);
-            // Create a simple text placeholder
-            const group = new THREE.Group();
-            resolve(group);
-          });
-        });
-      }
-
-      // Cleanup function
-      return () => {
-        cancelAnimationFrame(animationId);
-        window.removeEventListener('mousemove', handleMouseMove);
-        window.removeEventListener('resize', handleResize);
-        renderer.dispose();
-        scene.clear();
-      };
-    };
-
-    const cleanup = initThreeAnimation();
+    const container = canvasRef.current;
     
-    return cleanup;
+    // Clear existing content
+    while (container.firstChild) {
+      container.removeChild(container.firstChild);
+    }
+
+    // Scene setup
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    camera.position.z = 25;
+
+    // Renderer setup
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setClearColor(0x000000, 0);
+    container.appendChild(renderer.domElement);
+
+    // Lights
+    const ambientLight = new THREE.AmbientLight(0x404040, 1);
+    scene.add(ambientLight);
+    
+    const directionalLight = new THREE.DirectionalLight(0x4f46e5, 2);
+    directionalLight.position.set(1, 1, 1);
+    scene.add(directionalLight);
+
+    // Create 5 rotating rings
+    const ringGroup = new THREE.Group();
+    
+    const ringConfigs = [
+      { radius: 6, tube: 0.1, color: 0x4f46e5, speed: 0.01, axis: [1, 0, 0] },
+      { radius: 8, tube: 0.08, color: 0x7c3aed, speed: 0.008, axis: [0, 1, 0] },
+      { radius: 10, tube: 0.12, color: 0xa855f7, speed: 0.006, axis: [0, 0, 1] },
+      { radius: 12, tube: 0.06, color: 0xd946ef, speed: 0.012, axis: [1, 1, 0] },
+      { radius: 14, tube: 0.04, color: 0xf472b6, speed: 0.004, axis: [1, 0, 1] }
+    ];
+
+    const rings = ringConfigs.map(config => {
+      const geometry = new THREE.TorusGeometry(config.radius, config.tube, 16, 100);
+      const material = new THREE.MeshPhongMaterial({
+        color: config.color,
+        transparent: true,
+        opacity: 0.8
+      });
+      const ring = new THREE.Mesh(geometry, material);
+      ring.userData = { speed: config.speed, axis: config.axis };
+      ringGroup.add(ring);
+      return ring;
+    });
+
+    scene.add(ringGroup);
+
+    // Add VVITU logo at center
+    const textureLoader = new THREE.TextureLoader();
+    textureLoader.load(vvituLogo, (texture) => {
+      const logoMaterial = new THREE.SpriteMaterial({ map: texture, transparent: true });
+      const logoSprite = new THREE.Sprite(logoMaterial);
+      logoSprite.scale.set(6, 6, 1);
+      logoSprite.position.set(0, 0, 0);
+      scene.add(logoSprite);
+    });
+
+    // Particles
+    const particleGeometry = new THREE.BufferGeometry();
+    const particleCount = 1000;
+    const positions = new Float32Array(particleCount * 3);
+    
+    for (let i = 0; i < particleCount; i++) {
+      positions[i * 3] = (Math.random() - 0.5) * 100;
+      positions[i * 3 + 1] = (Math.random() - 0.5) * 100;
+      positions[i * 3 + 2] = (Math.random() - 0.5) * 100;
+    }
+    
+    particleGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    const particleMaterial = new THREE.PointsMaterial({ color: 0x4f46e5, size: 0.5 });
+    const particles = new THREE.Points(particleGeometry, particleMaterial);
+    scene.add(particles);
+
+    // Animation
+    let animationId: number;
+    const animate = () => {
+      animationId = requestAnimationFrame(animate);
+      
+      // Rotate rings
+      rings.forEach(ring => {
+        const { speed, axis } = ring.userData;
+        ring.rotation.x += speed * axis[0];
+        ring.rotation.y += speed * axis[1];
+        ring.rotation.z += speed * axis[2];
+      });
+
+      // Rotate particles
+      particles.rotation.y += 0.001;
+
+      renderer.render(scene, camera);
+    };
+    animate();
+
+    // Resize handler
+    const handleResize = () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    };
+    window.addEventListener('resize', handleResize);
+
+    // Cleanup
+    return () => {
+      cancelAnimationFrame(animationId);
+      window.removeEventListener('resize', handleResize);
+      renderer.dispose();
+    };
   }, [isDark]);
 
   return (
