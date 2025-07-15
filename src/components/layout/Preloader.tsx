@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import vvitacmLogo from '@/assets/vvitu-logo.png';
+import vvitacmLogo from '@/assets/vvitacm_logo.png';
 
 interface PreloaderProps {
   onLoadingComplete: () => void;
