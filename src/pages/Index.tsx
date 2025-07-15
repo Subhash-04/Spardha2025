@@ -43,6 +43,7 @@ const Index = () => {
             <Hero />
             <About />
             <Events />
+            <PromoVideo />
             <Navigation />
             
             <section id="register" className="py-20">
