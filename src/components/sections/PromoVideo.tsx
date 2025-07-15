@@ -51,41 +51,36 @@ export const PromoVideo = () => {
   };
 
   return (
-    <section id="promo" className="py-24 relative">
-      <div className="container mx-auto px-6">
-        {/* Section Header */}
+    <section id="promo" className="py-12 sm:py-24 relative px-4">
+      <div className="container mx-auto">
+        {/* Section Header - Responsive */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+          className="text-center mb-8 sm:mb-16"
         >
-          <h2 className="text-4xl md:text-5xl font-bold text-holographic font-audiowide mb-4" style={{fontFamily: 'Audiowide, cursive'}}>
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-holographic font-audiowide mb-4" 
+              style={{fontFamily: 'Audiowide, cursive'}}>
             Watch Our Promo Video
           </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto px-4">
             Experience the energy and excitement of Spardha 2025
           </p>
         </motion.div>
 
-        {/* Video Container */}
+        {/* Video Container - Responsive */}
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           whileInView={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8 }}
           className="max-w-4xl mx-auto relative"
         >
-          <div className="dashboard-glass rounded-3xl p-8 relative overflow-hidden">
-            {/* Ultra Crystal Background Effects */}
-            <div className="absolute inset-0 opacity-20">
-              <div className="absolute top-0 left-0 w-48 h-48 gradient-glass-blue rounded-full blur-3xl"></div>
-              <div className="absolute bottom-0 right-0 w-56 h-56 gradient-glass-purple rounded-full blur-3xl"></div>
-            </div>
-
-            {/* Video Player */}
+          <div className="dashboard-glass rounded-2xl sm:rounded-3xl p-4 sm:p-8 relative overflow-hidden">
+            {/* Video Player - Responsive */}
             <div 
               ref={containerRef}
-              className="relative aspect-video rounded-2xl overflow-hidden bg-black/20 backdrop-blur-sm border border-primary/20 group"
+              className="relative aspect-video rounded-xl sm:rounded-2xl overflow-hidden bg-black/20 backdrop-blur-sm border border-primary/20 group"
             >
               <video
                 ref={videoRef}
@@ -101,63 +96,64 @@ export const PromoVideo = () => {
                 Your browser does not support the video tag.
               </video>
 
-              {/* Video Controls Overlay */}
+              {/* Video Controls Overlay - Responsive */}
               <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                <div className="flex items-center space-x-6">
-                  {/* Play/Pause Button */}
+                <div className="flex items-center space-x-3 sm:space-x-6">
+                  {/* Play/Pause Button - Responsive */}
                   <motion.button
                     onClick={togglePlay}
-                    className="w-20 h-20 rounded-full bg-primary/90 backdrop-blur-sm flex items-center justify-center text-white hover:bg-primary transition-colors shadow-2xl"
+                    className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-primary/90 backdrop-blur-sm flex items-center justify-center text-white hover:bg-primary transition-colors shadow-2xl"
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.9 }}
                   >
                     {isPlaying ? (
-                      <Pause className="w-8 h-8" />
+                      <Pause className="w-6 h-6 sm:w-8 sm:h-8" />
                     ) : (
-                      <Play className="w-8 h-8 ml-1" />
+                      <Play className="w-6 h-6 sm:w-8 sm:h-8 ml-1" />
                     )}
                   </motion.button>
 
-                  {/* Secondary Controls */}
-                  <div className="flex items-center space-x-3">
+                  {/* Secondary Controls - Responsive */}
+                  <div className="flex items-center space-x-2 sm:space-x-3">
                     <motion.button
                       onClick={toggleMute}
-                      className="w-12 h-12 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center text-white hover:bg-white/30 transition-colors"
+                      className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center text-white hover:bg-white/30 transition-colors"
                       whileHover={{ scale: 1.1 }}
                       whileTap={{ scale: 0.9 }}
                     >
                       {isMuted ? (
-                        <VolumeX className="w-5 h-5" />
+                        <VolumeX className="w-4 h-4 sm:w-5 sm:h-5" />
                       ) : (
-                        <Volume2 className="w-5 h-5" />
+                        <Volume2 className="w-4 h-4 sm:w-5 sm:h-5" />
                       )}
                     </motion.button>
 
                     <motion.button
                       onClick={toggleFullscreen}
-                      className="w-12 h-12 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center text-white hover:bg-white/30 transition-colors"
+                      className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center text-white hover:bg-white/30 transition-colors"
                       whileHover={{ scale: 1.1 }}
                       whileTap={{ scale: 0.9 }}
                     >
-                      <Maximize className="w-5 h-5" />
+                      <Maximize className="w-4 h-4 sm:w-5 sm:h-5" />
                     </motion.button>
                   </div>
                 </div>
               </div>
 
-              {/* Video Info Overlay */}
-              <div className="absolute bottom-4 left-4 right-4">
-                <div className="liquid-glass rounded-xl p-4">
-                  <h3 className="text-white font-semibold mb-1 font-audiowide" style={{fontFamily: 'Audiowide, cursive'}}>
+              {/* Video Info Overlay - Responsive positioning */}
+              <div className="absolute bottom-2 sm:bottom-4 left-2 sm:left-4 right-2 sm:right-4">
+                <div className="liquid-glass rounded-lg sm:rounded-xl p-3 sm:p-4">
+                  <h3 className="text-white font-semibold text-sm sm:text-base mb-1 font-audiowide" 
+                      style={{fontFamily: 'Audiowide, cursive'}}>
                     Spardha 2025 - Official Promo
                   </h3>
-                  <p className="text-white/80 text-sm">
+                  <p className="text-white/80 text-xs sm:text-sm">
                     Experience the biggest techno-cultural fest of VVIT
                   </p>
                 </div>
               </div>
 
-              {/* Play Button Overlay (when video is not playing) */}
+              {/* Play Button Overlay - Responsive */}
               {!isPlaying && (
                 <motion.div
                   className="absolute inset-0 flex items-center justify-center bg-black/20"
@@ -167,7 +163,7 @@ export const PromoVideo = () => {
                 >
                   <motion.button
                     onClick={togglePlay}
-                    className="w-24 h-24 rounded-full bg-primary/90 backdrop-blur-sm flex items-center justify-center text-white shadow-2xl"
+                    className="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-primary/90 backdrop-blur-sm flex items-center justify-center text-white shadow-2xl"
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.9 }}
                     animate={{
@@ -184,26 +180,22 @@ export const PromoVideo = () => {
                       ease: "easeInOut"
                     }}
                   >
-                    <Play className="w-10 h-10 ml-2" />
+                    <Play className="w-8 h-8 sm:w-10 sm:h-10 ml-2" />
                   </motion.button>
                 </motion.div>
               )}
             </div>
-
-            {/* Decorative Elements */}
-            <div className="absolute top-4 right-4 w-16 h-16 border-2 border-primary/30 rounded-full backdrop-blur-md bg-primary/10"></div>
-            <div className="absolute bottom-4 left-4 w-12 h-12 border border-accent/40 rounded backdrop-blur-sm bg-accent/5"></div>
           </div>
         </motion.div>
 
-        {/* Call to Action */}
+        {/* Call to Action - Responsive */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.3 }}
-          className="text-center mt-12"
+          className="text-center mt-8 sm:mt-12 px-4"
         >
-          <p className="text-muted-foreground mb-6">
+          <p className="text-muted-foreground mb-4 sm:mb-6 text-sm sm:text-base">
             Ready to be part of the excitement?
           </p>
           <motion.button
@@ -213,7 +205,7 @@ export const PromoVideo = () => {
                 element.scrollIntoView({ behavior: 'smooth' });
               }
             }}
-            className="dashboard-glass px-8 py-3 rounded-2xl text-primary font-semibold hover:scale-105 transition-all duration-300 border-primary/30 hover:border-primary/50"
+            className="dashboard-glass px-6 sm:px-8 py-3 rounded-xl sm:rounded-2xl text-primary font-semibold hover:scale-105 transition-all duration-300 border-primary/30 hover:border-primary/50 text-sm sm:text-base"
             whileHover={{ y: -2 }}
             whileTap={{ y: 0 }}
           >

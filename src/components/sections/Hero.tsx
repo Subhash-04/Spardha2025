@@ -18,19 +18,21 @@ export const Hero = () => {
   };
 
   return (
-    <section id="home" className="min-h-screen flex items-center justify-center relative overflow-hidden">
-      <div className="container mx-auto px-6 text-center relative z-10">
-        {/* Main Title */}
+    <section id="home" className="min-h-screen flex items-center justify-center relative overflow-hidden px-4">
+      <div className="container mx-auto text-center relative z-10 max-w-6xl">
+        {/* Main Title - Responsive */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
+          className="mb-4 sm:mb-6"
         >
-          <h1 className="text-6xl md:text-8xl font-bold mb-6 text-gradient animate-glow-pulse font-audiowide" style={{fontFamily: 'Audiowide, cursive'}}>
+          <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-bold text-gradient animate-glow-pulse font-audiowide leading-tight" 
+              style={{fontFamily: 'Audiowide, cursive'}}>
             SPARDHA
           </h1>
           <motion.div
-            className="text-4xl md:text-6xl font-light text-foreground mb-8 font-audiowide"
+            className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-light text-foreground mt-2 sm:mt-4 font-audiowide"
             style={{fontFamily: 'Audiowide, cursive'}}
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -40,24 +42,24 @@ export const Hero = () => {
           </motion.div>
         </motion.div>
 
-        {/* Subtitle */}
+        {/* Subtitle - Responsive */}
         <motion.div
-          className="space-y-4 mb-12"
+          className="space-y-2 sm:space-y-4 mb-8 sm:mb-12 px-4"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.8 }}
         >
-          <p className="text-xl md:text-2xl text-muted-foreground font-light">
+          <p className="text-base sm:text-xl md:text-2xl text-muted-foreground font-light">
             The Annual Techno-Cultural Fest of VVIT
           </p>
-          <p className="text-lg md:text-xl text-primary font-medium">
+          <p className="text-sm sm:text-lg md:text-xl text-primary font-medium">
             Presented by ACM VVITU Student Chapter
           </p>
         </motion.div>
 
-        {/* Call to Action Buttons */}
+        {/* Call to Action Buttons - Responsive */}
         <motion.div
-          className="flex flex-col sm:flex-row gap-4 justify-center items-center"
+          className="flex flex-col sm:flex-row gap-4 justify-center items-center px-4"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 1.1 }}
@@ -65,7 +67,7 @@ export const Hero = () => {
           <Button
             onClick={scrollToRegister}
             size="lg"
-            className="dashboard-glass text-lg px-8 py-3 hover:scale-105 transition-all duration-300 border-primary/30 hover:border-primary/50"
+            className="w-full sm:w-auto dashboard-glass text-base sm:text-lg px-6 sm:px-8 py-3 hover:scale-105 transition-all duration-300 border-primary/30 hover:border-primary/50"
           >
             Register Now
           </Button>
@@ -74,15 +76,15 @@ export const Hero = () => {
             onClick={scrollToAbout}
             variant="outline"
             size="lg"
-            className="crystal-glass text-lg px-8 py-3 hover:scale-105 transition-all duration-300"
+            className="w-full sm:w-auto crystal-glass text-base sm:text-lg px-6 sm:px-8 py-3 hover:scale-105 transition-all duration-300"
           >
             Learn More
           </Button>
         </motion.div>
 
-        {/* Scroll Indicator */}
+        {/* Scroll Indicator - Hidden on mobile */}
         <motion.div
-          className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
+          className="absolute bottom-8 left-1/2 transform -translate-x-1/2 hidden sm:block"
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 1.5 }}
@@ -98,12 +100,12 @@ export const Hero = () => {
         </motion.div>
       </div>
 
-      {/* Floating Elements */}
+      {/* Floating Elements - Reduced on mobile */}
       <div className="absolute inset-0 pointer-events-none">
-        {[...Array(6)].map((_, i) => (
+        {[...Array(3)].map((_, i) => (
           <motion.div
             key={i}
-            className="absolute w-2 h-2 bg-primary/30 rounded-full"
+            className="absolute w-2 h-2 bg-primary/30 rounded-full hidden sm:block"
             style={{
               left: `${Math.random() * 100}%`,
               top: `${Math.random() * 100}%`,

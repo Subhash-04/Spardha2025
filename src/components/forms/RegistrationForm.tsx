@@ -111,14 +111,15 @@ export const RegistrationForm = () => {
   };
 
   return (
-    <motion.div
-      className="max-w-2xl mx-auto relative"
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6 }}
-    >
+    <div className="px-4">
+      <motion.div
+        className="max-w-2xl mx-auto relative"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+      >
       {/* Sophisticated Dashboard Container */}
-      <div className="dashboard-glass rounded-3xl p-10 relative overflow-hidden">
+      <div className="dashboard-glass rounded-2xl sm:rounded-3xl p-6 sm:p-10 relative overflow-hidden">
         {/* Ultra Crystal Background Effects */}
         <div className="absolute inset-0 opacity-15">
           <div className="absolute top-0 left-0 w-48 h-48 gradient-glass-blue rounded-full blur-3xl"></div>
@@ -136,18 +137,18 @@ export const RegistrationForm = () => {
         <div className="text-center mb-10 relative z-10">
           {/* Enhanced ACM VVITU Logo */}
           <motion.div
-            className="mx-auto w-20 h-20 mb-6 crystal-glass rounded-3xl flex items-center justify-center hover:scale-110 transition-all duration-300"
+            className="mx-auto w-16 h-16 sm:w-20 sm:h-20 mb-6 crystal-glass rounded-2xl sm:rounded-3xl flex items-center justify-center hover:scale-110 transition-all duration-300"
             initial={{ scale: 0, rotate: -180, opacity: 0 }}
             animate={{ scale: 1, rotate: 0, opacity: 1 }}
             transition={{ duration: 1.2, type: "spring", bounce: 0.4 }}
           >
-            <span className="text-3xl font-bold text-holographic font-orbitron">ACM</span>
+            <span className="text-2xl sm:text-3xl font-bold text-holographic font-orbitron">ACM</span>
           </motion.div>
           
-          <h2 className="text-3xl font-bold text-holographic mb-2 font-orbitron">
+          <h2 className="text-2xl sm:text-3xl font-bold text-holographic mb-2 font-orbitron">
             Register for Spardha 2025
           </h2>
-          <p className="text-muted-foreground">
+          <p className="text-sm sm:text-base text-muted-foreground px-4">
             Join the biggest techno-cultural fest of VVIT
           </p>
         </div>
@@ -387,7 +388,7 @@ export const RegistrationForm = () => {
           >
             <Button
               type="submit"
-              className="w-full glass-button text-lg py-3"
+              className="w-full glass-button text-base sm:text-lg py-3"
               disabled={isSubmitting}
             >
               {isSubmitting ? (
@@ -402,10 +403,11 @@ export const RegistrationForm = () => {
           </motion.div>
         </form>
 
-        <div className="mt-6 text-center text-sm text-muted-foreground">
+        <div className="mt-6 text-center text-xs sm:text-sm text-muted-foreground">
           * Required fields
         </div>
       </div>
-    </motion.div>
+      </motion.div>
+    </div>
   );
 };

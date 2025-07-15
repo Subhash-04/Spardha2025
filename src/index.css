@@ -770,12 +770,46 @@ Inspired by iOS 26 Liquid Glass & Cyberpunk Aesthetics
 
   /* === RESPONSIVE 3D EFFECTS === */
   @media (max-width: 768px) {
+    .text-gradient {
+      font-size: clamp(2rem, 8vw, 4rem) !important;
+      line-height: 1.1;
+    }
+    
     .card-3d:hover {
       transform: rotateX(5deg) rotateY(8deg) translateZ(15px);
     }
     
     .liquid-card:hover {
       transform: translateY(-4px) rotateX(1deg) rotateY(1deg);
+    }
+    
+    .dashboard-glass {
+      backdrop-filter: blur(20px) saturate(1.5) brightness(1.05);
+      -webkit-backdrop-filter: blur(20px) saturate(1.5) brightness(1.05);
+    }
+    
+    .crystal-glass {
+      backdrop-filter: blur(30px) saturate(1.8) brightness(1.08);
+      -webkit-backdrop-filter: blur(30px) saturate(1.8) brightness(1.08);
+    }
+  }
+  
+  /* Mobile-specific optimizations */
+  @media (max-width: 640px) {
+    .container {
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
+    
+    .dashboard-glass,
+    .crystal-glass {
+      margin: 0.5rem;
+    }
+    
+    /* Ensure text doesn't overflow */
+    h1, h2, h3 {
+      word-wrap: break-word;
+      overflow-wrap: break-word;
     }
   }
 

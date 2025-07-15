@@ -56,45 +56,15 @@ export const Preloader = ({ onLoadingComplete }: PreloaderProps) => {
         ))}
       </div>
 
-      {/* Floating Geometric Shapes */}
-      <div className="absolute inset-0 pointer-events-none">
-        {[...Array(8)].map((_, i) => (
-          <motion.div
-            key={`shape-${i}`}
-            className="absolute"
-            style={{
-              left: `${10 + (i * 12)}%`,
-              top: `${20 + Math.random() * 60}%`,
-            }}
-            animate={{
-              rotate: [0, 360],
-              y: [0, -20, 0],
-              scale: [1, 1.2, 1],
-            }}
-            transition={{
-              duration: 4 + Math.random() * 2,
-              repeat: Infinity,
-              ease: "linear",
-              delay: i * 0.5,
-            }}
-          >
-            <div 
-              className={`w-4 h-4 ${i % 3 === 0 ? 'bg-primary/20' : i % 3 === 1 ? 'bg-accent/20' : 'bg-primary-glow/20'} 
-                         ${i % 2 === 0 ? 'rounded-full' : 'rounded-sm rotate-45'}`}
-            />
-          </motion.div>
-        ))}
-      </div>
-
       <div className="text-center relative z-10">
-        {/* Enhanced 3D VVIT ACM Logo */}
+        {/* Enhanced VVIT ACM Logo - Larger and Circular */}
         <motion.div
           className="mb-8 relative"
           initial={{ scale: 0.5, opacity: 0, rotateY: -180 }}
           animate={{ scale: 1, opacity: 1, rotateY: 0 }}
           transition={{ duration: 1.2, ease: "easeOut", type: "spring", bounce: 0.4 }}
         >
-          <div className="relative w-40 h-40 mx-auto perspective-1000">
+          <div className="relative w-48 h-48 mx-auto">
             {/* Outer Rotating Ring */}
             <motion.div
               className="absolute inset-0 rounded-full border-4 border-primary/30"
@@ -104,24 +74,14 @@ export const Preloader = ({ onLoadingComplete }: PreloaderProps) => {
             
             {/* Middle Rotating Ring */}
             <motion.div
-              className="absolute inset-2 rounded-full border-2 border-accent/40"
+              className="absolute inset-4 rounded-full border-2 border-accent/40"
               animate={{ rotate: -360 }}
               transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
             />
-            
-            {/* Inner Glow Ring */}
-            <motion.div
-              className="absolute inset-4 rounded-full bg-gradient-to-br from-primary/20 to-accent/20 backdrop-blur-sm"
-              animate={{ 
-                scale: [1, 1.05, 1],
-                opacity: [0.6, 0.9, 0.6]
-              }}
-              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-            />
 
-            {/* Logo Container with 3D Effects */}
+            {/* Logo Container - Larger and Circular */}
             <motion.div
-              className="absolute inset-6 rounded-full bg-background/10 backdrop-blur-md flex items-center justify-center overflow-hidden shadow-2xl"
+              className="absolute inset-8 rounded-full bg-background/10 backdrop-blur-md flex items-center justify-center overflow-hidden shadow-2xl"
               animate={{ 
                 rotateY: [0, 10, -10, 0],
                 rotateX: [0, 5, -5, 0],
@@ -144,7 +104,7 @@ export const Preloader = ({ onLoadingComplete }: PreloaderProps) => {
                 alt="VVIT ACM Chapter" 
                 className="w-24 h-24 object-contain rounded-full filter drop-shadow-lg"
                 animate={{
-                  scale: [1, 1.1, 1],
+                  scale: [1, 1.05, 1],
                   filter: [
                     'drop-shadow(0 0 10px rgba(79, 70, 229, 0.5))',
                     'drop-shadow(0 0 20px rgba(79, 70, 229, 0.8))',
@@ -158,35 +118,10 @@ export const Preloader = ({ onLoadingComplete }: PreloaderProps) => {
                 }}
               />
             </motion.div>
-
-            {/* Orbiting Particles */}
-            {[...Array(6)].map((_, i) => (
-              <motion.div
-                key={`orbit-${i}`}
-                className="absolute w-2 h-2 bg-primary rounded-full"
-                style={{
-                  left: '50%',
-                  top: '50%',
-                  transformOrigin: '0 0',
-                }}
-                animate={{
-                  rotate: 360,
-                  scale: [1, 1.5, 1],
-                  opacity: [0.5, 1, 0.5],
-                }}
-                transition={{
-                  duration: 3 + i * 0.5,
-                  repeat: Infinity,
-                  ease: "linear",
-                  delay: i * 0.5,
-                }}
-                transform={`translate(-50%, -50%) translate(${60 + i * 10}px, 0)`}
-              />
-            ))}
           </div>
         </motion.div>
 
-        {/* Enhanced Loading Text with 3D Effect */}
+        {/* Enhanced Loading Text */}
         <motion.div
           className="mb-6"
           initial={{ y: 20, opacity: 0 }}
@@ -216,7 +151,7 @@ export const Preloader = ({ onLoadingComplete }: PreloaderProps) => {
           </motion.p>
         </motion.div>
 
-        {/* Enhanced Progress Bar with 3D Effects */}
+        {/* Enhanced Progress Bar */}
         <motion.div
           className="w-80 h-3 bg-muted/30 rounded-full overflow-hidden mx-auto relative backdrop-blur-sm"
           initial={{ width: 0 }}
@@ -234,7 +169,6 @@ export const Preloader = ({ onLoadingComplete }: PreloaderProps) => {
             style={{ width: `${progress}%` }}
             transition={{ duration: 0.3 }}
           >
-            {/* Animated Shine Effect */}
             <motion.div
               className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent"
               animate={{ x: ['-100%', '100%'] }}
@@ -245,16 +179,9 @@ export const Preloader = ({ onLoadingComplete }: PreloaderProps) => {
               }}
             />
           </motion.div>
-          
-          {/* Progress Glow */}
-          <motion.div
-            className="absolute inset-0 bg-gradient-to-r from-primary/50 to-accent/50 blur-sm"
-            animate={{ opacity: [0.5, 0.8, 0.5] }}
-            transition={{ duration: 1, repeat: Infinity }}
-          />
         </motion.div>
 
-        {/* Enhanced Progress Text */}
+        {/* Progress Text */}
         <motion.div
           className="mt-6 text-lg text-muted-foreground font-mono"
           initial={{ opacity: 0 }}
