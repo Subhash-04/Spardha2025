@@ -1,9 +1,11 @@
 import { motion } from 'framer-motion';
 import { useState, useRef } from 'react';
+import { Volume2, VolumeX } from 'lucide-react';
 import promoVideo from '@/assets/Create_a_sleek_second_K_v.mp4';
 
 export const PromoVideo = () => {
   const [isPlaying, setIsPlaying] = useState(false);
+  const [isMuted, setIsMuted] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
 
   const togglePlay = () => {
@@ -14,6 +16,14 @@ export const PromoVideo = () => {
         videoRef.current.play();
       }
       setIsPlaying(!isPlaying);
+    }
+  };
+
+  const toggleMute = (e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent triggering play/pause
+    if (videoRef.current) {
+      videoRef.current.muted = !isMuted;
+      setIsMuted(!isMuted);
     }
   };
 
@@ -60,7 +70,7 @@ export const PromoVideo = () => {
             <video
               ref={videoRef}
               className="w-full h-full object-cover transition-all duration-500 group-hover:scale-105"
-              muted
+              muted={isMuted}
               playsInline
               onEnded={handleVideoEnd}
               onPlay={handleVideoPlay}
@@ -69,6 +79,20 @@ export const PromoVideo = () => {
               <source src={promoVideo} type="video/mp4" />
               Your browser does not support the video tag.
             </video>
+
+            {/* Audio Control Button */}
+            <motion.button
+              onClick={toggleMute}
+              className="absolute top-4 right-4 w-12 h-12 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center shadow-lg hover:bg-white/20 transition-all duration-300 z-10"
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+            >
+              {isMuted ? (
+                <VolumeX className="w-5 h-5 text-white" />
+              ) : (
+                <Volume2 className="w-5 h-5 text-white" />
+              )}
+            </motion.button>
 
             {/* Minimalist Play Button - Only shows when paused */}
             {!isPlaying && (
@@ -109,7 +133,6 @@ export const PromoVideo = () => {
 
             {/* Subtle Corner Indicators */}
             <div className="absolute top-4 left-4 w-8 h-8 border-l-2 border-t-2 border-white/30 rounded-tl-lg"></div>
-            <div className="absolute top-4 right-4 w-8 h-8 border-r-2 border-t-2 border-white/30 rounded-tr-lg"></div>
             <div className="absolute bottom-4 left-4 w-8 h-8 border-l-2 border-b-2 border-white/30 rounded-bl-lg"></div>
             <div className="absolute bottom-4 right-4 w-8 h-8 border-r-2 border-b-2 border-white/30 rounded-br-lg"></div>
 
