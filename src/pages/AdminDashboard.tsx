@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useTheme } from 'next-themes';
 import { useAdminAuth } from '@/hooks/useAdminAuth';
-import { AdminLogin } from '@/components/admin/AdminLogin';
+
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -187,7 +187,9 @@ const AdminDashboard = () => {
   }
 
   if (!isAuthenticated) {
-    return <AdminLogin onClose={() => {}} />;
+    // Redirect to home if not authenticated
+    window.location.href = '/';
+    return null;
   }
 
   return (
