@@ -73,17 +73,16 @@ export const Header = ({ isDark, onThemeToggle }: HeaderProps) => {
 
             {/* Controls */}
             <div className="flex items-center space-x-4">
-              {/* Admin Dashboard Link */}
-              <Link to="/admin">
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="hidden md:flex items-center space-x-2 neu-button"
-                >
-                  <Shield className="w-4 h-4" />
-                  <span>Admin</span>
-                </Button>
-              </Link>
+              {/* Admin Dashboard Button */}
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setShowPinDialog(true)}
+                className="hidden md:flex items-center space-x-2 neu-button"
+              >
+                <Shield className="w-4 h-4" />
+                <span>Admin</span>
+              </Button>
 
               {/* Theme Toggle */}
               <Button
@@ -135,15 +134,16 @@ export const Header = ({ isDark, onThemeToggle }: HeaderProps) => {
                   {item.label}
                 </button>
               ))}
-              <Link to="/admin" className="block w-full">
-                <button
-                  onClick={() => setIsMenuOpen(false)}
-                  className="flex items-center space-x-2 text-foreground hover:text-primary transition-colors py-2 w-full"
-                >
-                  <Shield className="w-4 h-4" />
-                  <span>Admin Dashboard</span>
-                </button>
-              </Link>
+              <button
+                onClick={() => {
+                  setIsMenuOpen(false);
+                  setShowPinDialog(true);
+                }}
+                className="flex items-center space-x-2 text-foreground hover:text-primary transition-colors py-2 w-full"
+              >
+                <Shield className="w-4 h-4" />
+                <span>Admin Dashboard</span>
+              </button>
             </div>
           </motion.div>
         </nav>

@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
 import { AdminLogin } from './AdminLogin';
+import { X } from 'lucide-react';
 
 interface PinVerificationProps {
   isOpen: boolean;
@@ -89,6 +90,16 @@ export const PinVerification = ({ isOpen, onClose }: PinVerificationProps) => {
           exit={{ scale: 0.8, opacity: 0, y: 20 }}
           transition={{ type: "spring", duration: 0.5 }}
         >
+          {/* Close Button */}
+          <Button
+            onClick={handleClose}
+            variant="ghost"
+            size="sm"
+            className="absolute top-4 right-4 h-8 w-8 p-0"
+          >
+            <X className="h-4 w-4" />
+          </Button>
+
           {!isPinVerified ? (
             <div className="text-center space-y-6">
               <div>
@@ -138,7 +149,7 @@ export const PinVerification = ({ isOpen, onClose }: PinVerificationProps) => {
               </div>
             </div>
           ) : (
-            <AdminLogin onClose={handleClose} />
+            <AdminLogin onClose={handleClose} showSuccessOnly={true} />
           )}
         </motion.div>
       </motion.div>
