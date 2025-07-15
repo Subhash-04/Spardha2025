@@ -49,16 +49,16 @@ export const ThreeBackground = ({ isDark }: ThreeBackgroundProps) => {
       pointLight2.position.set(-10, -10, -10);
       scene.add(pointLight2);
 
-      // Create glowing circle
-      const glowingCircle = createGlowingCircle();
-      scene.add(glowingCircle);
+      // Create rotating rings system
+      const rotatingRings = createRotatingRings();
+      scene.add(rotatingRings);
       
       // Create particle system
       const particles = createParticleSystem();
       scene.add(particles);
       
-      // Create ACM logo
-      createACMLogo().then(logo => {
+      // Create centered logo
+      createCenteredLogo().then(logo => {
         scene.add(logo);
       });
       
@@ -97,23 +97,39 @@ export const ThreeBackground = ({ isDark }: ThreeBackgroundProps) => {
         targetX = mouseX * 0.1;
         targetY = mouseY * 0.1;
         
-        // Rotate and animate glowing circle
-        if (glowingCircle) {
-          glowingCircle.rotation.x += 0.003;
-          glowingCircle.rotation.y += 0.005;
-          
-          // Subtle movement based on mouse position
-          glowingCircle.position.x += (targetX - glowingCircle.position.x) * 0.05;
-          glowingCircle.position.y += (targetY - glowingCircle.position.y) * 0.05;
-          
-          // Pulse animation for each ring
-          glowingCircle.children.forEach(child => {
-            if (child.userData && child.userData.pulseSpeed) {
-              const { pulseSpeed, pulseAmount, phase } = child.userData;
-              const pulseFactor = 1 + Math.sin(time * pulseSpeed + phase) * pulseAmount;
-              child.scale.set(pulseFactor, pulseFactor, pulseFactor);
+        // Animate rotating rings
+        if (rotatingRings) {
+          rotatingRings.children.forEach((ring, index) => {
+            if (ring.userData && ring.userData.rotationSpeed) {
+              const { rotationSpeed, rotationAxis } = ring.userData;
+              
+              // Apply rotation based on axis
+              if (rotationAxis === 'x') {
+                ring.rotation.x += rotationSpeed;
+              } else if (rotationAxis === 'y') {
+                ring.rotation.y += rotationSpeed;
+              } else if (rotationAxis === 'z') {
+                ring.rotation.z += rotationSpeed;
+              } else if (rotationAxis === 'xy') {
+                ring.rotation.x += rotationSpeed * 0.7;
+                ring.rotation.y += rotationSpeed * 0.8;
+              } else if (rotationAxis === 'xz') {
+                ring.rotation.x += rotationSpeed * 0.6;
+                ring.rotation.z += rotationSpeed * 0.9;
+              }
+              
+              // Pulse animation
+              if (ring.userData.pulseSpeed) {
+                const { pulseSpeed, pulseAmount, phase } = ring.userData;
+                const pulseFactor = 1 + Math.sin(time * pulseSpeed + phase) * pulseAmount;
+                ring.scale.set(pulseFactor, pulseFactor, pulseFactor);
+              }
             }
           });
+          
+          // Subtle movement based on mouse position
+          rotatingRings.position.x += (targetX - rotatingRings.position.x) * 0.02;
+          rotatingRings.position.y += (targetY - rotatingRings.position.y) * 0.02;
         }
         
         // Animate particles
@@ -137,64 +153,108 @@ export const ThreeBackground = ({ isDark }: ThreeBackgroundProps) => {
       
       animate();
 
-      // Create a glowing circle with shader material
-      function createGlowingCircle() {
-        // Create a group to hold all elements
+      // Create rotating rings system
+      function createRotatingRings() {
         const group = new THREE.Group();
         
-        // Create multiple concentric rings for a more complex effect
-        const createRing = (radius: number, tubeRadius: number, color: number, opacity: number, rotationOffset: { x: number; y: number }) => {
-          const geometry = new THREE.TorusGeometry(radius, tubeRadius, 16, 100);
-          const material = new THREE.MeshBasicMaterial({ 
-            color: color,
+        // Define ring configurations
+        const ringConfigs = [
+          {
+            radius: 8,
+            tubeRadius: 0.15,
+            color: isDark ? 0x4f46e5 : 0x8b5cf6,
+            opacity: 0.9,
+            rotationSpeed: 0.008,
+            rotationAxis: 'x',
+            pulseSpeed: 0.6,
+            pulseAmount: 0.05,
+            initialRotation: { x: 0, y: 0, z: 0 }
+          },
+          {
+            radius: 10,
+            tubeRadius: 0.12,
+            color: isDark ? 0xa855f7 : 0xd946ef,
+            opacity: 0.8,
+            rotationSpeed: 0.006,
+            rotationAxis: 'y',
+            pulseSpeed: 0.8,
+            pulseAmount: 0.08,
+            initialRotation: { x: Math.PI / 4, y: 0, z: 0 }
+          },
+          {
+            radius: 12,
+            tubeRadius: 0.18,
+            color: isDark ? 0xec4899 : 0xec4899,
+            opacity: 0.7,
+            rotationSpeed: 0.004,
+            rotationAxis: 'z',
+            pulseSpeed: 0.5,
+            pulseAmount: 0.06,
+            initialRotation: { x: 0, y: Math.PI / 3, z: 0 }
+          },
+          {
+            radius: 14,
+            tubeRadius: 0.1,
+            color: isDark ? 0x818cf8 : 0x6366f1,
+            opacity: 0.6,
+            rotationSpeed: 0.005,
+            rotationAxis: 'xy',
+            pulseSpeed: 0.7,
+            pulseAmount: 0.04,
+            initialRotation: { x: Math.PI / 6, y: Math.PI / 2, z: 0 }
+          },
+          {
+            radius: 16,
+            tubeRadius: 0.08,
+            color: isDark ? 0x60a5fa : 0x3b82f6,
+            opacity: 0.5,
+            rotationSpeed: 0.003,
+            rotationAxis: 'xz',
+            pulseSpeed: 0.4,
+            pulseAmount: 0.03,
+            initialRotation: { x: Math.PI / 2, y: 0, z: Math.PI / 4 }
+          }
+        ];
+        
+        // Create rings
+        ringConfigs.forEach((config, index) => {
+          const geometry = new THREE.TorusGeometry(config.radius, config.tubeRadius, 16, 100);
+          const material = new THREE.MeshBasicMaterial({
+            color: config.color,
             transparent: true,
-            opacity: opacity
+            opacity: config.opacity
           });
-          const ring = new THREE.Mesh(geometry, material);
-          ring.rotation.x = rotationOffset.x;
-          ring.rotation.y = rotationOffset.y;
           
-          // Add pulse animation data to each ring
+          const ring = new THREE.Mesh(geometry, material);
+          
+          // Set initial rotation
+          ring.rotation.x = config.initialRotation.x;
+          ring.rotation.y = config.initialRotation.y;
+          ring.rotation.z = config.initialRotation.z;
+          
+          // Add animation data
           ring.userData = {
-            pulseSpeed: 0.5 + Math.random() * 0.5,
-            pulseAmount: 0.1 + Math.random() * 0.1,
-            initialRadius: radius,
-            phase: Math.random() * Math.PI * 2
+            rotationSpeed: config.rotationSpeed,
+            rotationAxis: config.rotationAxis,
+            pulseSpeed: config.pulseSpeed,
+            pulseAmount: config.pulseAmount,
+            phase: index * Math.PI * 0.5
           };
           
-          return ring;
-        };
+          group.add(ring);
+        });
         
-        // Updated colors to match our design
-        const colors = isDark ? {
-          primary: 0x4f46e5,
-          secondary: 0xa855f7,
-          tertiary: 0xec4899,
-          accent: 0x818cf8
-        } : {
-          primary: 0x8b5cf6,
-          secondary: 0xd946ef,
-          tertiary: 0xec4899,
-          accent: 0x6366f1
-        };
-
-        group.add(createRing(10, 0.2, colors.primary, 0.8, {x: 0, y: 0}));
-        group.add(createRing(8, 0.15, colors.secondary, 0.7, {x: Math.PI/4, y: Math.PI/6}));
-        group.add(createRing(12, 0.25, colors.tertiary, 0.6, {x: -Math.PI/5, y: Math.PI/3}));
-        group.add(createRing(14, 0.1, colors.accent, 0.5, {x: Math.PI/2, y: -Math.PI/4}));
-        
-        // Create inner glow
-        const innerGeometry = new THREE.TorusGeometry(10, 0.5, 16, 100);
-        const innerGlowMaterial = createGlowMaterial(colors.primary, 0.6, 2);
-        const innerGlow = new THREE.Mesh(innerGeometry, innerGlowMaterial);
-        innerGlow.scale.multiplyScalar(0.95);
+        // Add glow effects
+        const innerGlowGeometry = new THREE.TorusGeometry(10, 0.4, 16, 100);
+        const innerGlowMaterial = createGlowMaterial(isDark ? 0x4f46e5 : 0x8b5cf6, 0.5, 2);
+        const innerGlow = new THREE.Mesh(innerGlowGeometry, innerGlowMaterial);
+        innerGlow.scale.multiplyScalar(0.9);
         group.add(innerGlow);
         
-        // Create outer glow
-        const outerGeometry = new THREE.TorusGeometry(10, 0.5, 16, 100);
-        const outerGlowMaterial = createGlowMaterial(colors.tertiary, 0.4, 3);
-        const outerGlow = new THREE.Mesh(outerGeometry, outerGlowMaterial);
-        outerGlow.scale.multiplyScalar(1.1);
+        const outerGlowGeometry = new THREE.TorusGeometry(12, 0.3, 16, 100);
+        const outerGlowMaterial = createGlowMaterial(isDark ? 0xec4899 : 0xec4899, 0.3, 3);
+        const outerGlow = new THREE.Mesh(outerGlowGeometry, outerGlowMaterial);
+        outerGlow.scale.multiplyScalar(1.15);
         group.add(outerGlow);
         
         return group;
@@ -308,28 +368,84 @@ export const ThreeBackground = ({ isDark }: ThreeBackgroundProps) => {
         return particleSystem;
       }
 
-      // Create and load ACM logo
-      async function createACMLogo() {
+      // Create centered logo that always faces camera
+      async function createCenteredLogo() {
         return new Promise<THREE.Group>((resolve) => {
           const textureLoader = new THREE.TextureLoader();
-          textureLoader.load('/images/vvitacm_logo.svg', (texture) => {
+          
+          // Try to load user's logo first, fallback to ACM logo
+          const logoPath = '/images/logo.png'; // User can upload their logo as logo.png
+          
+          textureLoader.load(logoPath, (texture) => {
             const material = new THREE.SpriteMaterial({ 
               map: texture,
               transparent: true,
-              opacity: 0.7
+              opacity: 0.8
             });
             
             const group = new THREE.Group();
             const logo = new THREE.Sprite(material);
-            logo.scale.set(5, 5, 1);
-            logo.position.set(-15, 10, -5);
+            
+            // Position at center of rings
+            logo.position.set(0, 0, 0);
+            
+            // Scale appropriately
+            logo.scale.set(6, 6, 1);
+            
+            // Add subtle pulsing animation
+            logo.userData = {
+              pulseSpeed: 0.3,
+              pulseAmount: 0.05,
+              phase: 0
+            };
+            
             group.add(logo);
+            
+            // Animate logo pulsing
+            const animateLogo = () => {
+              const time = performance.now() * 0.001;
+              const pulseFactor = 1 + Math.sin(time * logo.userData.pulseSpeed) * logo.userData.pulseAmount;
+              logo.scale.set(6 * pulseFactor, 6 * pulseFactor, 1);
+              requestAnimationFrame(animateLogo);
+            };
+            animateLogo();
             
             resolve(group);
           }, undefined, () => {
-            // Error loading texture, resolve with empty group
-            console.log('ACM logo texture not found, continuing without it');
-            resolve(new THREE.Group());
+            // Try fallback to ACM logo
+            textureLoader.load('/images/vvitacm_logo.svg', (texture) => {
+              const material = new THREE.SpriteMaterial({ 
+                map: texture,
+                transparent: true,
+                opacity: 0.7
+              });
+              
+              const group = new THREE.Group();
+              const logo = new THREE.Sprite(material);
+              logo.position.set(0, 0, 0);
+              logo.scale.set(5, 5, 1);
+              
+              logo.userData = {
+                pulseSpeed: 0.3,
+                pulseAmount: 0.05,
+                phase: 0
+              };
+              
+              group.add(logo);
+              
+              const animateLogo = () => {
+                const time = performance.now() * 0.001;
+                const pulseFactor = 1 + Math.sin(time * logo.userData.pulseSpeed) * logo.userData.pulseAmount;
+                logo.scale.set(5 * pulseFactor, 5 * pulseFactor, 1);
+                requestAnimationFrame(animateLogo);
+              };
+              animateLogo();
+              
+              resolve(group);
+            }, undefined, () => {
+              console.log('Logo texture not found, creating placeholder');
+              resolve(new THREE.Group());
+            });
           });
         });
       }
