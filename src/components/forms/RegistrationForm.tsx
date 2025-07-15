@@ -19,13 +19,12 @@ const registrationSchema = z.object({
   year_of_study: z.number().min(1).max(4),
   registration_type: z.enum(['individual', 'team']),
   team_name: z.string().optional(),
-  events_registered: z.array(z.string()).min(1, 'Please select at least one event'),
+  event_registered: z.string().min(1, 'Please select an event'), // Changed to single event
 });
 
 type RegistrationFormData = z.infer<typeof registrationSchema>;
 
 export const RegistrationForm = () => {
-  const [selectedEvents, setSelectedEvents] = useState<string[]>([]);
   const [registrationType, setRegistrationType] = useState<'individual' | 'team'>('individual');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
@@ -41,12 +40,13 @@ export const RegistrationForm = () => {
     resolver: zodResolver(registrationSchema),
     defaultValues: {
       registration_type: 'individual',
-      events_registered: [],
+      event_registered: '', // Changed to single event
       year_of_study: 1
     }
   });
 
   const yearOfStudy = watch('year_of_study');
+  const selectedEvent = watch('event_registered');
 
   // Define event options
   const events = [
@@ -78,7 +78,7 @@ export const RegistrationForm = () => {
         year_of_study: data.year_of_study,
         registration_type: data.registration_type,
         team_name: data.registration_type === 'team' ? data.team_name : null,
-        events_registered: data.events_registered
+        events_registered: [data.event_registered] // Convert single event to array for database
       };
 
       // Insert into Supabase
@@ -96,7 +96,6 @@ export const RegistrationForm = () => {
       });
       
       reset();
-      setSelectedEvents([]);
       setRegistrationType('individual');
     } catch (error: any) {
       console.error('Registration error:', error);
@@ -235,7 +234,7 @@ export const RegistrationForm = () => {
               <SelectTrigger className="neu-input">
                 <SelectValue placeholder="Choose registration type" />
               </SelectTrigger>
-              <SelectContent className="liquid-glass border border-border/30 backdrop-blur-xl z-50">
+              <SelectContent className="liquid-glass border border-border/30 backdrop-blur-xl z-50 bg-background">
                 <SelectItem value="individual" className="hover:bg-primary/10 focus:bg-primary/10 cursor-pointer">
                   Individual Participation
                 </SelectItem>
@@ -271,39 +270,36 @@ export const RegistrationForm = () => {
             </motion.div>
           )}
 
-          {/* Events Selection */}
+          {/* Event Selection - Single Dropdown */}
           <motion.div
             className="space-y-2"
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.45 }}
           >
-            <Label>Select Events *</Label>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 p-4 border border-border/30 rounded-lg neu-input">
-              {events.map((event) => (
-                <label key={event.value} className="flex items-center space-x-2 cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={selectedEvents.includes(event.value)}
-                    onChange={(e) => {
-                      let newEvents;
-                      if (e.target.checked) {
-                        newEvents = [...selectedEvents, event.value];
-                      } else {
-                        newEvents = selectedEvents.filter(ev => ev !== event.value);
-                      }
-                      setSelectedEvents(newEvents);
-                      setValue('events_registered', newEvents);
-                    }}
-                    className="rounded border-border/30 text-primary focus:ring-primary"
-                    disabled={isSubmitting}
-                  />
-                  <span className="text-sm">{event.label}</span>
-                </label>
-              ))}
-            </div>
-            {errors.events_registered && (
-              <p className="text-destructive text-sm">{errors.events_registered.message}</p>
+            <Label htmlFor="event_registered">Select Event *</Label>
+            <Select
+              value={selectedEvent}
+              onValueChange={(value) => setValue('event_registered', value)}
+              disabled={isSubmitting}
+            >
+              <SelectTrigger className="neu-input">
+                <SelectValue placeholder="Choose your event" />
+              </SelectTrigger>
+              <SelectContent className="liquid-glass border border-border/30 backdrop-blur-xl z-50 max-h-60 overflow-y-auto bg-background">
+                {events.map((event) => (
+                  <SelectItem 
+                    key={event.value} 
+                    value={event.value}
+                    className="hover:bg-primary/10 focus:bg-primary/10 cursor-pointer"
+                  >
+                    {event.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            {errors.event_registered && (
+              <p className="text-destructive text-sm">{errors.event_registered.message}</p>
             )}
           </motion.div>
 
@@ -366,7 +362,7 @@ export const RegistrationForm = () => {
               <SelectTrigger className="neu-input">
                 <SelectValue placeholder="Select your year" />
               </SelectTrigger>
-              <SelectContent className="liquid-glass border border-border/30 backdrop-blur-xl z-50">
+              <SelectContent className="liquid-glass border border-border/30 backdrop-blur-xl z-50 bg-background">
                 <SelectItem value="1" className="hover:bg-primary/10 focus:bg-primary/10 cursor-pointer">1st Year</SelectItem>
                 <SelectItem value="2" className="hover:bg-primary/10 focus:bg-primary/10 cursor-pointer">2nd Year</SelectItem>
                 <SelectItem value="3" className="hover:bg-primary/10 focus:bg-primary/10 cursor-pointer">3rd Year</SelectItem>
