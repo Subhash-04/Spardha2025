@@ -79,8 +79,6 @@ export const useAdminAuth = () => {
   const logout = () => {
     setAdmin(null);
     localStorage.removeItem('admin_session');
-    // Redirect to home page
-    window.location.href = '/';
   };
 
   return {

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useTheme } from 'next-themes';
+import { useNavigate } from 'react-router-dom';
 import { useAdminAuth } from '@/hooks/useAdminAuth';
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -60,6 +61,7 @@ interface DashboardStats {
 
 const AdminDashboard = () => {
   const { theme, setTheme } = useTheme();
+  const navigate = useNavigate();
   const { admin, loading, logout, isAuthenticated } = useAdminAuth();
   const [registrations, setRegistrations] = useState<UserRegistration[]>([]);
   const [events, setEvents] = useState<Event[]>([]);
@@ -71,10 +73,14 @@ const AdminDashboard = () => {
   const { toast } = useToast();
 
   useEffect(() => {
+    if (!loading && !isAuthenticated) {
+      navigate('/', { replace: true });
+      return;
+    }
     if (isAuthenticated && admin) {
       fetchDashboardData();
     }
-  }, [isAuthenticated, admin]);
+  }, [isAuthenticated, admin, loading, navigate]);
 
   const fetchDashboardData = async () => {
     try {
@@ -186,10 +192,8 @@ const AdminDashboard = () => {
     );
   }
 
-  if (!isAuthenticated) {
-    // Redirect to home if not authenticated
-    window.location.href = '/';
-    return null;
+  if (!isAuthenticated && !loading) {
+    return null; // Navigation will handle redirect
   }
 
   return (
@@ -225,7 +229,10 @@ const AdminDashboard = () => {
                 <span className="sr-only">Toggle theme</span>
               </Button>
 
-              <Button variant="outline" onClick={logout} className="flex items-center space-x-2">
+              <Button variant="outline" onClick={() => {
+                logout();
+                navigate('/', { replace: true });
+              }} className="flex items-center space-x-2">
                 <LogOut className="h-4 w-4" />
                 <span>Logout</span>
               </Button>
