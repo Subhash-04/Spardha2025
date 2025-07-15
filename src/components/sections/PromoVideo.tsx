@@ -48,100 +48,73 @@ export const PromoVideo = () => {
           </p>
         </motion.div>
 
-        {/* Enhanced Video Container */}
+        {/* Direct Video Player - No Card Container */}
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           whileInView={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8 }}
           className="max-w-6xl mx-auto relative"
         >
-          {/* Premium Glass Container */}
-          <div className="ultra-liquid-glass rounded-3xl p-2 sm:p-4 relative overflow-hidden">
-            {/* Animated Border Effect */}
-            <div className="absolute inset-0 rounded-3xl">
-              <div className="absolute inset-0 rounded-3xl bg-gradient-to-r from-primary/20 via-accent/20 to-primary/20 animate-pulse"></div>
-            </div>
+          {/* Video Player Container - Direct without card wrapper */}
+          <div className="relative aspect-video rounded-2xl overflow-hidden bg-black group cursor-pointer" onClick={togglePlay}>
+            <video
+              ref={videoRef}
+              className="w-full h-full object-cover transition-all duration-500 group-hover:scale-105"
+              muted
+              playsInline
+              onEnded={handleVideoEnd}
+              onPlay={handleVideoPlay}
+              onPause={handleVideoPause}
+            >
+              <source src={promoVideo} type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
 
-            {/* Video Player Container */}
-            <div className="relative aspect-video rounded-2xl overflow-hidden bg-black group cursor-pointer" onClick={togglePlay}>
-              <video
-                ref={videoRef}
-                className="w-full h-full object-cover transition-all duration-500 group-hover:scale-105"
-                muted
-                playsInline
-                onEnded={handleVideoEnd}
-                onPlay={handleVideoPlay}
-                onPause={handleVideoPause}
-                poster="https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=1920&q=80"
+            {/* Minimalist Play Button - Only shows when paused */}
+            {!isPlaying && (
+              <motion.div
+                className="absolute inset-0 flex items-center justify-center bg-black/20 backdrop-blur-sm"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
               >
-                <source src={promoVideo} type="video/mp4" />
-                Your browser does not support the video tag.
-              </video>
-
-              {/* Minimalist Play Button - Only shows when paused */}
-              {!isPlaying && (
                 <motion.div
-                  className="absolute inset-0 flex items-center justify-center bg-black/20 backdrop-blur-sm"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
+                  className="w-20 h-20 sm:w-28 sm:h-28 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center shadow-2xl"
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
+                  animate={{
+                    scale: [1, 1.05, 1],
+                    boxShadow: [
+                      '0 0 30px rgba(255, 255, 255, 0.3)',
+                      '0 0 50px rgba(255, 255, 255, 0.5)',
+                      '0 0 30px rgba(255, 255, 255, 0.3)'
+                    ]
+                  }}
+                  transition={{ 
+                    duration: 2, 
+                    repeat: Infinity,
+                    ease: "easeInOut"
+                  }}
                 >
-                  <motion.div
-                    className="w-20 h-20 sm:w-28 sm:h-28 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center shadow-2xl"
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.9 }}
-                    animate={{
-                      scale: [1, 1.05, 1],
-                      boxShadow: [
-                        '0 0 30px rgba(255, 255, 255, 0.3)',
-                        '0 0 50px rgba(255, 255, 255, 0.5)',
-                        '0 0 30px rgba(255, 255, 255, 0.3)'
-                      ]
-                    }}
-                    transition={{ 
-                      duration: 2, 
-                      repeat: Infinity,
-                      ease: "easeInOut"
-                    }}
+                  <svg 
+                    className="w-8 h-8 sm:w-12 sm:h-12 text-white ml-1" 
+                    fill="currentColor" 
+                    viewBox="0 0 24 24"
                   >
-                    <svg 
-                      className="w-8 h-8 sm:w-12 sm:h-12 text-white ml-1" 
-                      fill="currentColor" 
-                      viewBox="0 0 24 24"
-                    >
-                      <path d="M8 5v14l11-7z"/>
-                    </svg>
-                  </motion.div>
+                    <path d="M8 5v14l11-7z"/>
+                  </svg>
                 </motion.div>
-              )}
+              </motion.div>
+            )}
 
-              {/* Subtle Corner Indicators */}
-              <div className="absolute top-4 left-4 w-8 h-8 border-l-2 border-t-2 border-white/30 rounded-tl-lg"></div>
-              <div className="absolute top-4 right-4 w-8 h-8 border-r-2 border-t-2 border-white/30 rounded-tr-lg"></div>
-              <div className="absolute bottom-4 left-4 w-8 h-8 border-l-2 border-b-2 border-white/30 rounded-bl-lg"></div>
-              <div className="absolute bottom-4 right-4 w-8 h-8 border-r-2 border-b-2 border-white/30 rounded-br-lg"></div>
+            {/* Subtle Corner Indicators */}
+            <div className="absolute top-4 left-4 w-8 h-8 border-l-2 border-t-2 border-white/30 rounded-tl-lg"></div>
+            <div className="absolute top-4 right-4 w-8 h-8 border-r-2 border-t-2 border-white/30 rounded-tr-lg"></div>
+            <div className="absolute bottom-4 left-4 w-8 h-8 border-l-2 border-b-2 border-white/30 rounded-bl-lg"></div>
+            <div className="absolute bottom-4 right-4 w-8 h-8 border-r-2 border-b-2 border-white/30 rounded-br-lg"></div>
 
-              {/* Elegant Bottom Gradient */}
-              <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
-              
-              {/* Clean Title Overlay */}
-              <div className="absolute bottom-6 left-6 right-6">
-                <motion.div
-                  className="backdrop-blur-md bg-white/10 rounded-xl p-4 border border-white/20"
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: 0.3 }}
-                >
-                  <h3 className="text-white font-bold text-lg sm:text-xl mb-1 font-audiowide" 
-                      style={{fontFamily: 'Audiowide, cursive'}}>
-                    Spardha 2025
-                  </h3>
-                  <p className="text-white/90 text-sm sm:text-base">
-                    The Annual Techno-Cultural Fest of VVIT
-                  </p>
-                </motion.div>
-              </div>
-            </div>
+            {/* Elegant Bottom Gradient */}
+            <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
           </div>
         </motion.div>
 
