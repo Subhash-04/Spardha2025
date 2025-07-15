@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
+import vvituLogo from '@/assets/vvitu-logo.png';
 
 interface PreloaderProps {
   onLoadingComplete: () => void;
@@ -30,7 +31,7 @@ export const Preloader = ({ onLoadingComplete }: PreloaderProps) => {
       transition={{ duration: 0.8, ease: "easeInOut" }}
     >
       <div className="text-center">
-        {/* ACM VVITU Logo */}
+        {/* VVITU Logo */}
         <motion.div
           className="mb-8"
           initial={{ scale: 0.5, opacity: 0 }}
@@ -43,11 +44,12 @@ export const Preloader = ({ onLoadingComplete }: PreloaderProps) => {
               animate={{ rotate: 360 }}
               transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
             />
-            <div className="absolute inset-2 rounded-full bg-background flex items-center justify-center">
-              <div className="text-center">
-                <div className="text-2xl font-bold text-gradient">ACM</div>
-                <div className="text-sm font-medium text-muted-foreground">VVITU</div>
-              </div>
+            <div className="absolute inset-1 rounded-full bg-background/10 backdrop-blur-sm flex items-center justify-center overflow-hidden">
+              <img 
+                src={vvituLogo} 
+                alt="VVITU ACM Chapter" 
+                className="w-24 h-24 object-contain rounded-full"
+              />
             </div>
           </div>
         </motion.div>

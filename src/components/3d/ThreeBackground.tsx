@@ -1,5 +1,6 @@
 import { useRef, useMemo, useState, useEffect } from 'react';
 import * as THREE from 'three';
+import vvituLogo from '@/assets/vvitu-logo.png';
 
 interface ThreeBackgroundProps {
   isDark: boolean;
@@ -373,14 +374,12 @@ export const ThreeBackground = ({ isDark }: ThreeBackgroundProps) => {
         return new Promise<THREE.Group>((resolve) => {
           const textureLoader = new THREE.TextureLoader();
           
-          // Try to load user's logo first, fallback to ACM logo
-          const logoPath = '/images/logo.png'; // User can upload their logo as logo.png
-          
-          textureLoader.load(logoPath, (texture) => {
+          // Load VVITU logo
+          textureLoader.load(vvituLogo, (texture) => {
             const material = new THREE.SpriteMaterial({ 
               map: texture,
               transparent: true,
-              opacity: 0.8
+              opacity: 0.9
             });
             
             const group = new THREE.Group();
@@ -389,63 +388,33 @@ export const ThreeBackground = ({ isDark }: ThreeBackgroundProps) => {
             // Position at center of rings
             logo.position.set(0, 0, 0);
             
-            // Scale appropriately
-            logo.scale.set(6, 6, 1);
+            // Scale appropriately for VVITU logo
+            logo.scale.set(8, 8, 1);
             
             // Add subtle pulsing animation
             logo.userData = {
-              pulseSpeed: 0.3,
-              pulseAmount: 0.05,
+              pulseSpeed: 0.4,
+              pulseAmount: 0.08,
               phase: 0
             };
             
             group.add(logo);
             
-            // Animate logo pulsing
+            // Animate logo pulsing with the rings
             const animateLogo = () => {
               const time = performance.now() * 0.001;
               const pulseFactor = 1 + Math.sin(time * logo.userData.pulseSpeed) * logo.userData.pulseAmount;
-              logo.scale.set(6 * pulseFactor, 6 * pulseFactor, 1);
+              logo.scale.set(8 * pulseFactor, 8 * pulseFactor, 1);
               requestAnimationFrame(animateLogo);
             };
             animateLogo();
             
             resolve(group);
-          }, undefined, () => {
-            // Try fallback to ACM logo
-            textureLoader.load('/images/vvitacm_logo.svg', (texture) => {
-              const material = new THREE.SpriteMaterial({ 
-                map: texture,
-                transparent: true,
-                opacity: 0.7
-              });
-              
-              const group = new THREE.Group();
-              const logo = new THREE.Sprite(material);
-              logo.position.set(0, 0, 0);
-              logo.scale.set(5, 5, 1);
-              
-              logo.userData = {
-                pulseSpeed: 0.3,
-                pulseAmount: 0.05,
-                phase: 0
-              };
-              
-              group.add(logo);
-              
-              const animateLogo = () => {
-                const time = performance.now() * 0.001;
-                const pulseFactor = 1 + Math.sin(time * logo.userData.pulseSpeed) * logo.userData.pulseAmount;
-                logo.scale.set(5 * pulseFactor, 5 * pulseFactor, 1);
-                requestAnimationFrame(animateLogo);
-              };
-              animateLogo();
-              
-              resolve(group);
-            }, undefined, () => {
-              console.log('Logo texture not found, creating placeholder');
-              resolve(new THREE.Group());
-            });
+          }, undefined, (error) => {
+            console.log('VVITU logo not found, creating text placeholder');
+            // Create a simple text placeholder
+            const group = new THREE.Group();
+            resolve(group);
           });
         });
       }
