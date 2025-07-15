@@ -238,11 +238,11 @@ export const RegistrationForm = () => {
               <SelectTrigger className="neu-input">
                 <SelectValue placeholder="Choose registration type" />
               </SelectTrigger>
-              <SelectContent className="liquid-glass border border-border/30 backdrop-blur-xl z-50 bg-background/95 text-foreground">
-                <SelectItem value="individual" className="hover:bg-primary/10 focus:bg-primary/10 data-[state=checked]:bg-primary/20 data-[state=checked]:text-primary cursor-pointer text-foreground">
+              <SelectContent>
+                <SelectItem value="individual">
                   Individual Participation
                 </SelectItem>
-                <SelectItem value="team" className="hover:bg-primary/10 focus:bg-primary/10 data-[state=checked]:bg-primary/20 data-[state=checked]:text-primary cursor-pointer text-foreground">
+                <SelectItem value="team">
                   Team Participation
                 </SelectItem>
               </SelectContent>
@@ -290,12 +290,11 @@ export const RegistrationForm = () => {
               <SelectTrigger className="neu-input">
                 <SelectValue placeholder="Choose your event" />
               </SelectTrigger>
-              <SelectContent className="liquid-glass border border-border/30 backdrop-blur-xl z-50 max-h-60 overflow-y-auto bg-background/95 text-foreground">
+              <SelectContent className="max-h-60 overflow-y-auto">
                 {events.map((event) => (
                   <SelectItem 
                     key={event.value} 
                     value={event.value}
-                    className="hover:bg-primary/10 focus:bg-primary/10 data-[state=checked]:bg-primary/20 data-[state=checked]:text-primary cursor-pointer text-foreground"
                   >
                     {event.label}
                   </SelectItem>
@@ -367,11 +366,11 @@ export const RegistrationForm = () => {
               <SelectTrigger className="neu-input">
                 <SelectValue placeholder="Select your year" />
               </SelectTrigger>
-              <SelectContent className="liquid-glass border border-border/30 backdrop-blur-xl z-50 bg-background/95 text-foreground">
-                <SelectItem value="1" className="hover:bg-primary/10 focus:bg-primary/10 data-[state=checked]:bg-primary/20 data-[state=checked]:text-primary cursor-pointer text-foreground">1st Year</SelectItem>
-                <SelectItem value="2" className="hover:bg-primary/10 focus:bg-primary/10 data-[state=checked]:bg-primary/20 data-[state=checked]:text-primary cursor-pointer text-foreground">2nd Year</SelectItem>
-                <SelectItem value="3" className="hover:bg-primary/10 focus:bg-primary/10 data-[state=checked]:bg-primary/20 data-[state=checked]:text-primary cursor-pointer text-foreground">3rd Year</SelectItem>
-                <SelectItem value="4" className="hover:bg-primary/10 focus:bg-primary/10 data-[state=checked]:bg-primary/20 data-[state=checked]:text-primary cursor-pointer text-foreground">4th Year</SelectItem>
+              <SelectContent>
+                <SelectItem value="1">1st Year</SelectItem>
+                <SelectItem value="2">2nd Year</SelectItem>
+                <SelectItem value="3">3rd Year</SelectItem>
+                <SelectItem value="4">4th Year</SelectItem>
               </SelectContent>
             </Select>
             {errors.year_of_study && (

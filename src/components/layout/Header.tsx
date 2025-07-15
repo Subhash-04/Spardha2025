@@ -43,7 +43,8 @@ export const Header = ({ isDark, onThemeToggle }: HeaderProps) => {
           <div className="flex items-center justify-between">
             {/* Logo */}
             <motion.div
-              className="text-2xl font-bold text-gradient"
+              className="text-2xl font-bold text-gradient font-audiowide"
+              style={{fontFamily: 'Audiowide, cursive'}}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >

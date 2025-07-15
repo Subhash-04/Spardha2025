@@ -20,6 +20,7 @@ export default {
 		extend: {
 			fontFamily: {
 				inter: ['Inter', 'system-ui', 'sans-serif'],
+				audiowide: ['Audiowide', 'cursive', 'sans-serif'],
 			},
 			colors: {
 				border: 'hsl(var(--border))',

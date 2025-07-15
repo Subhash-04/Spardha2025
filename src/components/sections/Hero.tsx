@@ -26,11 +26,12 @@ export const Hero = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
         >
-          <h1 className="text-6xl md:text-8xl font-bold mb-6 text-gradient animate-glow-pulse">
+          <h1 className="text-6xl md:text-8xl font-bold mb-6 text-gradient animate-glow-pulse font-audiowide" style={{fontFamily: 'Audiowide, cursive'}}>
             SPARDHA
           </h1>
           <motion.div
-            className="text-4xl md:text-6xl font-light text-foreground mb-8"
+            className="text-4xl md:text-6xl font-light text-foreground mb-8 font-audiowide"
+            style={{fontFamily: 'Audiowide, cursive'}}
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.6, delay: 0.5 }}
