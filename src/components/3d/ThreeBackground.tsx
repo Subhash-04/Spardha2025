@@ -6,19 +6,11 @@ interface ThreeBackgroundProps {
 }
 
 export const ThreeBackground = ({ isDark }: ThreeBackgroundProps) => {
-  const videoRef = useRef<HTMLVideoElement>(null);
-
-  useEffect(() => {
-    if (videoRef.current) {
-      videoRef.current.play().catch(console.error);
-    }
-  }, []);
 
   return (
     <div className="fixed inset-0 -z-10 overflow-hidden">
       {/* Video Background */}
       <video
-        ref={videoRef}
         className="absolute inset-0 w-full h-full object-cover"
         autoPlay
         muted
