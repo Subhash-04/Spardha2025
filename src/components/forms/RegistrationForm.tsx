@@ -8,20 +8,25 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
+import { supabase } from '@/integrations/supabase/client';
 
 const registrationSchema = z.object({
-  name: z.string().min(2, 'Name must be at least 2 characters'),
+  full_name: z.string().min(2, 'Name must be at least 2 characters'),
   email: z.string().email('Please enter a valid email address'),
-  mobile: z.string().regex(/^\d{10}$/, 'Please enter a valid 10-digit mobile number'),
-  event: z.string().min(1, 'Please select an event'),
-  collegeId: z.string().min(3, 'College ID must be at least 3 characters'),
-  collegeName: z.string().min(3, 'College name must be at least 3 characters'),
-  yearOfStudy: z.string().min(1, 'Please select your year of study'),
+  phone: z.string().regex(/^\d{10}$/, 'Please enter a valid 10-digit mobile number'),
+  college: z.string().min(3, 'College name must be at least 3 characters'),
+  department: z.string().optional(),
+  year_of_study: z.number().min(1).max(4),
+  registration_type: z.enum(['individual', 'team']),
+  team_name: z.string().optional(),
+  events_registered: z.array(z.string()).min(1, 'Please select at least one event'),
 });
 
 type RegistrationFormData = z.infer<typeof registrationSchema>;
 
 export const RegistrationForm = () => {
+  const [selectedEvents, setSelectedEvents] = useState<string[]>([]);
+  const [registrationType, setRegistrationType] = useState<'individual' | 'team'>('individual');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
 
@@ -34,10 +39,14 @@ export const RegistrationForm = () => {
     reset
   } = useForm<RegistrationFormData>({
     resolver: zodResolver(registrationSchema),
+    defaultValues: {
+      registration_type: 'individual',
+      events_registered: [],
+      year_of_study: 1
+    }
   });
 
-  const yearOfStudy = watch('yearOfStudy');
-  const selectedEvent = watch('event');
+  const yearOfStudy = watch('year_of_study');
 
   // Define event options
   const events = [
@@ -59,11 +68,27 @@ export const RegistrationForm = () => {
     setIsSubmitting(true);
     
     try {
-      // TODO: Replace with actual Supabase integration
-      console.log('Registration data:', data);
-      
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      // Prepare data for database
+      const registrationData = {
+        full_name: data.full_name,
+        email: data.email,
+        phone: data.phone,
+        college: data.college,
+        department: data.department || null,
+        year_of_study: data.year_of_study,
+        registration_type: data.registration_type,
+        team_name: data.registration_type === 'team' ? data.team_name : null,
+        events_registered: data.events_registered
+      };
+
+      // Insert into Supabase
+      const { error } = await supabase
+        .from('user_registrations')
+        .insert(registrationData);
+
+      if (error) {
+        throw error;
+      }
       
       toast({
         title: "Registration Successful!",
@@ -71,11 +96,13 @@ export const RegistrationForm = () => {
       });
       
       reset();
-    } catch (error) {
+      setSelectedEvents([]);
+      setRegistrationType('individual');
+    } catch (error: any) {
       console.error('Registration error:', error);
       toast({
         title: "Registration Failed",
-        description: "Something went wrong. Please try again.",
+        description: error.message || "Something went wrong. Please try again.",
         variant: "destructive"
       });
     } finally {
@@ -126,23 +153,23 @@ export const RegistrationForm = () => {
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-          {/* Name */}
+          {/* Full Name */}
           <motion.div
             className="space-y-2"
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.1 }}
           >
-            <Label htmlFor="name">Full Name *</Label>
+            <Label htmlFor="full_name">Full Name *</Label>
             <Input
-              id="name"
-              {...register('name')}
+              id="full_name"
+              {...register('full_name')}
               placeholder="Enter your full name"
               className="neu-input"
               disabled={isSubmitting}
             />
-            {errors.name && (
-              <p className="text-destructive text-sm">{errors.name.message}</p>
+            {errors.full_name && (
+              <p className="text-destructive text-sm">{errors.full_name.message}</p>
             )}
           </motion.div>
 
@@ -174,122 +201,180 @@ export const RegistrationForm = () => {
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.3 }}
           >
-            <Label htmlFor="mobile">Mobile Number *</Label>
+            <Label htmlFor="phone">Mobile Number *</Label>
             <Input
-              id="mobile"
+              id="phone"
               type="tel"
-              {...register('mobile')}
+              {...register('phone')}
               placeholder="9876543210"
               className="neu-input"
               maxLength={10}
               disabled={isSubmitting}
             />
-            {errors.mobile && (
-              <p className="text-destructive text-sm">{errors.mobile.message}</p>
+            {errors.phone && (
+              <p className="text-destructive text-sm">{errors.phone.message}</p>
             )}
           </motion.div>
 
-          {/* Event Selection */}
+          {/* Registration Type */}
           <motion.div
             className="space-y-2"
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.35 }}
           >
-            <Label htmlFor="event">Select Event *</Label>
+            <Label>Registration Type *</Label>
             <Select
-              value={selectedEvent}
-              onValueChange={(value) => setValue('event', value)}
+              value={registrationType}
+              onValueChange={(value: 'individual' | 'team') => {
+                setRegistrationType(value);
+                setValue('registration_type', value);
+              }}
               disabled={isSubmitting}
             >
               <SelectTrigger className="neu-input">
-                <SelectValue placeholder="Choose your event" />
+                <SelectValue placeholder="Choose registration type" />
               </SelectTrigger>
-              <SelectContent className="liquid-glass border border-border/30 backdrop-blur-xl z-50 max-h-60 overflow-y-auto">
-                {events.map((event) => (
-                  <SelectItem 
-                    key={event.value} 
-                    value={event.value}
-                    className="hover:bg-primary/10 focus:bg-primary/10 cursor-pointer"
-                  >
-                    {event.label}
-                  </SelectItem>
-                ))}
+              <SelectContent className="liquid-glass border border-border/30 backdrop-blur-xl z-50">
+                <SelectItem value="individual" className="hover:bg-primary/10 focus:bg-primary/10 cursor-pointer">
+                  Individual Participation
+                </SelectItem>
+                <SelectItem value="team" className="hover:bg-primary/10 focus:bg-primary/10 cursor-pointer">
+                  Team Participation
+                </SelectItem>
               </SelectContent>
             </Select>
-            {errors.event && (
-              <p className="text-destructive text-sm">{errors.event.message}</p>
+            {errors.registration_type && (
+              <p className="text-destructive text-sm">{errors.registration_type.message}</p>
             )}
           </motion.div>
 
-          {/* College ID and Name Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* College ID */}
+          {/* Team Name (only if team registration) */}
+          {registrationType === 'team' && (
             <motion.div
               className="space-y-2"
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.4 }}
             >
-              <Label htmlFor="collegeId">College ID *</Label>
+              <Label htmlFor="team_name">Team Name *</Label>
               <Input
-                id="collegeId"
-                {...register('collegeId')}
-                placeholder="e.g., 20A91A0501"
+                id="team_name"
+                {...register('team_name')}
+                placeholder="Enter your team name"
                 className="neu-input"
                 disabled={isSubmitting}
               />
-              {errors.collegeId && (
-                <p className="text-destructive text-sm">{errors.collegeId.message}</p>
+              {errors.team_name && (
+                <p className="text-destructive text-sm">{errors.team_name.message}</p>
               )}
             </motion.div>
+          )}
 
-            {/* Year of Study */}
+          {/* Events Selection */}
+          <motion.div
+            className="space-y-2"
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.45 }}
+          >
+            <Label>Select Events *</Label>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 p-4 border border-border/30 rounded-lg neu-input">
+              {events.map((event) => (
+                <label key={event.value} className="flex items-center space-x-2 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={selectedEvents.includes(event.value)}
+                    onChange={(e) => {
+                      let newEvents;
+                      if (e.target.checked) {
+                        newEvents = [...selectedEvents, event.value];
+                      } else {
+                        newEvents = selectedEvents.filter(ev => ev !== event.value);
+                      }
+                      setSelectedEvents(newEvents);
+                      setValue('events_registered', newEvents);
+                    }}
+                    className="rounded border-border/30 text-primary focus:ring-primary"
+                    disabled={isSubmitting}
+                  />
+                  <span className="text-sm">{event.label}</span>
+                </label>
+              ))}
+            </div>
+            {errors.events_registered && (
+              <p className="text-destructive text-sm">{errors.events_registered.message}</p>
+            )}
+          </motion.div>
+
+          {/* College and Academic Info Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* College Name */}
             <motion.div
               className="space-y-2"
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.5 }}
             >
-              <Label htmlFor="yearOfStudy">Year of Study *</Label>
-              <Select
-                value={yearOfStudy}
-                onValueChange={(value) => setValue('yearOfStudy', value)}
+              <Label htmlFor="college">College Name *</Label>
+              <Input
+                id="college"
+                {...register('college')}
+                placeholder="e.g., Vasireddy Venkatadri Institute of Technology"
+                className="neu-input"
                 disabled={isSubmitting}
-              >
-                <SelectTrigger className="neu-input">
-                  <SelectValue placeholder="Select your year" />
-                </SelectTrigger>
-                <SelectContent className="liquid-glass border border-border/30 backdrop-blur-xl z-50">
-                  <SelectItem value="1st Year" className="hover:bg-primary/10 focus:bg-primary/10 cursor-pointer">1st Year</SelectItem>
-                  <SelectItem value="2nd Year" className="hover:bg-primary/10 focus:bg-primary/10 cursor-pointer">2nd Year</SelectItem>
-                  <SelectItem value="3rd Year" className="hover:bg-primary/10 focus:bg-primary/10 cursor-pointer">3rd Year</SelectItem>
-                  <SelectItem value="4th Year" className="hover:bg-primary/10 focus:bg-primary/10 cursor-pointer">4th Year</SelectItem>
-                </SelectContent>
-              </Select>
-              {errors.yearOfStudy && (
-                <p className="text-destructive text-sm">{errors.yearOfStudy.message}</p>
+              />
+              {errors.college && (
+                <p className="text-destructive text-sm">{errors.college.message}</p>
+              )}
+            </motion.div>
+
+            {/* Department */}
+            <motion.div
+              className="space-y-2"
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.55 }}
+            >
+              <Label htmlFor="department">Department</Label>
+              <Input
+                id="department"
+                {...register('department')}
+                placeholder="e.g., Computer Science Engineering"
+                className="neu-input"
+                disabled={isSubmitting}
+              />
+              {errors.department && (
+                <p className="text-destructive text-sm">{errors.department.message}</p>
               )}
             </motion.div>
           </div>
 
-          {/* College Name */}
+          {/* Year of Study */}
           <motion.div
             className="space-y-2"
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.6 }}
           >
-            <Label htmlFor="collegeName">College Name *</Label>
-            <Input
-              id="collegeName"
-              {...register('collegeName')}
-              placeholder="e.g., Vasireddy Venkatadri Institute of Technology"
-              className="neu-input"
+            <Label htmlFor="year_of_study">Year of Study *</Label>
+            <Select
+              value={yearOfStudy?.toString()}
+              onValueChange={(value) => setValue('year_of_study', parseInt(value))}
               disabled={isSubmitting}
-            />
-            {errors.collegeName && (
-              <p className="text-destructive text-sm">{errors.collegeName.message}</p>
+            >
+              <SelectTrigger className="neu-input">
+                <SelectValue placeholder="Select your year" />
+              </SelectTrigger>
+              <SelectContent className="liquid-glass border border-border/30 backdrop-blur-xl z-50">
+                <SelectItem value="1" className="hover:bg-primary/10 focus:bg-primary/10 cursor-pointer">1st Year</SelectItem>
+                <SelectItem value="2" className="hover:bg-primary/10 focus:bg-primary/10 cursor-pointer">2nd Year</SelectItem>
+                <SelectItem value="3" className="hover:bg-primary/10 focus:bg-primary/10 cursor-pointer">3rd Year</SelectItem>
+                <SelectItem value="4" className="hover:bg-primary/10 focus:bg-primary/10 cursor-pointer">4th Year</SelectItem>
+              </SelectContent>
+            </Select>
+            {errors.year_of_study && (
+              <p className="text-destructive text-sm">{errors.year_of_study.message}</p>
             )}
           </motion.div>
 
