@@ -4,7 +4,7 @@ import { AdminLogin } from '@/components/admin/AdminLogin';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { 
   Users, 
@@ -52,9 +52,7 @@ interface Event {
 
 interface DashboardStats {
   totalRegistrations: number;
-  activeEvents: number;
-  teamRegistrations: number;
-  individualRegistrations: number;
+  eventRegistrations: { [eventTitle: string]: number };
 }
 
 const AdminDashboard = () => {
@@ -63,9 +61,7 @@ const AdminDashboard = () => {
   const [events, setEvents] = useState<Event[]>([]);
   const [stats, setStats] = useState<DashboardStats>({
     totalRegistrations: 0,
-    activeEvents: 0,
-    teamRegistrations: 0,
-    individualRegistrations: 0
+    eventRegistrations: {}
   });
   const [loadingData, setLoadingData] = useState(true);
   const { toast } = useToast();
@@ -101,15 +97,21 @@ const AdminDashboard = () => {
 
       // Calculate stats
       const totalRegistrations = registrationsData?.length || 0;
-      const teamRegistrations = registrationsData?.filter(reg => reg.registration_type === 'team').length || 0;
-      const individualRegistrations = registrationsData?.filter(reg => reg.registration_type === 'individual').length || 0;
-      const activeEvents = eventsData?.filter(event => event.is_active).length || 0;
+      
+      // Calculate registrations per event
+      const eventRegistrations: { [eventTitle: string]: number } = {};
+      
+      registrationsData?.forEach(reg => {
+        if (Array.isArray(reg.events_registered)) {
+          reg.events_registered.forEach((eventTitle: string) => {
+            eventRegistrations[eventTitle] = (eventRegistrations[eventTitle] || 0) + 1;
+          });
+        }
+      });
 
       setStats({
         totalRegistrations,
-        activeEvents,
-        teamRegistrations,
-        individualRegistrations
+        eventRegistrations
       });
 
     } catch (error: any) {
@@ -215,7 +217,7 @@ const AdminDashboard = () => {
 
       <main className="container mx-auto px-6 py-8">
         {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
           <Card className="glass-card">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Total Registrations</CardTitle>
@@ -229,226 +231,119 @@ const AdminDashboard = () => {
             </CardContent>
           </Card>
 
-          <Card className="glass-card">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Team Registrations</CardTitle>
-              <Users className="h-4 w-4 text-primary" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{stats.teamRegistrations}</div>
-              <p className="text-xs text-muted-foreground">
-                Teams registered
-              </p>
-            </CardContent>
-          </Card>
-
-          <Card className="glass-card">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Individual Registrations</CardTitle>
-              <Users className="h-4 w-4 text-primary" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{stats.individualRegistrations}</div>
-              <p className="text-xs text-muted-foreground">
-                Individual participants
-              </p>
-            </CardContent>
-          </Card>
-
-          <Card className="glass-card">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Active Events</CardTitle>
-              <Calendar className="h-4 w-4 text-primary" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{stats.activeEvents}</div>
-              <p className="text-xs text-muted-foreground">
-                Currently open for registration
-              </p>
-            </CardContent>
-          </Card>
+          {Object.entries(stats.eventRegistrations).map(([eventTitle, count]) => (
+            <Card key={eventTitle} className="glass-card">
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">{eventTitle}</CardTitle>
+                <Calendar className="h-4 w-4 text-primary" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">{count}</div>
+                <p className="text-xs text-muted-foreground">
+                  Registrations
+                </p>
+              </CardContent>
+            </Card>
+          ))}
         </div>
 
         {/* Main Content */}
         <div className="space-y-6">
-          <Tabs defaultValue="registrations" className="w-full">
-            <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="registrations">User Registrations</TabsTrigger>
-              <TabsTrigger value="events">Event Management</TabsTrigger>
-            </TabsList>
-
-            <TabsContent value="registrations" className="space-y-4">
-              <Card className="glass-card">
-                <CardHeader>
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <CardTitle className="flex items-center space-x-2">
-                        <Users className="h-5 w-5" />
-                        <span>User Registrations</span>
-                      </CardTitle>
-                      <CardDescription>
-                        View and manage all user registrations for Spardha 2025
-                      </CardDescription>
-                    </div>
-                    <Button onClick={downloadExcel} className="flex items-center space-x-2">
-                      <Download className="h-4 w-4" />
-                      <span>Download Excel</span>
-                    </Button>
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  {loadingData ? (
-                    <div className="flex justify-center py-8">
-                      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-                    </div>
-                  ) : (
-                    <div className="rounded-md border overflow-hidden">
-                      <Table>
-                        <TableHeader>
-                          <TableRow>
-                            <TableHead>Name</TableHead>
-                            <TableHead>Email</TableHead>
-                            <TableHead>College</TableHead>
-                            <TableHead>Type</TableHead>
-                            <TableHead>Events</TableHead>
-                            <TableHead>Registered</TableHead>
-                          </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                          {registrations.map((registration) => (
-                            <TableRow key={registration.id}>
-                              <TableCell className="font-medium">
-                                <div className="flex items-center space-x-2">
-                                  <div>
-                                    <p className="font-semibold">{registration.full_name}</p>
-                                    {registration.phone && (
-                                      <p className="text-xs text-muted-foreground flex items-center">
-                                        <Phone className="h-3 w-3 mr-1" />
-                                        {registration.phone}
-                                      </p>
-                                    )}
-                                  </div>
-                                </div>
-                              </TableCell>
-                              <TableCell>
-                                <div className="flex items-center space-x-1">
-                                  <Mail className="h-3 w-3" />
-                                  <span className="text-sm">{registration.email}</span>
-                                </div>
-                              </TableCell>
-                              <TableCell>
-                                <div className="flex items-center space-x-1">
-                                  <Building className="h-3 w-3" />
-                                  <span className="text-sm">{registration.college || 'N/A'}</span>
-                                </div>
-                              </TableCell>
-                              <TableCell>
-                                <Badge variant="outline">
-                                  {registration.registration_type}
-                                </Badge>
-                                {registration.team_name && (
-                                  <p className="text-xs text-muted-foreground mt-1">
-                                    Team: {registration.team_name}
-                                  </p>
-                                )}
-                              </TableCell>
-                              <TableCell>
-                                <div className="text-sm">
-                                  {Array.isArray(registration.events_registered) 
-                                    ? registration.events_registered.join(', ') 
-                                    : 'N/A'}
-                                </div>
-                              </TableCell>
-                              <TableCell>
-                                <div className="flex items-center space-x-1">
-                                  <Clock className="h-3 w-3" />
-                                  <span className="text-xs">{formatDate(registration.created_at)}</span>
-                                </div>
-                              </TableCell>
-                            </TableRow>
-                          ))}
-                        </TableBody>
-                      </Table>
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
-            </TabsContent>
-
-            <TabsContent value="events" className="space-y-4">
-              <Card className="glass-card">
-                <CardHeader>
+          <Card className="glass-card">
+            <CardHeader>
+              <div className="flex items-center justify-between">
+                <div>
                   <CardTitle className="flex items-center space-x-2">
-                    <Calendar className="h-5 w-5" />
-                    <span>Event Management</span>
+                    <Users className="h-5 w-5" />
+                    <span>User Registrations</span>
                   </CardTitle>
                   <CardDescription>
-                    Manage events, schedules, and configurations
+                    View and manage all user registrations for Spardha 2025
                   </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  {loadingData ? (
-                    <div className="flex justify-center py-8">
-                      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-                    </div>
-                  ) : (
-                    <div className="rounded-md border overflow-hidden">
-                      <Table>
-                        <TableHeader>
-                          <TableRow>
-                            <TableHead>Event</TableHead>
-                            <TableHead>Type</TableHead>
-                            <TableHead>Venue</TableHead>
-                            <TableHead>Date</TableHead>
-                            <TableHead>Participants</TableHead>
-                            <TableHead>Status</TableHead>
-                          </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                          {events.map((event) => (
-                            <TableRow key={event.id}>
-                              <TableCell className="font-medium">
-                                <div>
-                                  <p className="font-semibold">{event.title}</p>
-                                  <p className="text-xs text-muted-foreground">
-                                    {event.description?.substring(0, 50)}...
-                                  </p>
-                                </div>
-                              </TableCell>
-                              <TableCell>
-                                <Badge variant="outline">
-                                  {event.event_type}
-                                </Badge>
-                              </TableCell>
-                              <TableCell>{event.venue || 'TBA'}</TableCell>
-                              <TableCell>
-                                {event.event_date ? formatDate(event.event_date) : 'TBA'}
-                              </TableCell>
-                              <TableCell>
-                                {event.max_participants ? `Max: ${event.max_participants}` : 'Unlimited'}
-                                {event.is_team_event && (
-                                  <p className="text-xs text-muted-foreground">
-                                    Team Event (Max: {event.max_team_size || 'N/A'} per team)
+                </div>
+                <Button onClick={downloadExcel} className="flex items-center space-x-2">
+                  <Download className="h-4 w-4" />
+                  <span>Download Excel</span>
+                </Button>
+              </div>
+            </CardHeader>
+            <CardContent>
+              {loadingData ? (
+                <div className="flex justify-center py-8">
+                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+                </div>
+              ) : (
+                <div className="rounded-md border overflow-hidden">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Name</TableHead>
+                        <TableHead>Email</TableHead>
+                        <TableHead>College</TableHead>
+                        <TableHead>Type</TableHead>
+                        <TableHead>Events</TableHead>
+                        <TableHead>Registered</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {registrations.map((registration) => (
+                        <TableRow key={registration.id}>
+                          <TableCell className="font-medium">
+                            <div className="flex items-center space-x-2">
+                              <div>
+                                <p className="font-semibold">{registration.full_name}</p>
+                                {registration.phone && (
+                                  <p className="text-xs text-muted-foreground flex items-center">
+                                    <Phone className="h-3 w-3 mr-1" />
+                                    {registration.phone}
                                   </p>
                                 )}
-                              </TableCell>
-                              <TableCell>
-                                {event.is_active ? (
-                                  <Badge className="bg-green-500">Active</Badge>
-                                ) : (
-                                  <Badge variant="secondary">Inactive</Badge>
-                                )}
-                              </TableCell>
-                            </TableRow>
-                          ))}
-                        </TableBody>
-                      </Table>
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
-            </TabsContent>
-          </Tabs>
+                              </div>
+                            </div>
+                          </TableCell>
+                          <TableCell>
+                            <div className="flex items-center space-x-1">
+                              <Mail className="h-3 w-3" />
+                              <span className="text-sm">{registration.email}</span>
+                            </div>
+                          </TableCell>
+                          <TableCell>
+                            <div className="flex items-center space-x-1">
+                              <Building className="h-3 w-3" />
+                              <span className="text-sm">{registration.college || 'N/A'}</span>
+                            </div>
+                          </TableCell>
+                          <TableCell>
+                            <Badge variant="outline">
+                              {registration.registration_type}
+                            </Badge>
+                            {registration.team_name && (
+                              <p className="text-xs text-muted-foreground mt-1">
+                                Team: {registration.team_name}
+                              </p>
+                            )}
+                          </TableCell>
+                          <TableCell>
+                            <div className="text-sm">
+                              {Array.isArray(registration.events_registered) 
+                                ? registration.events_registered.join(', ') 
+                                : 'N/A'}
+                            </div>
+                          </TableCell>
+                          <TableCell>
+                            <div className="flex items-center space-x-1">
+                              <Clock className="h-3 w-3" />
+                              <span className="text-xs">{formatDate(registration.created_at)}</span>
+                            </div>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </div>
+              )}
+            </CardContent>
+          </Card>
         </div>
       </main>
     </div>
