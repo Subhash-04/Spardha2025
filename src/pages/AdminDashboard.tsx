@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useTheme } from 'next-themes';
 import { useAdminAuth } from '@/hooks/useAdminAuth';
 import { AdminLogin } from '@/components/admin/AdminLogin';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -15,7 +16,9 @@ import {
   Phone,
   Building,
   Clock,
-  Download
+  Download,
+  Sun,
+  Moon
 } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
@@ -56,6 +59,7 @@ interface DashboardStats {
 }
 
 const AdminDashboard = () => {
+  const { theme, setTheme } = useTheme();
   const { admin, loading, logout, isAuthenticated } = useAdminAuth();
   const [registrations, setRegistrations] = useState<UserRegistration[]>([]);
   const [events, setEvents] = useState<Event[]>([]);
@@ -206,6 +210,19 @@ const AdminDashboard = () => {
                   {admin?.role?.replace('_', ' ').toUpperCase()}
                 </Badge>
               </div>
+              
+              {/* Theme Toggle */}
+              <Button
+                variant="outline"
+                size="icon"
+                onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+                className="h-9 w-9"
+              >
+                <Sun className="h-4 w-4 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+                <Moon className="absolute h-4 w-4 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+                <span className="sr-only">Toggle theme</span>
+              </Button>
+
               <Button variant="outline" onClick={logout} className="flex items-center space-x-2">
                 <LogOut className="h-4 w-4" />
                 <span>Logout</span>
