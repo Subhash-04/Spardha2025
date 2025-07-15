@@ -56,7 +56,7 @@ export const Header = ({ isDark, onThemeToggle }: HeaderProps) => {
                 <motion.button
                   key={item.href}
                   onClick={() => scrollToSection(item.href)}
-                  className="text-foreground hover:text-primary transition-colors relative"
+                  className="text-foreground hover:text-primary transition-colors relative font-['Bebas_Neue'] text-lg tracking-wider"
                   whileHover={{ y: -2 }}
                   whileTap={{ y: 0 }}
                 >
@@ -129,7 +129,7 @@ export const Header = ({ isDark, onThemeToggle }: HeaderProps) => {
                 <button
                   key={item.href}
                   onClick={() => scrollToSection(item.href)}
-                  className="block w-full text-left text-foreground hover:text-primary transition-colors py-2"
+                  className="block w-full text-left text-foreground hover:text-primary transition-colors py-2 font-['Bebas_Neue'] text-lg tracking-wider"
                 >
                   {item.label}
                 </button>

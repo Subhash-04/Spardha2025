@@ -8,6 +8,7 @@ import { About } from '@/components/sections/About';
 import { Events } from '@/components/sections/Events';
 import { Navigation } from '@/components/sections/Navigation';
 import { RegistrationForm } from '@/components/forms/RegistrationForm';
+import { PromoVideo } from '@/components/sections/PromoVideo';
 import { Contact } from '@/components/sections/Contact';
 
 const Index = () => {
@@ -42,6 +43,7 @@ const Index = () => {
             <Hero />
             <About />
             <Events />
+            <PromoVideo />
             <Navigation />
             
             <section id="register" className="py-20">

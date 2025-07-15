@@ -35,12 +35,13 @@ export const RegistrationForm = () => {
     formState: { errors },
     setValue,
     watch,
-    reset
+    reset,
+    control
   } = useForm<RegistrationFormData>({
     resolver: zodResolver(registrationSchema),
     defaultValues: {
       registration_type: 'individual',
-      event_registered: '', // Changed to single event
+      event_registered: '',
       year_of_study: 1
     }
   });
@@ -151,7 +152,7 @@ export const RegistrationForm = () => {
           </p>
         </div>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 relative z-20">
           {/* Full Name */}
           <motion.div
             className="space-y-2"
@@ -159,13 +160,14 @@ export const RegistrationForm = () => {
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.1 }}
           >
-            <Label htmlFor="full_name">Full Name *</Label>
+            <Label htmlFor="full_name" className="text-foreground font-medium">Full Name *</Label>
             <Input
               id="full_name"
               {...register('full_name')}
               placeholder="Enter your full name"
-              className="neu-input"
+              className="neu-input bg-background border-border text-foreground placeholder:text-muted-foreground focus:border-primary"
               disabled={isSubmitting}
+              autoComplete="name"
             />
             {errors.full_name && (
               <p className="text-destructive text-sm">{errors.full_name.message}</p>
@@ -179,14 +181,15 @@ export const RegistrationForm = () => {
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.2 }}
           >
-            <Label htmlFor="email">Email Address *</Label>
+            <Label htmlFor="email" className="text-foreground font-medium">Email Address *</Label>
             <Input
               id="email"
               type="email"
               {...register('email')}
               placeholder="your.email@example.com"
-              className="neu-input"
+              className="neu-input bg-background border-border text-foreground placeholder:text-muted-foreground focus:border-primary"
               disabled={isSubmitting}
+              autoComplete="email"
             />
             {errors.email && (
               <p className="text-destructive text-sm">{errors.email.message}</p>
@@ -200,15 +203,16 @@ export const RegistrationForm = () => {
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.3 }}
           >
-            <Label htmlFor="phone">Mobile Number *</Label>
+            <Label htmlFor="phone" className="text-foreground font-medium">Mobile Number *</Label>
             <Input
               id="phone"
               type="tel"
               {...register('phone')}
               placeholder="9876543210"
-              className="neu-input"
+              className="neu-input bg-background border-border text-foreground placeholder:text-muted-foreground focus:border-primary"
               maxLength={10}
               disabled={isSubmitting}
+              autoComplete="tel"
             />
             {errors.phone && (
               <p className="text-destructive text-sm">{errors.phone.message}</p>
@@ -222,7 +226,7 @@ export const RegistrationForm = () => {
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.35 }}
           >
-            <Label>Registration Type *</Label>
+            <Label className="text-foreground font-medium">Registration Type *</Label>
             <Select
               value={registrationType}
               onValueChange={(value: 'individual' | 'team') => {
@@ -256,12 +260,12 @@ export const RegistrationForm = () => {
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.4 }}
             >
-              <Label htmlFor="team_name">Team Name *</Label>
+              <Label htmlFor="team_name" className="text-foreground font-medium">Team Name *</Label>
               <Input
                 id="team_name"
                 {...register('team_name')}
                 placeholder="Enter your team name"
-                className="neu-input"
+                className="neu-input bg-background border-border text-foreground placeholder:text-muted-foreground focus:border-primary"
                 disabled={isSubmitting}
               />
               {errors.team_name && (
@@ -277,7 +281,7 @@ export const RegistrationForm = () => {
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.45 }}
           >
-            <Label htmlFor="event_registered">Select Event *</Label>
+            <Label htmlFor="event_registered" className="text-foreground font-medium">Select Event *</Label>
             <Select
               value={selectedEvent}
               onValueChange={(value) => setValue('event_registered', value)}
@@ -312,13 +316,14 @@ export const RegistrationForm = () => {
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.5 }}
             >
-              <Label htmlFor="college">College Name *</Label>
+              <Label htmlFor="college" className="text-foreground font-medium">College Name *</Label>
               <Input
                 id="college"
                 {...register('college')}
                 placeholder="e.g., Vasireddy Venkatadri Institute of Technology"
-                className="neu-input"
+                className="neu-input bg-background border-border text-foreground placeholder:text-muted-foreground focus:border-primary"
                 disabled={isSubmitting}
+                autoComplete="organization"
               />
               {errors.college && (
                 <p className="text-destructive text-sm">{errors.college.message}</p>
@@ -332,12 +337,12 @@ export const RegistrationForm = () => {
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.55 }}
             >
-              <Label htmlFor="department">Department</Label>
+              <Label htmlFor="department" className="text-foreground font-medium">Department</Label>
               <Input
                 id="department"
                 {...register('department')}
                 placeholder="e.g., Computer Science Engineering"
-                className="neu-input"
+                className="neu-input bg-background border-border text-foreground placeholder:text-muted-foreground focus:border-primary"
                 disabled={isSubmitting}
               />
               {errors.department && (
@@ -353,7 +358,7 @@ export const RegistrationForm = () => {
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.6 }}
           >
-            <Label htmlFor="year_of_study">Year of Study *</Label>
+            <Label htmlFor="year_of_study" className="text-foreground font-medium">Year of Study *</Label>
             <Select
               value={yearOfStudy?.toString()}
               onValueChange={(value) => setValue('year_of_study', parseInt(value))}
