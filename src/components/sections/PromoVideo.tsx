@@ -1,14 +1,10 @@
 import { motion } from 'framer-motion';
-import { Play, Pause, Volume2, VolumeX, Maximize } from 'lucide-react';
 import { useState, useRef } from 'react';
 import promoVideo from '@/assets/Create_a_sleek_second_K_v.mp4';
 
 export const PromoVideo = () => {
   const [isPlaying, setIsPlaying] = useState(false);
-  const [isMuted, setIsMuted] = useState(true);
-  const [isFullscreen, setIsFullscreen] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
 
   const togglePlay = () => {
     if (videoRef.current) {
@@ -18,23 +14,6 @@ export const PromoVideo = () => {
         videoRef.current.play();
       }
       setIsPlaying(!isPlaying);
-    }
-  };
-
-  const toggleMute = () => {
-    if (videoRef.current) {
-      videoRef.current.muted = !isMuted;
-      setIsMuted(!isMuted);
-    }
-  };
-
-  const toggleFullscreen = () => {
-    if (!document.fullscreenElement && containerRef.current) {
-      containerRef.current.requestFullscreen();
-      setIsFullscreen(true);
-    } else if (document.fullscreenElement) {
-      document.exitFullscreen();
-      setIsFullscreen(false);
     }
   };
 
@@ -62,30 +41,33 @@ export const PromoVideo = () => {
         >
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-holographic font-audiowide mb-4" 
               style={{fontFamily: 'Audiowide, cursive'}}>
-            Watch Our Promo Video
+            Experience Spardha 2025
           </h2>
           <p className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto px-4">
-            Experience the energy and excitement of Spardha 2025
+            Witness the energy and innovation of VVIT's premier techno-cultural festival
           </p>
         </motion.div>
 
-        {/* Video Container - Responsive */}
+        {/* Enhanced Video Container */}
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           whileInView={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8 }}
-          className="max-w-4xl mx-auto relative"
+          className="max-w-6xl mx-auto relative"
         >
-          <div className="dashboard-glass rounded-2xl sm:rounded-3xl p-4 sm:p-8 relative overflow-hidden">
-            {/* Video Player - Responsive */}
-            <div 
-              ref={containerRef}
-              className="relative aspect-video rounded-xl sm:rounded-2xl overflow-hidden bg-black/20 backdrop-blur-sm border border-primary/20 group"
-            >
+          {/* Premium Glass Container */}
+          <div className="ultra-liquid-glass rounded-3xl p-2 sm:p-4 relative overflow-hidden">
+            {/* Animated Border Effect */}
+            <div className="absolute inset-0 rounded-3xl">
+              <div className="absolute inset-0 rounded-3xl bg-gradient-to-r from-primary/20 via-accent/20 to-primary/20 animate-pulse"></div>
+            </div>
+
+            {/* Video Player Container */}
+            <div className="relative aspect-video rounded-2xl overflow-hidden bg-black group cursor-pointer" onClick={togglePlay}>
               <video
                 ref={videoRef}
-                className="w-full h-full object-cover"
-                muted={isMuted}
+                className="w-full h-full object-cover transition-all duration-500 group-hover:scale-105"
+                muted
                 playsInline
                 onEnded={handleVideoEnd}
                 onPlay={handleVideoPlay}
@@ -96,82 +78,24 @@ export const PromoVideo = () => {
                 Your browser does not support the video tag.
               </video>
 
-              {/* Video Controls Overlay - Responsive */}
-              <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                <div className="flex items-center space-x-3 sm:space-x-6">
-                  {/* Play/Pause Button - Responsive */}
-                  <motion.button
-                    onClick={togglePlay}
-                    className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-primary/90 backdrop-blur-sm flex items-center justify-center text-white hover:bg-primary transition-colors shadow-2xl"
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.9 }}
-                  >
-                    {isPlaying ? (
-                      <Pause className="w-6 h-6 sm:w-8 sm:h-8" />
-                    ) : (
-                      <Play className="w-6 h-6 sm:w-8 sm:h-8 ml-1" />
-                    )}
-                  </motion.button>
-
-                  {/* Secondary Controls - Responsive */}
-                  <div className="flex items-center space-x-2 sm:space-x-3">
-                    <motion.button
-                      onClick={toggleMute}
-                      className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center text-white hover:bg-white/30 transition-colors"
-                      whileHover={{ scale: 1.1 }}
-                      whileTap={{ scale: 0.9 }}
-                    >
-                      {isMuted ? (
-                        <VolumeX className="w-4 h-4 sm:w-5 sm:h-5" />
-                      ) : (
-                        <Volume2 className="w-4 h-4 sm:w-5 sm:h-5" />
-                      )}
-                    </motion.button>
-
-                    <motion.button
-                      onClick={toggleFullscreen}
-                      className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center text-white hover:bg-white/30 transition-colors"
-                      whileHover={{ scale: 1.1 }}
-                      whileTap={{ scale: 0.9 }}
-                    >
-                      <Maximize className="w-4 h-4 sm:w-5 sm:h-5" />
-                    </motion.button>
-                  </div>
-                </div>
-              </div>
-
-              {/* Video Info Overlay - Responsive positioning */}
-              <div className="absolute bottom-2 sm:bottom-4 left-2 sm:left-4 right-2 sm:right-4">
-                <div className="liquid-glass rounded-lg sm:rounded-xl p-3 sm:p-4">
-                  <h3 className="text-white font-semibold text-sm sm:text-base mb-1 font-audiowide" 
-                      style={{fontFamily: 'Audiowide, cursive'}}>
-                    Spardha 2025 - Official Promo
-                  </h3>
-                  <p className="text-white/80 text-xs sm:text-sm">
-                    Experience the biggest techno-cultural fest of VVIT
-                  </p>
-                </div>
-              </div>
-
-              {/* Play Button Overlay - Responsive */}
+              {/* Minimalist Play Button - Only shows when paused */}
               {!isPlaying && (
                 <motion.div
-                  className="absolute inset-0 flex items-center justify-center bg-black/20"
+                  className="absolute inset-0 flex items-center justify-center bg-black/20 backdrop-blur-sm"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
                 >
-                  <motion.button
-                    onClick={togglePlay}
-                    className="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-primary/90 backdrop-blur-sm flex items-center justify-center text-white shadow-2xl"
+                  <motion.div
+                    className="w-20 h-20 sm:w-28 sm:h-28 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center shadow-2xl"
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.9 }}
                     animate={{
                       scale: [1, 1.05, 1],
                       boxShadow: [
-                        '0 0 20px rgba(79, 70, 229, 0.5)',
-                        '0 0 40px rgba(79, 70, 229, 0.8)',
-                        '0 0 20px rgba(79, 70, 229, 0.5)'
+                        '0 0 30px rgba(255, 255, 255, 0.3)',
+                        '0 0 50px rgba(255, 255, 255, 0.5)',
+                        '0 0 30px rgba(255, 255, 255, 0.3)'
                       ]
                     }}
                     transition={{ 
@@ -180,38 +104,116 @@ export const PromoVideo = () => {
                       ease: "easeInOut"
                     }}
                   >
-                    <Play className="w-8 h-8 sm:w-10 sm:h-10 ml-2" />
-                  </motion.button>
+                    <svg 
+                      className="w-8 h-8 sm:w-12 sm:h-12 text-white ml-1" 
+                      fill="currentColor" 
+                      viewBox="0 0 24 24"
+                    >
+                      <path d="M8 5v14l11-7z"/>
+                    </svg>
+                  </motion.div>
                 </motion.div>
               )}
+
+              {/* Subtle Corner Indicators */}
+              <div className="absolute top-4 left-4 w-8 h-8 border-l-2 border-t-2 border-white/30 rounded-tl-lg"></div>
+              <div className="absolute top-4 right-4 w-8 h-8 border-r-2 border-t-2 border-white/30 rounded-tr-lg"></div>
+              <div className="absolute bottom-4 left-4 w-8 h-8 border-l-2 border-b-2 border-white/30 rounded-bl-lg"></div>
+              <div className="absolute bottom-4 right-4 w-8 h-8 border-r-2 border-b-2 border-white/30 rounded-br-lg"></div>
+
+              {/* Elegant Bottom Gradient */}
+              <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
+              
+              {/* Clean Title Overlay */}
+              <div className="absolute bottom-6 left-6 right-6">
+                <motion.div
+                  className="backdrop-blur-md bg-white/10 rounded-xl p-4 border border-white/20"
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.3 }}
+                >
+                  <h3 className="text-white font-bold text-lg sm:text-xl mb-1 font-audiowide" 
+                      style={{fontFamily: 'Audiowide, cursive'}}>
+                    Spardha 2025
+                  </h3>
+                  <p className="text-white/90 text-sm sm:text-base">
+                    The Annual Techno-Cultural Fest of VVIT
+                  </p>
+                </motion.div>
+              </div>
             </div>
           </div>
         </motion.div>
 
-        {/* Call to Action - Responsive */}
+        {/* Enhanced Call to Action */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.3 }}
-          className="text-center mt-8 sm:mt-12 px-4"
+          transition={{ duration: 0.6, delay: 0.4 }}
+          className="text-center mt-12 px-4"
         >
-          <p className="text-muted-foreground mb-4 sm:mb-6 text-sm sm:text-base">
-            Ready to be part of the excitement?
-          </p>
-          <motion.button
-            onClick={() => {
-              const element = document.querySelector('#register');
-              if (element) {
-                element.scrollIntoView({ behavior: 'smooth' });
-              }
-            }}
-            className="dashboard-glass px-6 sm:px-8 py-3 rounded-xl sm:rounded-2xl text-primary font-semibold hover:scale-105 transition-all duration-300 border-primary/30 hover:border-primary/50 text-sm sm:text-base"
-            whileHover={{ y: -2 }}
-            whileTap={{ y: 0 }}
-          >
-            Register Now for Spardha 2025
-          </motion.button>
+          <div className="max-w-2xl mx-auto">
+            <p className="text-muted-foreground mb-6 text-base sm:text-lg">
+              Join thousands of students in this extraordinary celebration of technology and culture
+            </p>
+            
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+              <motion.button
+                onClick={() => {
+                  const element = document.querySelector('#register');
+                  if (element) {
+                    element.scrollIntoView({ behavior: 'smooth' });
+                  }
+                }}
+                className="ultra-liquid-glass px-8 py-4 rounded-2xl text-primary font-bold text-lg hover:scale-105 transition-all duration-300 border border-primary/30 hover:border-primary/50 w-full sm:w-auto"
+                whileHover={{ y: -2 }}
+                whileTap={{ y: 0 }}
+              >
+                Register for Spardha 2025
+              </motion.button>
+              
+              <motion.button
+                onClick={() => {
+                  const element = document.querySelector('#events');
+                  if (element) {
+                    element.scrollIntoView({ behavior: 'smooth' });
+                  }
+                }}
+                className="crystal-glass px-8 py-4 rounded-2xl text-foreground font-semibold hover:scale-105 transition-all duration-300 w-full sm:w-auto"
+                whileHover={{ y: -2 }}
+                whileTap={{ y: 0 }}
+              >
+                Explore Events
+              </motion.button>
+            </div>
+          </div>
         </motion.div>
+
+        {/* Floating Elements */}
+        <div className="absolute inset-0 pointer-events-none overflow-hidden">
+          {[...Array(6)].map((_, i) => (
+            <motion.div
+              key={i}
+              className="absolute w-2 h-2 bg-primary/20 rounded-full"
+              style={{
+                left: `${Math.random() * 100}%`,
+                top: `${Math.random() * 100}%`,
+              }}
+              animate={{
+                y: [0, -30, 0],
+                x: [0, Math.random() * 20 - 10, 0],
+                opacity: [0.2, 0.6, 0.2],
+                scale: [1, 1.5, 1],
+              }}
+              transition={{
+                duration: 4 + Math.random() * 2,
+                repeat: Infinity,
+                delay: Math.random() * 2,
+                ease: "easeInOut"
+              }}
+            />
+          ))}
+        </div>
       </div>
     </section>
   );
